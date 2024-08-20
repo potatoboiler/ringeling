@@ -3,4 +3,28 @@ name = "ringeling"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "lglmain"
+test = false
+bench = false
+
+[[bin]]
+name = "ilingeling"
+test = false
+bench = false
+
+[[bin]]
+name = "plingeling"
+test = false
+bench = false
+
+[[bin]]
+name = "treengeling"
+test = false
+bench = false
+
+[lib]
+crate-type = ["staticlib"]
+
 [dependencies]
+libc = "*"
