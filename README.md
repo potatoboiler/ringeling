@@ -1,0 +1,1 @@
+`RUSTFLAGS="-Awarnings" cargo +nightly run -Z bindeps --bin lglmain`
