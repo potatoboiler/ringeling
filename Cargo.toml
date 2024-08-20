@@ -28,3 +28,5 @@ crate-type = ["staticlib"]
 
 [dependencies]
 libc = "*"
+c2rust-bitfields = "*"
+c2rust-bitfields-derive = "*"
