@@ -42,4 +42,4 @@ bench = false
 libc.workspace = true
 c2rust-bitfields.workspace = true
 c2rust-bitfields-derive.workspace = true
-libgeling = { path = "../libgeling", artifact = ["cdylib", "staticlib"], lib = true }
+libgeling = { path = "../libgeling" }
