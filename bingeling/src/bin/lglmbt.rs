@@ -8,6 +8,7 @@
     unused_mut
 )]
 #![feature(c_variadic, extern_types, label_break_value)]
+extern crate libgeling;
 extern "C" {
     pub type _IO_wide_data;
     pub type _IO_codecvt;

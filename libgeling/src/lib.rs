@@ -4,7 +4,7 @@ pub mod lgldimacs;
 pub mod lglib;
 pub mod lglopts;
 
-use lglbnr::*;
-use lgldimacs::*;
-use lglib::*;
-use lglopts::*;
+pub use lglbnr::*;
+pub use lgldimacs::*;
+pub use lglib::*;
+pub use lglopts::*;

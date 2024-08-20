@@ -8,6 +8,7 @@
     unused_mut
 )]
 #![feature(extern_types)]
+extern crate libgeling;
 extern "C" {
     pub type _IO_wide_data;
     pub type _IO_codecvt;
