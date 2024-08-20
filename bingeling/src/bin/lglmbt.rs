@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 #![feature(c_variadic, extern_types, label_break_value)]
 extern "C" {
     pub type _IO_wide_data;
@@ -24,7 +32,7 @@ extern "C" {
     fn lglonabort(
         _: *mut LGL,
         state: *mut libc::c_void,
-        callback: Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+        callback: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
     );
     fn lglwtrapi(_: *mut LGL, _: *mut FILE);
     fn lglmaxvar(_: *mut LGL) -> libc::c_int;
@@ -39,20 +47,12 @@ extern "C" {
     fn fprintf(_: *mut FILE, _: *const libc::c_char, _: ...) -> libc::c_int;
     fn printf(_: *const libc::c_char, _: ...) -> libc::c_int;
     fn sprintf(_: *mut libc::c_char, _: *const libc::c_char, _: ...) -> libc::c_int;
-    fn vfprintf(
-        _: *mut FILE,
-        _: *const libc::c_char,
-        _: ::core::ffi::VaList,
-    ) -> libc::c_int;
+    fn vfprintf(_: *mut FILE, _: *const libc::c_char, _: ::core::ffi::VaList) -> libc::c_int;
     fn fscanf(_: *mut FILE, _: *const libc::c_char, _: ...) -> libc::c_int;
     fn getc(__stream: *mut FILE) -> libc::c_int;
     fn fputc(__c: libc::c_int, __stream: *mut FILE) -> libc::c_int;
     fn fputs(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-    fn strtol(
-        _: *const libc::c_char,
-        _: *mut *mut libc::c_char,
-        _: libc::c_int,
-    ) -> libc::c_long;
+    fn strtol(_: *const libc::c_char, _: *mut *mut libc::c_char, _: libc::c_int) -> libc::c_long;
     fn lglookahead(_: *mut LGL) -> libc::c_int;
     fn lglreuse(_: *mut LGL, lit_0: libc::c_int);
     fn lglreusable(_: *mut LGL, lit_0: libc::c_int) -> libc::c_int;
@@ -93,11 +93,7 @@ extern "C" {
     fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
     fn wait(__stat_loc: *mut libc::c_int) -> __pid_t;
     fn __ctype_b_loc() -> *mut *const libc::c_ushort;
-    fn memset(
-        _: *mut libc::c_void,
-        _: libc::c_int,
-        _: libc::c_ulong,
-    ) -> *mut libc::c_void;
+    fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
     fn strlen(_: *const libc::c_char) -> libc::c_ulong;
     fn open(__file: *const libc::c_char, __oflag: libc::c_int, _: ...) -> libc::c_int;
@@ -173,7 +169,7 @@ pub struct tms {
     pub tms_cutime: clock_t,
     pub tms_cstime: clock_t,
 }
-pub type __sighandler_t = Option::<unsafe extern "C" fn(libc::c_int) -> ()>;
+pub type __sighandler_t = Option<unsafe extern "C" fn(libc::c_int) -> ()>;
 pub type C2RustUnnamed = libc::c_uint;
 pub const _ISalnum: C2RustUnnamed = 8;
 pub const _ISpunct: C2RustUnnamed = 4;
@@ -202,9 +198,7 @@ pub struct Data {
     pub print: libc::c_int,
     pub noptsfuzz: libc::c_int,
 }
-pub type State = Option::<
-    unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
->;
+pub type State = Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Event {
@@ -255,12 +249,10 @@ unsafe extern "C" fn initrng(mut seed: libc::c_uint) -> RNG {
     return res;
 }
 unsafe extern "C" fn nextrand(mut rng: *mut RNG) -> libc::c_uint {
-    (*rng)
-        .z = (36969 as libc::c_int as libc::c_uint)
+    (*rng).z = (36969 as libc::c_int as libc::c_uint)
         .wrapping_mul((*rng).z & 65535 as libc::c_int as libc::c_uint)
         .wrapping_add((*rng).z >> 16 as libc::c_int);
-    (*rng)
-        .w = (18000 as libc::c_int as libc::c_uint)
+    (*rng).w = (18000 as libc::c_int as libc::c_uint)
         .wrapping_mul((*rng).w & 65535 as libc::c_int as libc::c_uint)
         .wrapping_add((*rng).w >> 16 as libc::c_int);
     return ((*rng).z << 16 as libc::c_int).wrapping_add((*rng).w);
@@ -272,36 +264,36 @@ unsafe extern "C" fn pick(
 ) -> libc::c_int {
     let mut tmp: libc::c_uint = nextrand(rng_ptr);
     let mut res: libc::c_int = 0;
-    if from <= to && to <= 2147483647 as libc::c_int as libc::c_uint {} else {
+    if from <= to && to <= 2147483647 as libc::c_int as libc::c_uint {
+    } else {
         __assert_fail(
             b"from <= to && to <= INT_MAX\0" as *const u8 as *const libc::c_char,
             b"lglmbt.c\0" as *const u8 as *const libc::c_char,
             85 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 44],
-                &[libc::c_char; 44],
-            >(b"int pick(RNG *, unsigned int, unsigned int)\0"))
-                .as_ptr(),
+            (*::core::mem::transmute::<&[u8; 44], &[libc::c_char; 44]>(
+                b"int pick(RNG *, unsigned int, unsigned int)\0",
+            ))
+            .as_ptr(),
         );
     }
     'c_4591: {
-        if from <= to && to <= 2147483647 as libc::c_int as libc::c_uint {} else {
+        if from <= to && to <= 2147483647 as libc::c_int as libc::c_uint {
+        } else {
             __assert_fail(
                 b"from <= to && to <= INT_MAX\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 85 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 44],
-                    &[libc::c_char; 44],
-                >(b"int pick(RNG *, unsigned int, unsigned int)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 44], &[libc::c_char; 44]>(
+                    b"int pick(RNG *, unsigned int, unsigned int)\0",
+                ))
+                .as_ptr(),
             );
         }
     };
-    tmp = tmp
-        .wrapping_rem(
-            to.wrapping_sub(from).wrapping_add(1 as libc::c_int as libc::c_uint),
-        );
+    tmp = tmp.wrapping_rem(
+        to.wrapping_sub(from)
+            .wrapping_add(1 as libc::c_int as libc::c_uint),
+    );
     tmp = tmp.wrapping_add(from);
     res = tmp as libc::c_int;
     return res;
@@ -309,15 +301,11 @@ unsafe extern "C" fn pick(
 unsafe extern "C" fn onabort(mut dummy: *mut libc::c_void) {
     exit(42 as libc::c_int);
 }
-unsafe extern "C" fn init(
-    mut data: *mut Data,
-    mut r: libc::c_uint,
-) -> *mut libc::c_void {
+unsafe extern "C" fn init(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     let mut rng: RNG = initrng(r);
     let mut t: libc::c_int = 0;
     let mut i: libc::c_int = 0;
-    (*data)
-        .m = pick(
+    (*data).m = pick(
         &mut rng,
         10 as libc::c_int as libc::c_uint,
         200 as libc::c_int as libc::c_uint,
@@ -346,8 +334,7 @@ unsafe extern "C" fn init(
         lglwtrapi((*data).lgl, (*data).trace);
     }
     (*data).navailable = (*data).m;
-    (*data)
-        .available = malloc(
+    (*data).available = malloc(
         ((*data).navailable as libc::c_ulong)
             .wrapping_mul(::core::mem::size_of::<libc::c_int>() as libc::c_ulong),
     ) as *mut libc::c_int;
@@ -359,16 +346,14 @@ unsafe extern "C" fn init(
     }
     if (*data).noptsfuzz != 0 {
         return ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
+            Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
             *mut libc::c_void,
-        >(
-            Some(
-                cnf as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-            ),
-        );
+        >(Some(
+            cnf as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
+        ));
     }
     return ::core::mem::transmute::<
-        Option::<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
+        Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
     >(
         if pick(
@@ -377,14 +362,9 @@ unsafe extern "C" fn init(
             1 as libc::c_int as libc::c_uint,
         ) != 0
         {
-            Some(
-                opts
-                    as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-            )
+            Some(opts as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void)
         } else {
-            Some(
-                cnf as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-            )
+            Some(cnf as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void)
         },
     );
 }
@@ -394,8 +374,11 @@ unsafe extern "C" fn inc(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
     let mut newvars: libc::c_int = 0;
     let mut rng: RNG = RNG { z: 0, w: 0 };
     rng = initrng(r);
-    if pick(&mut rng, 0 as libc::c_int as libc::c_uint, 1 as libc::c_int as libc::c_uint)
-        != 0
+    if pick(
+        &mut rng,
+        0 as libc::c_int as libc::c_uint,
+        1 as libc::c_int as libc::c_uint,
+    ) != 0
     {
         lglmaxvar((*data).lgl);
     }
@@ -407,7 +390,11 @@ unsafe extern "C" fn inc(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
     {
         lglfixed(
             (*data).lgl,
-            pick(&mut rng, 1 as libc::c_int as libc::c_uint, (*data).m as libc::c_uint),
+            pick(
+                &mut rng,
+                1 as libc::c_int as libc::c_uint,
+                (*data).m as libc::c_uint,
+            ),
         );
     }
     while pick(
@@ -418,7 +405,11 @@ unsafe extern "C" fn inc(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
     {
         lglrepr(
             (*data).lgl,
-            pick(&mut rng, 1 as libc::c_int as libc::c_uint, (*data).m as libc::c_uint),
+            pick(
+                &mut rng,
+                1 as libc::c_int as libc::c_uint,
+                (*data).m as libc::c_uint,
+            ),
         );
     }
     newvars = pick(
@@ -437,30 +428,28 @@ unsafe extern "C" fn inc(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
         }
         oldavailable = (*data).navailable;
         (*data).navailable += newvars;
-        (*data)
-            .available = realloc(
+        (*data).available = realloc(
             (*data).available as *mut libc::c_void,
             ((*data).navailable as libc::c_ulong)
                 .wrapping_mul(::core::mem::size_of::<libc::c_int>() as libc::c_ulong),
         ) as *mut libc::c_int;
         i = 0 as libc::c_int;
         while i < newvars {
-            *((*data).available)
-                .offset((oldavailable + i) as isize) = (*data).m + i + 1 as libc::c_int;
+            *((*data).available).offset((oldavailable + i) as isize) =
+                (*data).m + i + 1 as libc::c_int;
             i += 1;
             i;
         }
         (*data).m += newvars;
     }
     return ::core::mem::transmute::<
-        Option::<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
+        Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
-    >(Some(cnf as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void));
+    >(Some(
+        cnf as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
+    ));
 }
-unsafe extern "C" fn opts(
-    mut data: *mut Data,
-    mut r: libc::c_uint,
-) -> *mut libc::c_void {
+unsafe extern "C" fn opts(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     let mut n: libc::c_int = 0 as libc::c_int;
     let mut min: libc::c_int = 0;
     let mut val: libc::c_int = 0;
@@ -490,29 +479,29 @@ unsafe extern "C" fn opts(
             n += 1;
             n;
         }
-        if n > 0 as libc::c_int {} else {
+        if n > 0 as libc::c_int {
+        } else {
             __assert_fail(
                 b"n > 0\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 148 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 33],
-                    &[libc::c_char; 33],
-                >(b"void *opts(Data *, unsigned int)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 33], &[libc::c_char; 33]>(
+                    b"void *opts(Data *, unsigned int)\0",
+                ))
+                .as_ptr(),
             );
         }
         'c_7012: {
-            if n > 0 as libc::c_int {} else {
+            if n > 0 as libc::c_int {
+            } else {
                 __assert_fail(
                     b"n > 0\0" as *const u8 as *const libc::c_char,
                     b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                     148 as libc::c_int as libc::c_uint,
-                    (*::core::mem::transmute::<
-                        &[u8; 33],
-                        &[libc::c_char; 33],
-                    >(b"void *opts(Data *, unsigned int)\0"))
-                        .as_ptr(),
+                    (*::core::mem::transmute::<&[u8; 33], &[libc::c_char; 33]>(
+                        b"void *opts(Data *, unsigned int)\0",
+                    ))
+                    .as_ptr(),
                 );
             }
         };
@@ -527,8 +516,11 @@ unsafe extern "C" fn opts(
             if it.is_null() {
                 break;
             }
-            if pick(&mut rng, 1 as libc::c_int as libc::c_uint, m as libc::c_uint)
-                != 1 as libc::c_int
+            if pick(
+                &mut rng,
+                1 as libc::c_int as libc::c_uint,
+                m as libc::c_uint,
+            ) != 1 as libc::c_int
             {
                 continue;
             }
@@ -562,8 +554,7 @@ unsafe extern "C" fn opts(
                 1 as libc::c_int as libc::c_uint,
             ) != 0
             {
-                if strcmp(name, b"locsmaxeff\0" as *const u8 as *const libc::c_char) == 0
-                {
+                if strcmp(name, b"locsmaxeff\0" as *const u8 as *const libc::c_char) == 0 {
                     max = 10 as libc::c_int * min;
                 }
                 if strcmp(name, b"locsrtc\0" as *const u8 as *const libc::c_char) == 0 {
@@ -573,7 +564,8 @@ unsafe extern "C" fn opts(
                     &mut rng,
                     0 as libc::c_int as libc::c_uint,
                     1 as libc::c_int as libc::c_uint,
-                ) != 0 && val < max
+                ) != 0
+                    && val < max
                 {
                     if val > 2147483647 as libc::c_int / 2 as libc::c_int {
                         break;
@@ -593,7 +585,8 @@ unsafe extern "C" fn opts(
                     &mut rng,
                     0 as libc::c_int as libc::c_uint,
                     1 as libc::c_int as libc::c_uint,
-                ) != 0 && val > min
+                ) != 0
+                    && val > min
                 {
                     if val > 0 as libc::c_int {
                         val /= 2 as libc::c_int;
@@ -602,8 +595,7 @@ unsafe extern "C" fn opts(
                         val;
                     } else {
                         if val
-                            < (-(2147483647 as libc::c_int) - 1 as libc::c_int)
-                                / 2 as libc::c_int
+                            < (-(2147483647 as libc::c_int) - 1 as libc::c_int) / 2 as libc::c_int
                         {
                             break;
                         }
@@ -618,27 +610,21 @@ unsafe extern "C" fn opts(
         }
     }
     return ::core::mem::transmute::<
-        Option::<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
+        Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
-    >(Some(cnf as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void));
+    >(Some(
+        cnf as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
+    ));
 }
 unsafe extern "C" fn cnf(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     return ::core::mem::transmute::<
-        Option::<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
+        Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
-    >(
-        if (*data).c < (*data).n {
-            Some(
-                unit
-                    as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-            )
-        } else {
-            Some(
-                lkhd
-                    as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-            )
-        },
-    );
+    >(if (*data).c < (*data).n {
+        Some(unit as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void)
+    } else {
+        Some(lkhd as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void)
+    });
 }
 unsafe extern "C" fn lit(mut data: *mut Data, mut r: *mut RNG) -> libc::c_int {
     let mut pos: libc::c_int = pick(
@@ -647,41 +633,43 @@ unsafe extern "C" fn lit(mut data: *mut Data, mut r: *mut RNG) -> libc::c_int {
         ((*data).navailable - 1 as libc::c_int) as libc::c_uint,
     );
     let mut res: libc::c_int = *((*data).available).offset(pos as isize);
-    if (0 as libc::c_int) < res && res <= (*data).m {} else {
+    if (0 as libc::c_int) < res && res <= (*data).m {
+    } else {
         __assert_fail(
             b"0 < res && res <= data->m\0" as *const u8 as *const libc::c_char,
             b"lglmbt.c\0" as *const u8 as *const libc::c_char,
             198 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 23],
-                &[libc::c_char; 23],
-            >(b"int lit(Data *, RNG *)\0"))
-                .as_ptr(),
+            (*::core::mem::transmute::<&[u8; 23], &[libc::c_char; 23]>(
+                b"int lit(Data *, RNG *)\0",
+            ))
+            .as_ptr(),
         );
     }
     'c_6496: {
-        if (0 as libc::c_int) < res && res <= (*data).m {} else {
+        if (0 as libc::c_int) < res && res <= (*data).m {
+        } else {
             __assert_fail(
                 b"0 < res && res <= data->m\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 198 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 23],
-                    &[libc::c_char; 23],
-                >(b"int lit(Data *, RNG *)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 23], &[libc::c_char; 23]>(
+                    b"int lit(Data *, RNG *)\0",
+                ))
+                .as_ptr(),
             );
         }
     };
-    if pick(r, 0 as libc::c_int as libc::c_uint, 1 as libc::c_int as libc::c_uint) != 0 {
+    if pick(
+        r,
+        0 as libc::c_int as libc::c_uint,
+        1 as libc::c_int as libc::c_uint,
+    ) != 0
+    {
         res = -res;
     }
     return res;
 }
-unsafe extern "C" fn unit(
-    mut data: *mut Data,
-    mut r: libc::c_uint,
-) -> *mut libc::c_void {
+unsafe extern "C" fn unit(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     let mut rng: RNG = initrng(r);
     lgladd((*data).lgl, lit(data, &mut rng));
     if pick(
@@ -691,28 +679,20 @@ unsafe extern "C" fn unit(
     ) == 0
     {
         return ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
+            Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
             *mut libc::c_void,
-        >(
-            Some(
-                clause
-                    as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-            ),
-        );
+        >(Some(
+            clause as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
+        ));
     }
     return ::core::mem::transmute::<
-        Option::<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
+        Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
-    >(
-        Some(
-            binary as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-        ),
-    );
+    >(Some(
+        binary as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
+    ));
 }
-unsafe extern "C" fn binary(
-    mut data: *mut Data,
-    mut r: libc::c_uint,
-) -> *mut libc::c_void {
+unsafe extern "C" fn binary(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     let mut rng: RNG = initrng(r);
     lgladd((*data).lgl, lit(data, &mut rng));
     if pick(
@@ -722,107 +702,95 @@ unsafe extern "C" fn binary(
     ) == 0
     {
         return ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
+            Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
             *mut libc::c_void,
-        >(
-            Some(
-                clause
-                    as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-            ),
-        );
+        >(Some(
+            clause as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
+        ));
     }
     return ::core::mem::transmute::<
-        Option::<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
+        Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
-    >(
-        Some(
-            ternary as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-        ),
-    );
+    >(Some(
+        ternary as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
+    ));
 }
-unsafe extern "C" fn ternary(
-    mut data: *mut Data,
-    mut r: libc::c_uint,
-) -> *mut libc::c_void {
+unsafe extern "C" fn ternary(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     let mut rng: RNG = initrng(r);
     lgladd((*data).lgl, lit(data, &mut rng));
-    if pick(&mut rng, 0 as libc::c_int as libc::c_uint, 2 as libc::c_int as libc::c_uint)
-        != 0
+    if pick(
+        &mut rng,
+        0 as libc::c_int as libc::c_uint,
+        2 as libc::c_int as libc::c_uint,
+    ) != 0
     {
         return ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
+            Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
             *mut libc::c_void,
-        >(
-            Some(
-                clause
-                    as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-            ),
-        );
+        >(Some(
+            clause as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
+        ));
     }
     return ::core::mem::transmute::<
-        Option::<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
+        Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
-    >(Some(rest as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void));
+    >(Some(
+        rest as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
+    ));
 }
-unsafe extern "C" fn rest(
-    mut data: *mut Data,
-    mut r: libc::c_uint,
-) -> *mut libc::c_void {
+unsafe extern "C" fn rest(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     let mut rng: RNG = initrng(r);
     lgladd((*data).lgl, lit(data, &mut rng));
-    if pick(&mut rng, 0 as libc::c_int as libc::c_uint, 3 as libc::c_int as libc::c_uint)
-        != 0
+    if pick(
+        &mut rng,
+        0 as libc::c_int as libc::c_uint,
+        3 as libc::c_int as libc::c_uint,
+    ) != 0
     {
         return ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
+            Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
             *mut libc::c_void,
-        >(
-            Some(
-                clause
-                    as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-            ),
-        );
+        >(Some(
+            clause as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
+        ));
     }
     return ::core::mem::transmute::<
-        Option::<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
+        Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
-    >(Some(rest as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void));
+    >(Some(
+        rest as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
+    ));
 }
-unsafe extern "C" fn clause(
-    mut data: *mut Data,
-    mut r: libc::c_uint,
-) -> *mut libc::c_void {
+unsafe extern "C" fn clause(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     lgladd((*data).lgl, 0 as libc::c_int);
     (*data).c += 1 as libc::c_int;
     return ::core::mem::transmute::<
-        Option::<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
+        Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
-    >(Some(cnf as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void));
+    >(Some(
+        cnf as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
+    ));
 }
 unsafe extern "C" fn gcd(mut a: libc::c_int, mut b: libc::c_int) -> libc::c_int {
     let mut r: libc::c_int = 0;
-    if a > 0 as libc::c_int && b > 0 as libc::c_int {} else {
+    if a > 0 as libc::c_int && b > 0 as libc::c_int {
+    } else {
         __assert_fail(
             b"a > 0 && b > 0\0" as *const u8 as *const libc::c_char,
             b"lglmbt.c\0" as *const u8 as *const libc::c_char,
             240 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 18],
-                &[libc::c_char; 18],
-            >(b"int gcd(int, int)\0"))
+            (*::core::mem::transmute::<&[u8; 18], &[libc::c_char; 18]>(b"int gcd(int, int)\0"))
                 .as_ptr(),
         );
     }
     'c_6163: {
-        if a > 0 as libc::c_int && b > 0 as libc::c_int {} else {
+        if a > 0 as libc::c_int && b > 0 as libc::c_int {
+        } else {
             __assert_fail(
                 b"a > 0 && b > 0\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 240 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 18],
-                    &[libc::c_char; 18],
-                >(b"int gcd(int, int)\0"))
+                (*::core::mem::transmute::<&[u8; 18], &[libc::c_char; 18]>(b"int gcd(int, int)\0"))
                     .as_ptr(),
             );
         }
@@ -834,10 +802,7 @@ unsafe extern "C" fn gcd(mut a: libc::c_int, mut b: libc::c_int) -> libc::c_int 
     }
     return a;
 }
-unsafe extern "C" fn lkhd(
-    mut data: *mut Data,
-    mut r: libc::c_uint,
-) -> *mut libc::c_void {
+unsafe extern "C" fn lkhd(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     let mut rng: RNG = initrng(r);
     if pick(
         &mut rng,
@@ -848,9 +813,11 @@ unsafe extern "C" fn lkhd(
         lglookahead((*data).lgl);
     }
     return ::core::mem::transmute::<
-        Option::<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
+        Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
-    >(Some(sat as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void));
+    >(Some(
+        sat as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
+    ));
 }
 unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     let mut res: libc::c_int = 0;
@@ -863,9 +830,8 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
     let mut nassumed: libc::c_int = 0;
     let mut szassumed: libc::c_int = 0;
     let mut lgl: *mut LGL = (*data).lgl;
-    let mut next: State = Some(
-        release as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-    );
+    let mut next: State =
+        Some(release as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void);
     let mut rng: RNG = RNG { z: 0, w: 0 };
     rng = initrng(r);
     if pick(
@@ -883,16 +849,13 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
     );
     if freeze != 0 {
         if (*data).navailable > 1 as libc::c_int {
-            (*data)
-                .nfrozen = pick(
+            (*data).nfrozen = pick(
                 &mut rng,
-                (((*data).navailable + 9 as libc::c_int) / 10 as libc::c_int)
+                (((*data).navailable + 9 as libc::c_int) / 10 as libc::c_int) as libc::c_uint,
+                (2 as libc::c_int * ((*data).navailable + 2 as libc::c_int) / 3 as libc::c_int)
                     as libc::c_uint,
-                (2 as libc::c_int * ((*data).navailable + 2 as libc::c_int)
-                    / 3 as libc::c_int) as libc::c_uint,
             );
-            (*data)
-                .frozen = malloc(
+            (*data).frozen = malloc(
                 ((*data).nfrozen as libc::c_ulong)
                     .wrapping_mul(::core::mem::size_of::<libc::c_int>() as libc::c_ulong),
             ) as *mut libc::c_int;
@@ -914,31 +877,30 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
             );
             i = 0 as libc::c_int;
             while i < (*data).nfrozen {
-                if 0 as libc::c_int <= pos && pos < (*data).navailable {} else {
+                if 0 as libc::c_int <= pos && pos < (*data).navailable {
+                } else {
                     __assert_fail(
-                        b"0 <= pos && pos < data->navailable\0" as *const u8
-                            as *const libc::c_char,
+                        b"0 <= pos && pos < data->navailable\0" as *const u8 as *const libc::c_char,
                         b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                         273 as libc::c_int as libc::c_uint,
-                        (*::core::mem::transmute::<
-                            &[u8; 32],
-                            &[libc::c_char; 32],
-                        >(b"void *sat(Data *, unsigned int)\0"))
-                            .as_ptr(),
+                        (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                            b"void *sat(Data *, unsigned int)\0",
+                        ))
+                        .as_ptr(),
                     );
                 }
                 'c_6026: {
-                    if 0 as libc::c_int <= pos && pos < (*data).navailable {} else {
+                    if 0 as libc::c_int <= pos && pos < (*data).navailable {
+                    } else {
                         __assert_fail(
                             b"0 <= pos && pos < data->navailable\0" as *const u8
                                 as *const libc::c_char,
                             b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                             273 as libc::c_int as libc::c_uint,
-                            (*::core::mem::transmute::<
-                                &[u8; 32],
-                                &[libc::c_char; 32],
-                            >(b"void *sat(Data *, unsigned int)\0"))
-                                .as_ptr(),
+                            (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                                b"void *sat(Data *, unsigned int)\0",
+                            ))
+                            .as_ptr(),
                         );
                     }
                 };
@@ -959,13 +921,10 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
             }
         } else if (*data).navailable == 1 as libc::c_int {
             (*data).nfrozen = 1 as libc::c_int;
-            (*data)
-                .frozen = malloc(::core::mem::size_of::<libc::c_int>() as libc::c_ulong)
-                as *mut libc::c_int;
-            *((*data).frozen)
-                .offset(
-                    0 as libc::c_int as isize,
-                ) = *((*data).available).offset(0 as libc::c_int as isize);
+            (*data).frozen =
+                malloc(::core::mem::size_of::<libc::c_int>() as libc::c_ulong) as *mut libc::c_int;
+            *((*data).frozen).offset(0 as libc::c_int as isize) =
+                *((*data).available).offset(0 as libc::c_int as isize);
         } else {
             (*data).nfrozen = 0 as libc::c_int;
             (*data).frozen = 0 as *mut libc::c_int;
@@ -990,9 +949,7 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
                 assumed = realloc(
                     assumed as *mut libc::c_void,
                     (szassumed as libc::c_ulong)
-                        .wrapping_mul(
-                            ::core::mem::size_of::<libc::c_int>() as libc::c_ulong,
-                        ),
+                        .wrapping_mul(::core::mem::size_of::<libc::c_int>() as libc::c_ulong),
                 ) as *mut libc::c_int;
             }
             pos = pick(
@@ -1010,29 +967,29 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
                 lit_0 = -lit_0;
             }
             lglassume(lgl, lit_0);
-            if nassumed < szassumed {} else {
+            if nassumed < szassumed {
+            } else {
                 __assert_fail(
                     b"nassumed < szassumed\0" as *const u8 as *const libc::c_char,
                     b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                     312 as libc::c_int as libc::c_uint,
-                    (*::core::mem::transmute::<
-                        &[u8; 32],
-                        &[libc::c_char; 32],
-                    >(b"void *sat(Data *, unsigned int)\0"))
-                        .as_ptr(),
+                    (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                        b"void *sat(Data *, unsigned int)\0",
+                    ))
+                    .as_ptr(),
                 );
             }
             'c_5735: {
-                if nassumed < szassumed {} else {
+                if nassumed < szassumed {
+                } else {
                     __assert_fail(
                         b"nassumed < szassumed\0" as *const u8 as *const libc::c_char,
                         b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                         312 as libc::c_int as libc::c_uint,
-                        (*::core::mem::transmute::<
-                            &[u8; 32],
-                            &[libc::c_char; 32],
-                        >(b"void *sat(Data *, unsigned int)\0"))
-                            .as_ptr(),
+                        (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                            b"void *sat(Data *, unsigned int)\0",
+                        ))
+                        .as_ptr(),
                     );
                 }
             };
@@ -1053,8 +1010,11 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
         szassumed = 0 as libc::c_int;
         nassumed = szassumed;
     }
-    if pick(&mut rng, 0 as libc::c_int as libc::c_uint, 4 as libc::c_int as libc::c_uint)
-        == 0
+    if pick(
+        &mut rng,
+        0 as libc::c_int as libc::c_uint,
+        4 as libc::c_int as libc::c_uint,
+    ) == 0
     {
         pos = pick(
             &mut rng,
@@ -1122,29 +1082,29 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
             ),
         );
     }
-    if res == 0 || res == 10 as libc::c_int || res == 20 as libc::c_int {} else {
+    if res == 0 || res == 10 as libc::c_int || res == 20 as libc::c_int {
+    } else {
         __assert_fail(
             b"!res || res == 10 || res == 20\0" as *const u8 as *const libc::c_char,
             b"lglmbt.c\0" as *const u8 as *const libc::c_char,
             328 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 32],
-                &[libc::c_char; 32],
-            >(b"void *sat(Data *, unsigned int)\0"))
-                .as_ptr(),
+            (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                b"void *sat(Data *, unsigned int)\0",
+            ))
+            .as_ptr(),
         );
     }
     'c_5469: {
-        if res == 0 || res == 10 as libc::c_int || res == 20 as libc::c_int {} else {
+        if res == 0 || res == 10 as libc::c_int || res == 20 as libc::c_int {
+        } else {
             __assert_fail(
                 b"!res || res == 10 || res == 20\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 328 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 32],
-                    &[libc::c_char; 32],
-                >(b"void *sat(Data *, unsigned int)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                    b"void *sat(Data *, unsigned int)\0",
+                ))
+                .as_ptr(),
             );
         }
     };
@@ -1168,7 +1128,11 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
         {
             lglsetphases(lgl);
         }
-        i = pick(&mut rng, 0 as libc::c_int as libc::c_uint, (*data).m as libc::c_uint);
+        i = pick(
+            &mut rng,
+            0 as libc::c_int as libc::c_uint,
+            (*data).m as libc::c_uint,
+        );
         loop {
             let fresh1 = i;
             i = i - 1;
@@ -1199,31 +1163,29 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
             lglsetphases(lgl);
         }
         if freeze != 0 {
-            if (*data).nfrozen <= (*data).navailable {} else {
+            if (*data).nfrozen <= (*data).navailable {
+            } else {
                 __assert_fail(
-                    b"data->nfrozen <= data->navailable\0" as *const u8
-                        as *const libc::c_char,
+                    b"data->nfrozen <= data->navailable\0" as *const u8 as *const libc::c_char,
                     b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                     341 as libc::c_int as libc::c_uint,
-                    (*::core::mem::transmute::<
-                        &[u8; 32],
-                        &[libc::c_char; 32],
-                    >(b"void *sat(Data *, unsigned int)\0"))
-                        .as_ptr(),
+                    (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                        b"void *sat(Data *, unsigned int)\0",
+                    ))
+                    .as_ptr(),
                 );
             }
             'c_5301: {
-                if (*data).nfrozen <= (*data).navailable {} else {
+                if (*data).nfrozen <= (*data).navailable {
+                } else {
                     __assert_fail(
-                        b"data->nfrozen <= data->navailable\0" as *const u8
-                            as *const libc::c_char,
+                        b"data->nfrozen <= data->navailable\0" as *const u8 as *const libc::c_char,
                         b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                         341 as libc::c_int as libc::c_uint,
-                        (*::core::mem::transmute::<
-                            &[u8; 32],
-                            &[libc::c_char; 32],
-                        >(b"void *sat(Data *, unsigned int)\0"))
-                            .as_ptr(),
+                        (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                            b"void *sat(Data *, unsigned int)\0",
+                        ))
+                        .as_ptr(),
                     );
                 }
             };
@@ -1242,8 +1204,7 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
                     }
                     2 => {
                         (*data).m += 1;
-                        *((*data).available)
-                            .offset((*data).navailable as isize) = (*data).m;
+                        *((*data).available).offset((*data).navailable as isize) = (*data).m;
                         (*data).navailable += 1;
                         (*data).navailable;
                         current_block_94 = 17485376261910781866;
@@ -1270,15 +1231,14 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
             free((*data).frozen as *mut libc::c_void);
         }
         if freeze >= 2 as libc::c_int {
-            (*data)
-                .n = (pick(
+            (*data).n = (pick(
                 &mut rng,
                 101 as libc::c_int as libc::c_uint,
                 130 as libc::c_int as libc::c_uint,
-            ) * (*data).n + 99 as libc::c_int) / 100 as libc::c_int;
-            next = Some(
-                inc as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-            );
+            ) * (*data).n
+                + 99 as libc::c_int)
+                / 100 as libc::c_int;
+            next = Some(inc as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void);
         }
         if pick(
             &mut rng,
@@ -1332,14 +1292,11 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
                 }
                 lglfailed(
                     (*data).lgl,
-                    *assumed
-                        .offset(
-                            pick(
-                                &mut rng,
-                                0 as libc::c_int as libc::c_uint,
-                                (nassumed - 1 as libc::c_int) as libc::c_uint,
-                            ) as isize,
-                        ),
+                    *assumed.offset(pick(
+                        &mut rng,
+                        0 as libc::c_int as libc::c_uint,
+                        (nassumed - 1 as libc::c_int) as libc::c_uint,
+                    ) as isize),
                 );
             }
         }
@@ -1383,10 +1340,7 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
     free(assumed as *mut libc::c_void);
     return ::core::mem::transmute::<State, *mut libc::c_void>(next);
 }
-unsafe extern "C" fn release(
-    mut data: *mut Data,
-    mut r: libc::c_uint,
-) -> *mut libc::c_void {
+unsafe extern "C" fn release(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     lglrelease((*data).lgl);
     return 0 as *mut libc::c_void;
 }
@@ -1415,9 +1369,7 @@ unsafe extern "C" fn rantrav(mut env_0: *mut Env) {
     data.print = (*env_0).print;
     (*env_0).rng.w = (*env_0).seed;
     (*env_0).rng.z = (*env_0).rng.w;
-    state = Some(
-        init as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-    );
+    state = Some(init as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void);
     while state.is_some() {
         rand = nextrand(&mut (*env_0).rng);
         if !((*env_0).file).is_null() {
@@ -1429,10 +1381,10 @@ unsafe extern "C" fn rantrav(mut env_0: *mut Env) {
             );
             fflush((*env_0).file);
         }
-        next = ::core::mem::transmute::<
-            *mut libc::c_void,
-            State,
-        >(state.expect("non-null function pointer")(&mut data, rand));
+        next = ::core::mem::transmute::<*mut libc::c_void, State>(state
+            .expect("non-null function pointer")(
+            &mut data, rand
+        ));
         state = next;
     }
 }
@@ -1452,7 +1404,8 @@ unsafe extern "C" fn isnumstr(mut str: *const libc::c_char) -> libc::c_int {
     p = str;
     while *p != 0 {
         if *(*__ctype_b_loc()).offset(*p as libc::c_int as isize) as libc::c_int
-            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int == 0
+            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+            == 0
         {
             return 0 as libc::c_int;
         }
@@ -1463,7 +1416,10 @@ unsafe extern "C" fn isnumstr(mut str: *const libc::c_char) -> libc::c_int {
 }
 unsafe extern "C" fn die(mut msg: *const libc::c_char, mut args: ...) {
     let mut ap: ::core::ffi::VaListImpl;
-    fputs(b"*** lglmbt: \0" as *const u8 as *const libc::c_char, stderr);
+    fputs(
+        b"*** lglmbt: \0" as *const u8 as *const libc::c_char,
+        stderr,
+    );
     ap = args.clone();
     vfprintf(stderr, msg, ap.as_va_list());
     fputc('\n' as i32, stderr);
@@ -1472,7 +1428,7 @@ unsafe extern "C" fn die(mut msg: *const libc::c_char, mut args: ...) {
 }
 unsafe extern "C" fn run(
     mut env_0: *mut Env,
-    mut process: Option::<unsafe extern "C" fn(*mut Env) -> ()>,
+    mut process: Option<unsafe extern "C" fn(*mut Env) -> ()>,
 ) -> libc::c_int {
     let mut res: libc::c_int = 0;
     let mut status: libc::c_int = 0;
@@ -1487,29 +1443,29 @@ unsafe extern "C" fn run(
     id = fork();
     if id != 0 {
         let mut wid: pid_t = wait(&mut status);
-        if wid == id {} else {
+        if wid == id {
+        } else {
             __assert_fail(
                 b"wid == id\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 455 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 32],
-                    &[libc::c_char; 32],
-                >(b"int run(Env *, void (*)(Env *))\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                    b"int run(Env *, void (*)(Env *))\0",
+                ))
+                .as_ptr(),
             );
         }
         'c_7963: {
-            if wid == id {} else {
+            if wid == id {
+            } else {
                 __assert_fail(
                     b"wid == id\0" as *const u8 as *const libc::c_char,
                     b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                     455 as libc::c_int as libc::c_uint,
-                    (*::core::mem::transmute::<
-                        &[u8; 32],
-                        &[libc::c_char; 32],
-                    >(b"int run(Env *, void (*)(Env *))\0"))
-                        .as_ptr(),
+                    (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                        b"int run(Env *, void (*)(Env *))\0",
+                    ))
+                    .as_ptr(),
                 );
             }
         };
@@ -1523,56 +1479,56 @@ unsafe extern "C" fn run(
         close(1 as libc::c_int);
         close(2 as libc::c_int);
         tmp = dup(null);
-        if tmp == 1 as libc::c_int {} else {
+        if tmp == 1 as libc::c_int {
+        } else {
             __assert_fail(
                 b"tmp == 1\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 466 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 32],
-                    &[libc::c_char; 32],
-                >(b"int run(Env *, void (*)(Env *))\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                    b"int run(Env *, void (*)(Env *))\0",
+                ))
+                .as_ptr(),
             );
         }
         'c_7887: {
-            if tmp == 1 as libc::c_int {} else {
+            if tmp == 1 as libc::c_int {
+            } else {
                 __assert_fail(
                     b"tmp == 1\0" as *const u8 as *const libc::c_char,
                     b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                     466 as libc::c_int as libc::c_uint,
-                    (*::core::mem::transmute::<
-                        &[u8; 32],
-                        &[libc::c_char; 32],
-                    >(b"int run(Env *, void (*)(Env *))\0"))
-                        .as_ptr(),
+                    (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                        b"int run(Env *, void (*)(Env *))\0",
+                    ))
+                    .as_ptr(),
                 );
             }
         };
         tmp = dup(null);
-        if tmp == 2 as libc::c_int {} else {
+        if tmp == 2 as libc::c_int {
+        } else {
             __assert_fail(
                 b"tmp == 2\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 471 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 32],
-                    &[libc::c_char; 32],
-                >(b"int run(Env *, void (*)(Env *))\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                    b"int run(Env *, void (*)(Env *))\0",
+                ))
+                .as_ptr(),
             );
         }
         'c_7844: {
-            if tmp == 2 as libc::c_int {} else {
+            if tmp == 2 as libc::c_int {
+            } else {
                 __assert_fail(
                     b"tmp == 2\0" as *const u8 as *const libc::c_char,
                     b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                     471 as libc::c_int as libc::c_uint,
-                    (*::core::mem::transmute::<
-                        &[u8; 32],
-                        &[libc::c_char; 32],
-                    >(b"int run(Env *, void (*)(Env *))\0"))
-                        .as_ptr(),
+                    (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                        b"int run(Env *, void (*)(Env *))\0",
+                    ))
+                    .as_ptr(),
                 );
             }
         };
@@ -1583,57 +1539,57 @@ unsafe extern "C" fn run(
         close(null);
         close(2 as libc::c_int);
         tmp = dup(saved2);
-        if tmp == 2 as libc::c_int {} else {
+        if tmp == 2 as libc::c_int {
+        } else {
             __assert_fail(
                 b"tmp == 2\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 480 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 32],
-                    &[libc::c_char; 32],
-                >(b"int run(Env *, void (*)(Env *))\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                    b"int run(Env *, void (*)(Env *))\0",
+                ))
+                .as_ptr(),
             );
         }
         'c_7769: {
-            if tmp == 2 as libc::c_int {} else {
+            if tmp == 2 as libc::c_int {
+            } else {
                 __assert_fail(
                     b"tmp == 2\0" as *const u8 as *const libc::c_char,
                     b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                     480 as libc::c_int as libc::c_uint,
-                    (*::core::mem::transmute::<
-                        &[u8; 32],
-                        &[libc::c_char; 32],
-                    >(b"int run(Env *, void (*)(Env *))\0"))
-                        .as_ptr(),
+                    (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                        b"int run(Env *, void (*)(Env *))\0",
+                    ))
+                    .as_ptr(),
                 );
             }
         };
         close(1 as libc::c_int);
         tmp = dup(saved1);
-        if tmp == 1 as libc::c_int {} else {
+        if tmp == 1 as libc::c_int {
+        } else {
             __assert_fail(
                 b"tmp == 1\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 486 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 32],
-                    &[libc::c_char; 32],
-                >(b"int run(Env *, void (*)(Env *))\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                    b"int run(Env *, void (*)(Env *))\0",
+                ))
+                .as_ptr(),
             );
         }
         'c_7719: {
-            if tmp == 1 as libc::c_int {} else {
+            if tmp == 1 as libc::c_int {
+            } else {
                 __assert_fail(
                     b"tmp == 1\0" as *const u8 as *const libc::c_char,
                     b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                     486 as libc::c_int as libc::c_uint,
-                    (*::core::mem::transmute::<
-                        &[u8; 32],
-                        &[libc::c_char; 32],
-                    >(b"int run(Env *, void (*)(Env *))\0"))
-                        .as_ptr(),
+                    (*::core::mem::transmute::<&[u8; 32], &[libc::c_char; 32]>(
+                        b"int run(Env *, void (*)(Env *))\0",
+                    ))
+                    .as_ptr(),
                 );
             }
         };
@@ -1648,8 +1604,9 @@ unsafe extern "C" fn run(
         } else if (*env_0).print != 0 {
             printf(b"exit %d \0" as *const u8 as *const libc::c_char, res);
         }
-    } else if ((status & 0x7f as libc::c_int) + 1 as libc::c_int) as libc::c_schar
-        as libc::c_int >> 1 as libc::c_int > 0 as libc::c_int
+    } else if ((status & 0x7f as libc::c_int) + 1 as libc::c_int) as libc::c_schar as libc::c_int
+        >> 1 as libc::c_int
+        > 0 as libc::c_int
     {
         if (*env_0).print != 0 {
             printf(b"signal\0" as *const u8 as *const libc::c_char);
@@ -1686,61 +1643,56 @@ unsafe extern "C" fn printrace(mut env_0: *mut Env) {
         ::core::mem::size_of::<Data>() as libc::c_ulong,
     );
     data.print = 0 as libc::c_int;
-    if !((*env_0).events).is_null() {} else {
+    if !((*env_0).events).is_null() {
+    } else {
         __assert_fail(
             b"env->events\0" as *const u8 as *const libc::c_char,
             b"lglmbt.c\0" as *const u8 as *const libc::c_char,
             510 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 22],
-                &[libc::c_char; 22],
-            >(b"void printrace(Env *)\0"))
+            (*::core::mem::transmute::<&[u8; 22], &[libc::c_char; 22]>(b"void printrace(Env *)\0"))
                 .as_ptr(),
         );
     }
     'c_8228: {
-        if !((*env_0).events).is_null() {} else {
+        if !((*env_0).events).is_null() {
+        } else {
             __assert_fail(
                 b"env->events\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 510 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 22],
-                    &[libc::c_char; 22],
-                >(b"void printrace(Env *)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 22], &[libc::c_char; 22]>(
+                    b"void printrace(Env *)\0",
+                ))
+                .as_ptr(),
             );
         }
     };
-    if !((*env_0).prefix).is_null() {} else {
+    if !((*env_0).prefix).is_null() {
+    } else {
         __assert_fail(
             b"env->prefix\0" as *const u8 as *const libc::c_char,
             b"lglmbt.c\0" as *const u8 as *const libc::c_char,
             511 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 22],
-                &[libc::c_char; 22],
-            >(b"void printrace(Env *)\0"))
+            (*::core::mem::transmute::<&[u8; 22], &[libc::c_char; 22]>(b"void printrace(Env *)\0"))
                 .as_ptr(),
         );
     }
     'c_8192: {
-        if !((*env_0).prefix).is_null() {} else {
+        if !((*env_0).prefix).is_null() {
+        } else {
             __assert_fail(
                 b"env->prefix\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 511 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 22],
-                    &[libc::c_char; 22],
-                >(b"void printrace(Env *)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 22], &[libc::c_char; 22]>(
+                    b"void printrace(Env *)\0",
+                ))
+                .as_ptr(),
             );
         }
     };
-    name = malloc(
-        (strlen((*env_0).prefix)).wrapping_add(80 as libc::c_int as libc::c_ulong),
-    ) as *mut libc::c_char;
+    name = malloc((strlen((*env_0).prefix)).wrapping_add(80 as libc::c_int as libc::c_ulong))
+        as *mut libc::c_char;
     sprintf(
         name,
         b"%s-%u.trace\0" as *const u8 as *const libc::c_char,
@@ -1749,29 +1701,27 @@ unsafe extern "C" fn printrace(mut env_0: *mut Env) {
     );
     data.trace = fopen(name, b"w\0" as *const u8 as *const libc::c_char);
     data.noptsfuzz = (*env_0).noptsfuzz;
-    if !(data.trace).is_null() {} else {
+    if !(data.trace).is_null() {
+    } else {
         __assert_fail(
             b"data.trace\0" as *const u8 as *const libc::c_char,
             b"lglmbt.c\0" as *const u8 as *const libc::c_char,
             516 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 22],
-                &[libc::c_char; 22],
-            >(b"void printrace(Env *)\0"))
+            (*::core::mem::transmute::<&[u8; 22], &[libc::c_char; 22]>(b"void printrace(Env *)\0"))
                 .as_ptr(),
         );
     }
     'c_8104: {
-        if !(data.trace).is_null() {} else {
+        if !(data.trace).is_null() {
+        } else {
             __assert_fail(
                 b"data.trace\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 516 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 22],
-                    &[libc::c_char; 22],
-                >(b"void printrace(Env *)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 22], &[libc::c_char; 22]>(
+                    b"void printrace(Env *)\0",
+                ))
+                .as_ptr(),
             );
         }
     };
@@ -1788,9 +1738,9 @@ unsafe extern "C" fn printrace(mut env_0: *mut Env) {
     free(name as *mut libc::c_void);
 }
 unsafe extern "C" fn prwc(mut env_0: *mut Env, mut prefix: *const libc::c_char) {
-    let mut name: *mut libc::c_char = malloc(
-        (strlen(prefix)).wrapping_add(80 as libc::c_int as libc::c_ulong),
-    ) as *mut libc::c_char;
+    let mut name: *mut libc::c_char =
+        malloc((strlen(prefix)).wrapping_add(80 as libc::c_int as libc::c_ulong))
+            as *mut libc::c_char;
     let mut ch: libc::c_int = 0;
     let mut res: libc::c_int = 0 as libc::c_int;
     let mut file: *mut FILE = 0 as *mut FILE;
@@ -1801,29 +1751,29 @@ unsafe extern "C" fn prwc(mut env_0: *mut Env, mut prefix: *const libc::c_char) 
         (*env_0).seed,
     );
     file = fopen(name, b"r\0" as *const u8 as *const libc::c_char);
-    if !file.is_null() {} else {
+    if !file.is_null() {
+    } else {
         __assert_fail(
             b"file\0" as *const u8 as *const libc::c_char,
             b"lglmbt.c\0" as *const u8 as *const libc::c_char,
             532 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 31],
-                &[libc::c_char; 31],
-            >(b"void prwc(Env *, const char *)\0"))
-                .as_ptr(),
+            (*::core::mem::transmute::<&[u8; 31], &[libc::c_char; 31]>(
+                b"void prwc(Env *, const char *)\0",
+            ))
+            .as_ptr(),
         );
     }
     'c_8363: {
-        if !file.is_null() {} else {
+        if !file.is_null() {
+        } else {
             __assert_fail(
                 b"file\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 532 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 31],
-                    &[libc::c_char; 31],
-                >(b"void prwc(Env *, const char *)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 31], &[libc::c_char; 31]>(
+                    b"void prwc(Env *, const char *)\0",
+                ))
+                .as_ptr(),
             );
         }
     };
@@ -1856,29 +1806,29 @@ unsafe extern "C" fn dd(
     let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut i: libc::c_int = 0;
     file = fopen(filename, b"r\0" as *const u8 as *const libc::c_char);
-    if !file.is_null() {} else {
+    if !file.is_null() {
+    } else {
         __assert_fail(
             b"file\0" as *const u8 as *const libc::c_char,
             b"lglmbt.c\0" as *const u8 as *const libc::c_char,
             550 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 39],
-                &[libc::c_char; 39],
-            >(b"void dd(Env *, const char *, int, int)\0"))
-                .as_ptr(),
+            (*::core::mem::transmute::<&[u8; 39], &[libc::c_char; 39]>(
+                b"void dd(Env *, const char *, int, int)\0",
+            ))
+            .as_ptr(),
         );
     }
     'c_8806: {
-        if !file.is_null() {} else {
+        if !file.is_null() {
+        } else {
             __assert_fail(
                 b"file\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 550 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 39],
-                    &[libc::c_char; 39],
-                >(b"void dd(Env *, const char *, int, int)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 39], &[libc::c_char; 39]>(
+                    b"void dd(Env *, const char *, int, int)\0",
+                ))
+                .as_ptr(),
             );
         }
     };
@@ -1893,35 +1843,34 @@ unsafe extern "C" fn dd(
         (*env_0).nevents += 1 as libc::c_int;
     }
     fclose(file);
-    (*env_0)
-        .events = calloc(
+    (*env_0).events = calloc(
         (*env_0).nevents as libc::c_ulong,
         ::core::mem::size_of::<Event>() as libc::c_ulong,
     ) as *mut Event;
     file = fopen(filename, b"r\0" as *const u8 as *const libc::c_char);
-    if !file.is_null() {} else {
+    if !file.is_null() {
+    } else {
         __assert_fail(
             b"file\0" as *const u8 as *const libc::c_char,
             b"lglmbt.c\0" as *const u8 as *const libc::c_char,
             557 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 39],
-                &[libc::c_char; 39],
-            >(b"void dd(Env *, const char *, int, int)\0"))
-                .as_ptr(),
+            (*::core::mem::transmute::<&[u8; 39], &[libc::c_char; 39]>(
+                b"void dd(Env *, const char *, int, int)\0",
+            ))
+            .as_ptr(),
         );
     }
     'c_8721: {
-        if !file.is_null() {} else {
+        if !file.is_null() {
+        } else {
             __assert_fail(
                 b"file\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 557 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 39],
-                    &[libc::c_char; 39],
-                >(b"void dd(Env *, const char *, int, int)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 39], &[libc::c_char; 39]>(
+                    b"void dd(Env *, const char *, int, int)\0",
+                ))
+                .as_ptr(),
             );
         }
     };
@@ -1933,29 +1882,29 @@ unsafe extern "C" fn dd(
         &mut rand as *mut libc::c_uint,
     ) == 2 as libc::c_int
     {
-        if i < (*env_0).nevents {} else {
+        if i < (*env_0).nevents {
+        } else {
             __assert_fail(
                 b"i < env->nevents\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 560 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 39],
-                    &[libc::c_char; 39],
-                >(b"void dd(Env *, const char *, int, int)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 39], &[libc::c_char; 39]>(
+                    b"void dd(Env *, const char *, int, int)\0",
+                ))
+                .as_ptr(),
             );
         }
         'c_8661: {
-            if i < (*env_0).nevents {} else {
+            if i < (*env_0).nevents {
+            } else {
                 __assert_fail(
                     b"i < env->nevents\0" as *const u8 as *const libc::c_char,
                     b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                     560 as libc::c_int as libc::c_uint,
-                    (*::core::mem::transmute::<
-                        &[u8; 39],
-                        &[libc::c_char; 39],
-                    >(b"void dd(Env *, const char *, int, int)\0"))
-                        .as_ptr(),
+                    (*::core::mem::transmute::<&[u8; 39], &[libc::c_char; 39]>(
+                        b"void dd(Env *, const char *, int, int)\0",
+                    ))
+                    .as_ptr(),
                 );
             }
         };
@@ -1967,34 +1916,37 @@ unsafe extern "C" fn dd(
         i;
     }
     fclose(file);
-    if i == (*env_0).nevents {} else {
+    if i == (*env_0).nevents {
+    } else {
         __assert_fail(
             b"i == env->nevents\0" as *const u8 as *const libc::c_char,
             b"lglmbt.c\0" as *const u8 as *const libc::c_char,
             567 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 39],
-                &[libc::c_char; 39],
-            >(b"void dd(Env *, const char *, int, int)\0"))
-                .as_ptr(),
+            (*::core::mem::transmute::<&[u8; 39], &[libc::c_char; 39]>(
+                b"void dd(Env *, const char *, int, int)\0",
+            ))
+            .as_ptr(),
         );
     }
     'c_8568: {
-        if i == (*env_0).nevents {} else {
+        if i == (*env_0).nevents {
+        } else {
             __assert_fail(
                 b"i == env->nevents\0" as *const u8 as *const libc::c_char,
                 b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                 567 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 39],
-                    &[libc::c_char; 39],
-                >(b"void dd(Env *, const char *, int, int)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 39], &[libc::c_char; 39]>(
+                    b"void dd(Env *, const char *, int, int)\0",
+                ))
+                .as_ptr(),
             );
         }
     };
     (*env_0).prefix = b"bug\0" as *const u8 as *const libc::c_char;
-    run(env_0, Some(printrace as unsafe extern "C" fn(*mut Env) -> ()));
+    run(
+        env_0,
+        Some(printrace as unsafe extern "C" fn(*mut Env) -> ()),
+    );
     prwc(env_0, b"bug\0" as *const u8 as *const libc::c_char);
     cmd = malloc(100 as libc::c_int as libc::c_ulong) as *mut libc::c_char;
     if (*env_0).nodd != 0 {
@@ -2007,8 +1959,7 @@ unsafe extern "C" fn dd(
     } else {
         sprintf(
             cmd,
-            b"./lglddtrace %s bug-%u.trace red-%u.trace\0" as *const u8
-                as *const libc::c_char,
+            b"./lglddtrace %s bug-%u.trace red-%u.trace\0" as *const u8 as *const libc::c_char,
             if opt != 0 {
                 b"-O\0" as *const u8 as *const libc::c_char
             } else {
@@ -2079,7 +2030,10 @@ static mut env: Env = Env {
 static mut start: libc::c_double = 0.;
 unsafe extern "C" fn currentime() -> libc::c_double {
     let mut res: libc::c_double = 0 as libc::c_int as libc::c_double;
-    let mut tv: timeval = timeval { tv_sec: 0, tv_usec: 0 };
+    let mut tv: timeval = timeval {
+        tv_sec: 0,
+        tv_usec: 0,
+    };
     if gettimeofday(&mut tv, 0 as *mut libc::c_void) == 0 {
         res = 1e-6f64 * tv.tv_usec as libc::c_double;
         res += tv.tv_sec as libc::c_double;
@@ -2089,11 +2043,12 @@ unsafe extern "C" fn currentime() -> libc::c_double {
 unsafe extern "C" fn getime() -> libc::c_double {
     return currentime() - start;
 }
-unsafe extern "C" fn average(
-    mut a: libc::c_double,
-    mut b: libc::c_double,
-) -> libc::c_double {
-    return if b != 0. { a / b } else { 0 as libc::c_int as libc::c_double };
+unsafe extern "C" fn average(mut a: libc::c_double, mut b: libc::c_double) -> libc::c_double {
+    return if b != 0. {
+        a / b
+    } else {
+        0 as libc::c_int as libc::c_double
+    };
 }
 unsafe extern "C" fn stats() {
     let mut t: libc::c_double = getime();
@@ -2103,26 +2058,22 @@ unsafe extern "C" fn stats() {
         t,
     );
     printf(
-        b"[lglmbt] %d rounds = %.0f rounds per second\n\0" as *const u8
-            as *const libc::c_char,
+        b"[lglmbt] %d rounds = %.0f rounds per second\n\0" as *const u8 as *const libc::c_char,
         env.round,
         average(env.round as libc::c_double, t),
     );
     printf(
-        b"[lglmbt] %d violations = %.0f rounds per second\n\0" as *const u8
-            as *const libc::c_char,
+        b"[lglmbt] %d violations = %.0f rounds per second\n\0" as *const u8 as *const libc::c_char,
         env.violations,
         average(env.violations as libc::c_double, t),
     );
     printf(
-        b"[lglmbt] %d valid runs = %.0f rounds per second\n\0" as *const u8
-            as *const libc::c_char,
+        b"[lglmbt] %d valid runs = %.0f rounds per second\n\0" as *const u8 as *const libc::c_char,
         valid,
         average(valid as libc::c_double, t),
     );
     printf(
-        b"[lglmbt] %d bugs = %.0f bugs per second\n\0" as *const u8
-            as *const libc::c_char,
+        b"[lglmbt] %d bugs = %.0f bugs per second\n\0" as *const u8 as *const libc::c_char,
         env.bugs,
         average(env.bugs as libc::c_double, t),
     );
@@ -2131,8 +2082,7 @@ unsafe extern "C" fn sighandler(mut sig: libc::c_int) {
     fflush(stdout);
     fflush(stderr);
     printf(
-        b"*** lglmbt: caught signal %d in round %d\n\0" as *const u8
-            as *const libc::c_char,
+        b"*** lglmbt: caught signal %d in round %d\n\0" as *const u8 as *const libc::c_char,
         sig,
         env.round,
     );
@@ -2158,10 +2108,7 @@ unsafe extern "C" fn setsighandlers() {
         Some(sighandler as unsafe extern "C" fn(libc::c_int) -> ()),
     );
 }
-unsafe fn main_0(
-    mut argc: libc::c_int,
-    mut argv: *mut *mut libc::c_char,
-) -> libc::c_int {
+unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> libc::c_int {
     let mut i: libc::c_int = 0;
     let mut max: libc::c_int = 0;
     let mut res: libc::c_int = 0;
@@ -2189,8 +2136,10 @@ unsafe fn main_0(
     opt = 0 as libc::c_int;
     i = 1 as libc::c_int;
     while i < argc {
-        if strcmp(*argv.offset(i as isize), b"-h\0" as *const u8 as *const libc::c_char)
-            == 0
+        if strcmp(
+            *argv.offset(i as isize),
+            b"-h\0" as *const u8 as *const libc::c_char,
+        ) == 0
         {
             printf(b"%s\0" as *const u8 as *const libc::c_char, usage);
             exit(0 as libc::c_int);
@@ -2260,8 +2209,7 @@ unsafe fn main_0(
         ) == 0
             || strcmp(
                 *argv.offset(i as isize),
-                b"--optimize-by-delta-debugging-options\0" as *const u8
-                    as *const libc::c_char,
+                b"--optimize-by-delta-debugging-options\0" as *const u8 as *const libc::c_char,
             ) == 0
         {
             opt = 1 as libc::c_int;
@@ -2272,10 +2220,7 @@ unsafe fn main_0(
         {
             i += 1;
             if i == argc {
-                die(
-                    b"argument to '-t' missing (try '-h')\0" as *const u8
-                        as *const libc::c_char,
-                );
+                die(b"argument to '-t' missing (try '-h')\0" as *const u8 as *const libc::c_char);
             }
             if isnumstr(*argv.offset(i as isize)) == 0 {
                 die(
@@ -2292,10 +2237,7 @@ unsafe fn main_0(
         {
             i += 1;
             if i == argc {
-                die(
-                    b"argument to '-m' missing (try '-h')\0" as *const u8
-                        as *const libc::c_char,
-                );
+                die(b"argument to '-m' missing (try '-h')\0" as *const u8 as *const libc::c_char);
             }
             if isnumstr(*argv.offset(i as isize)) == 0 {
                 die(
@@ -2352,7 +2294,10 @@ unsafe fn main_0(
                 );
                 fflush(stdout);
             }
-            res = run(&mut env, Some(rantrav as unsafe extern "C" fn(*mut Env) -> ()));
+            res = run(
+                &mut env,
+                Some(rantrav as unsafe extern "C" fn(*mut Env) -> ()),
+            );
             if res > 0 as libc::c_int {
                 let mut name: [libc::c_char; 100] = [0; 100];
                 env.bugs += 1;
@@ -2362,8 +2307,7 @@ unsafe fn main_0(
                     b"/tmp/lglmbt-tmp-%d.trace\0" as *const u8 as *const libc::c_char,
                     getpid(),
                 );
-                env
-                    .file = fopen(
+                env.file = fopen(
                     name.as_mut_ptr(),
                     b"w\0" as *const u8 as *const libc::c_char,
                 );
@@ -2372,29 +2316,29 @@ unsafe fn main_0(
                     &mut env,
                     Some(rantrav as unsafe extern "C" fn(*mut Env) -> ()),
                 );
-                if tmp == res {} else {
+                if tmp == res {
+                } else {
                     __assert_fail(
                         b"tmp == res\0" as *const u8 as *const libc::c_char,
                         b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                         751 as libc::c_int as libc::c_uint,
-                        (*::core::mem::transmute::<
-                            &[u8; 23],
-                            &[libc::c_char; 23],
-                        >(b"int main(int, char **)\0"))
-                            .as_ptr(),
+                        (*::core::mem::transmute::<&[u8; 23], &[libc::c_char; 23]>(
+                            b"int main(int, char **)\0",
+                        ))
+                        .as_ptr(),
                     );
                 }
                 'c_9379: {
-                    if tmp == res {} else {
+                    if tmp == res {
+                    } else {
                         __assert_fail(
                             b"tmp == res\0" as *const u8 as *const libc::c_char,
                             b"lglmbt.c\0" as *const u8 as *const libc::c_char,
                             751 as libc::c_int as libc::c_uint,
-                            (*::core::mem::transmute::<
-                                &[u8; 23],
-                                &[libc::c_char; 23],
-                            >(b"int main(int, char **)\0"))
-                                .as_ptr(),
+                            (*::core::mem::transmute::<&[u8; 23], &[libc::c_char; 23]>(
+                                b"int main(int, char **)\0",
+                            ))
+                            .as_ptr(),
                         );
                     }
                 };
@@ -2421,13 +2365,16 @@ unsafe fn main_0(
         if env.terminal != 0 {
             erase();
         }
-        printf(b"forked %d\n\0" as *const u8 as *const libc::c_char, env.forked);
+        printf(
+            b"forked %d\n\0" as *const u8 as *const libc::c_char,
+            env.forked,
+        );
     }
     stats();
     return 0 as libc::c_int;
 }
 pub fn main() {
-    let mut args: Vec::<*mut libc::c_char> = Vec::new();
+    let mut args: Vec<*mut libc::c_char> = Vec::new();
     for arg in ::std::env::args() {
         args.push(
             (::std::ffi::CString::new(arg))
@@ -2437,11 +2384,9 @@ pub fn main() {
     }
     args.push(::core::ptr::null_mut());
     unsafe {
-        ::std::process::exit(
-            main_0(
-                (args.len() - 1) as libc::c_int,
-                args.as_mut_ptr() as *mut *mut libc::c_char,
-            ) as i32,
-        )
+        ::std::process::exit(main_0(
+            (args.len() - 1) as libc::c_int,
+            args.as_mut_ptr() as *mut *mut libc::c_char,
+        ) as i32)
     }
 }

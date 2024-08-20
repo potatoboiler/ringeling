@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 #![feature(c_variadic, core_intrinsics, extern_types)]
 extern "C" {
     pub type _IO_wide_data;
@@ -12,38 +20,30 @@ extern "C" {
     fn fopen(_: *const libc::c_char, _: *const libc::c_char) -> *mut FILE;
     fn printf(_: *const libc::c_char, _: ...) -> libc::c_int;
     fn sprintf(_: *mut libc::c_char, _: *const libc::c_char, _: ...) -> libc::c_int;
-    fn vfprintf(
-        _: *mut FILE,
-        _: *const libc::c_char,
-        _: ::core::ffi::VaList,
-    ) -> libc::c_int;
+    fn vfprintf(_: *mut FILE, _: *const libc::c_char, _: ::core::ffi::VaList) -> libc::c_int;
     fn fscanf(_: *mut FILE, _: *const libc::c_char, _: ...) -> libc::c_int;
     fn getc(__stream: *mut FILE) -> libc::c_int;
     fn fputc(__c: libc::c_int, __stream: *mut FILE) -> libc::c_int;
     fn fputs(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
     fn pclose(__stream: *mut FILE) -> libc::c_int;
     fn popen(__command: *const libc::c_char, __modes: *const libc::c_char) -> *mut FILE;
-    fn lglsetime(_: *mut LGL, time: Option::<unsafe extern "C" fn() -> libc::c_double>);
+    fn lglsetime(_: *mut LGL, time: Option<unsafe extern "C" fn() -> libc::c_double>);
     fn lglsetmsglock(
         _: *mut LGL,
-        lock_0: Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
-        unlock: Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+        lock_0: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+        unlock: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
         _: *mut libc::c_void,
     );
     fn lglsetconsumecls(
         _: *mut LGL,
-        consume: Option::<
-            unsafe extern "C" fn(
-                *mut libc::c_void,
-                *mut *mut libc::c_int,
-                *mut libc::c_int,
-            ) -> (),
+        consume: Option<
+            unsafe extern "C" fn(*mut libc::c_void, *mut *mut libc::c_int, *mut libc::c_int) -> (),
         >,
         _: *mut libc::c_void,
     );
     fn lglsetconsumeunits(
         _: *mut LGL,
-        consume: Option::<
+        consume: Option<
             unsafe extern "C" fn(
                 *mut libc::c_void,
                 *mut *mut libc::c_int,
@@ -54,12 +54,12 @@ extern "C" {
     );
     fn lglsetproduceunit(
         _: *mut LGL,
-        produce: Option::<unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> ()>,
+        produce: Option<unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> ()>,
         _: *mut libc::c_void,
     );
     fn lglseterm(
         _: *mut LGL,
-        term_0: Option::<unsafe extern "C" fn(*mut libc::c_void) -> libc::c_int>,
+        term_0: Option<unsafe extern "C" fn(*mut libc::c_void) -> libc::c_int>,
         _: *mut libc::c_void,
     );
     fn lglprocesstime() -> libc::c_double;
@@ -85,18 +85,9 @@ extern "C" {
     fn lgljoin(parent: *mut LGL, child: *mut LGL) -> libc::c_int;
     fn lglfork(parent: *mut LGL) -> *mut LGL;
     fn lglclone(_: *mut LGL) -> *mut LGL;
-    fn lglminit(
-        mem: *mut libc::c_void,
-        _: lglalloc,
-        _: lglrealloc,
-        _: lgldealloc,
-    ) -> *mut LGL;
+    fn lglminit(mem: *mut libc::c_void, _: lglalloc, _: lglrealloc, _: lgldealloc) -> *mut LGL;
     fn lglrelease(_: *mut LGL);
-    fn strtol(
-        _: *const libc::c_char,
-        _: *mut *mut libc::c_char,
-        _: libc::c_int,
-    ) -> libc::c_long;
+    fn strtol(_: *const libc::c_char, _: *mut *mut libc::c_char, _: libc::c_int) -> libc::c_long;
     fn strtoll(
         _: *const libc::c_char,
         _: *mut *mut libc::c_char,
@@ -108,25 +99,15 @@ extern "C" {
     fn realloc(_: *mut libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
     fn malloc(_: libc::c_ulong) -> *mut libc::c_void;
     fn system(__command: *const libc::c_char) -> libc::c_int;
-    fn qsort(
-        __base: *mut libc::c_void,
-        __nmemb: size_t,
-        __size: size_t,
-        __compar: __compar_fn_t,
-    );
+    fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
     fn __ctype_b_loc() -> *mut *const libc::c_ushort;
     fn pthread_create(
         __newthread: *mut pthread_t,
         __attr: *const pthread_attr_t,
-        __start_routine: Option::<
-            unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void,
-        >,
+        __start_routine: Option<unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void>,
         __arg: *mut libc::c_void,
     ) -> libc::c_int;
-    fn pthread_join(
-        __th: pthread_t,
-        __thread_return: *mut *mut libc::c_void,
-    ) -> libc::c_int;
+    fn pthread_join(__th: pthread_t, __thread_return: *mut *mut libc::c_void) -> libc::c_int;
     fn pthread_mutex_init(
         __mutex: *mut pthread_mutex_t,
         __mutexattr: *const pthread_mutexattr_t,
@@ -138,17 +119,11 @@ extern "C" {
         __cond_attr: *const pthread_condattr_t,
     ) -> libc::c_int;
     fn pthread_cond_signal(__cond: *mut pthread_cond_t) -> libc::c_int;
-    fn pthread_cond_wait(
-        __cond: *mut pthread_cond_t,
-        __mutex: *mut pthread_mutex_t,
-    ) -> libc::c_int;
+    fn pthread_cond_wait(__cond: *mut pthread_cond_t, __mutex: *mut pthread_mutex_t)
+        -> libc::c_int;
     fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
     fn raise(__sig: libc::c_int) -> libc::c_int;
-    fn memset(
-        _: *mut libc::c_void,
-        _: libc::c_int,
-        _: libc::c_ulong,
-    ) -> *mut libc::c_void;
+    fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
     fn strcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
     fn strlen(_: *const libc::c_char) -> libc::c_ulong;
@@ -305,22 +280,13 @@ pub union pthread_cond_t {
     pub __size: [libc::c_char; 48],
     pub __align: libc::c_longlong,
 }
-pub type __compar_fn_t = Option::<
-    unsafe extern "C" fn(*const libc::c_void, *const libc::c_void) -> libc::c_int,
->;
-pub type lglalloc = Option::<
-    unsafe extern "C" fn(*mut libc::c_void, size_t) -> *mut libc::c_void,
->;
-pub type lgldealloc = Option::<
-    unsafe extern "C" fn(*mut libc::c_void, *mut libc::c_void, size_t) -> (),
->;
-pub type lglrealloc = Option::<
-    unsafe extern "C" fn(
-        *mut libc::c_void,
-        *mut libc::c_void,
-        size_t,
-        size_t,
-    ) -> *mut libc::c_void,
+pub type __compar_fn_t =
+    Option<unsafe extern "C" fn(*const libc::c_void, *const libc::c_void) -> libc::c_int>;
+pub type lglalloc = Option<unsafe extern "C" fn(*mut libc::c_void, size_t) -> *mut libc::c_void>;
+pub type lgldealloc =
+    Option<unsafe extern "C" fn(*mut libc::c_void, *mut libc::c_void, size_t) -> ()>;
+pub type lglrealloc = Option<
+    unsafe extern "C" fn(*mut libc::c_void, *mut libc::c_void, size_t, size_t) -> *mut libc::c_void,
 >;
 pub type C2RustUnnamed_0 = libc::c_uint;
 pub const _ISalnum: C2RustUnnamed_0 = 8;
@@ -335,7 +301,7 @@ pub const _ISdigit: C2RustUnnamed_0 = 2048;
 pub const _ISalpha: C2RustUnnamed_0 = 1024;
 pub const _ISlower: C2RustUnnamed_0 = 512;
 pub const _ISupper: C2RustUnnamed_0 = 256;
-pub type __sighandler_t = Option::<unsafe extern "C" fn(libc::c_int) -> ()>;
+pub type __sighandler_t = Option<unsafe extern "C" fn(libc::c_int) -> ()>;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct stat {
@@ -631,7 +597,7 @@ pub struct Job {
     pub pos: libc::c_int,
     pub state: State,
     pub node: *mut Node,
-    pub fun: Option::<unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void>,
+    pub fun: Option<unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void>,
     pub thread: pthread_t,
     pub name: *const libc::c_char,
 }
@@ -768,14 +734,8 @@ static mut parallel: Parallel = Parallel {
     decisions: 0,
     conflicts: 0,
     propagations: 0,
-    consumed: C2RustUnnamed_2 {
-        leafs: 0,
-        units: 0,
-    },
-    produced: C2RustUnnamed_2 {
-        leafs: 0,
-        units: 0,
-    },
+    consumed: C2RustUnnamed_2 { leafs: 0, units: 0 },
+    produced: C2RustUnnamed_2 { leafs: 0, units: 0 },
     res: 0,
     nunits: 0,
     units: 0 as *const libc::c_int as *mut libc::c_int,
@@ -841,8 +801,7 @@ static mut started: libc::c_int = 0;
 static mut deleted: libc::c_int = 0;
 static mut simplified: libc::c_int = 0;
 static mut added: libc::c_int = 0;
-static mut startimeptr: *mut libc::c_double = 0 as *const libc::c_double
-    as *mut libc::c_double;
+static mut startimeptr: *mut libc::c_double = 0 as *const libc::c_double as *mut libc::c_double;
 static mut startime: libc::c_double = 0.;
 static mut opts: C2RustUnnamed_5 = C2RustUnnamed_5 { set: 0, def: 0 };
 #[no_mangle]
@@ -868,10 +827,8 @@ static mut lock: C2RustUnnamed_8 = C2RustUnnamed_8 {
                 __spins: 0,
                 __elision: 0,
                 __list: __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 },
             },
         },
@@ -889,10 +846,8 @@ static mut lock: C2RustUnnamed_8 = C2RustUnnamed_8 {
                 __spins: 0,
                 __elision: 0,
                 __list: __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 },
             },
         },
@@ -910,10 +865,8 @@ static mut lock: C2RustUnnamed_8 = C2RustUnnamed_8 {
                 __spins: 0,
                 __elision: 0,
                 __list: __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 },
             },
         },
@@ -931,10 +884,8 @@ static mut lock: C2RustUnnamed_8 = C2RustUnnamed_8 {
                 __spins: 0,
                 __elision: 0,
                 __list: __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 },
             },
         },
@@ -952,10 +903,8 @@ static mut lock: C2RustUnnamed_8 = C2RustUnnamed_8 {
                 __spins: 0,
                 __elision: 0,
                 __list: __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 },
             },
         },
@@ -973,10 +922,8 @@ static mut lock: C2RustUnnamed_8 = C2RustUnnamed_8 {
                 __spins: 0,
                 __elision: 0,
                 __list: __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 },
             },
         },
@@ -994,10 +941,8 @@ static mut lock: C2RustUnnamed_8 = C2RustUnnamed_8 {
                 __spins: 0,
                 __elision: 0,
                 __list: __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 },
             },
         },
@@ -1015,10 +960,8 @@ static mut lock: C2RustUnnamed_8 = C2RustUnnamed_8 {
                 __spins: 0,
                 __elision: 0,
                 __list: __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 },
             },
         },
@@ -1036,10 +979,8 @@ static mut lock: C2RustUnnamed_8 = C2RustUnnamed_8 {
                 __spins: 0,
                 __elision: 0,
                 __list: __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 },
             },
         },
@@ -1057,10 +998,8 @@ static mut lock: C2RustUnnamed_8 = C2RustUnnamed_8 {
                 __spins: 0,
                 __elision: 0,
                 __list: __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 },
             },
         },
@@ -1078,10 +1017,8 @@ static mut lock: C2RustUnnamed_8 = C2RustUnnamed_8 {
                 __spins: 0,
                 __elision: 0,
                 __list: __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 },
             },
         },
@@ -1099,10 +1036,8 @@ static mut lock: C2RustUnnamed_8 = C2RustUnnamed_8 {
                 __spins: 0,
                 __elision: 0,
                 __list: __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 },
             },
         },
@@ -1120,10 +1055,8 @@ static mut lock: C2RustUnnamed_8 = C2RustUnnamed_8 {
                 __spins: 0,
                 __elision: 0,
                 __list: __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 },
             },
         },
@@ -1133,12 +1066,8 @@ static mut lock: C2RustUnnamed_8 = C2RustUnnamed_8 {
 };
 static mut workerscond: pthread_cond_t = pthread_cond_t {
     __data: __pthread_cond_s {
-        __wseq: __atomic_wide_counter {
-            __value64: 0,
-        },
-        __g1_start: __atomic_wide_counter {
-            __value64: 0,
-        },
+        __wseq: __atomic_wide_counter { __value64: 0 },
+        __g1_start: __atomic_wide_counter { __value64: 0 },
         __g_refs: [0; 2],
         __g_size: [0; 2],
         __g1_orig_size: 0,
@@ -1148,7 +1077,10 @@ static mut workerscond: pthread_cond_t = pthread_cond_t {
 };
 unsafe extern "C" fn currentime() -> libc::c_double {
     let mut res: libc::c_double = 0 as libc::c_int as libc::c_double;
-    let mut tv: timeval = timeval { tv_sec: 0, tv_usec: 0 };
+    let mut tv: timeval = timeval {
+        tv_sec: 0,
+        tv_usec: 0,
+    };
     if gettimeofday(&mut tv, 0 as *mut libc::c_void) == 0 {
         res = 1e-6f64 * tv.tv_usec as libc::c_double;
         res += tv.tv_sec as libc::c_double;
@@ -1160,7 +1092,10 @@ unsafe extern "C" fn getime() -> libc::c_double {
 }
 unsafe extern "C" fn warn(mut fmt: *const libc::c_char, mut args: ...) {
     let mut ap: ::core::ffi::VaListImpl;
-    fputs(b"c *** warning *** \0" as *const u8 as *const libc::c_char, stdout);
+    fputs(
+        b"c *** warning *** \0" as *const u8 as *const libc::c_char,
+        stdout,
+    );
     ap = args.clone();
     vprintf(fmt, ap.as_va_list());
     fputc('\n' as i32, stdout);
@@ -1191,7 +1126,10 @@ unsafe extern "C" fn stoptimer() -> libc::c_double {
 }
 unsafe extern "C" fn lockgen(mut lock_0: *mut Lock, mut name: *const libc::c_char) {
     if pthread_mutex_lock(&mut (*lock_0).mutex) != 0 {
-        warn(b"failed to lock '%s' mutex\0" as *const u8 as *const libc::c_char, name);
+        warn(
+            b"failed to lock '%s' mutex\0" as *const u8 as *const libc::c_char,
+            name,
+        );
     }
     (*lock_0).locked += 1;
     (*lock_0).locked;
@@ -1200,17 +1138,29 @@ unsafe extern "C" fn unlockgen(mut lock_0: *mut Lock, mut name: *const libc::c_c
     (*lock_0).locked -= 1;
     (*lock_0).locked;
     if pthread_mutex_unlock(&mut (*lock_0).mutex) != 0 {
-        warn(b"failed to lock '%s' mutex\0" as *const u8 as *const libc::c_char, name);
+        warn(
+            b"failed to lock '%s' mutex\0" as *const u8 as *const libc::c_char,
+            name,
+        );
     }
 }
 unsafe extern "C" fn lockconfs() {
-    lockgen(&mut lock.confs, b"confs\0" as *const u8 as *const libc::c_char);
+    lockgen(
+        &mut lock.confs,
+        b"confs\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn lockdone() {
-    lockgen(&mut lock.done, b"done\0" as *const u8 as *const libc::c_char);
+    lockgen(
+        &mut lock.done,
+        b"done\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn lockleafs() {
-    lockgen(&mut lock.leafs, b"leafs\0" as *const u8 as *const libc::c_char);
+    lockgen(
+        &mut lock.leafs,
+        b"leafs\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn lockmem() {
     lockgen(&mut lock.mem, b"mem\0" as *const u8 as *const libc::c_char);
@@ -1219,37 +1169,70 @@ unsafe extern "C" fn lockmsg() {
     lockgen(&mut lock.msg, b"msg\0" as *const u8 as *const libc::c_char);
 }
 unsafe extern "C" fn locknodes() {
-    lockgen(&mut lock.nodes, b"nodes\0" as *const u8 as *const libc::c_char);
+    lockgen(
+        &mut lock.nodes,
+        b"nodes\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn lockopts() {
-    lockgen(&mut lock.opts, b"opts\0" as *const u8 as *const libc::c_char);
+    lockgen(
+        &mut lock.opts,
+        b"opts\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn lockparleafs() {
-    lockgen(&mut lock.parleafs, b"parleafs\0" as *const u8 as *const libc::c_char);
+    lockgen(
+        &mut lock.parleafs,
+        b"parleafs\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn lockparstats() {
-    lockgen(&mut lock.parstats, b"parstats\0" as *const u8 as *const libc::c_char);
+    lockgen(
+        &mut lock.parstats,
+        b"parstats\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn lockparunits() {
-    lockgen(&mut lock.parunits, b"parunits\0" as *const u8 as *const libc::c_char);
+    lockgen(
+        &mut lock.parunits,
+        b"parunits\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn locksimplified() {
-    lockgen(&mut lock.simplified, b"simplified\0" as *const u8 as *const libc::c_char);
+    lockgen(
+        &mut lock.simplified,
+        b"simplified\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn lockstats() {
-    lockgen(&mut lock.stats, b"stats\0" as *const u8 as *const libc::c_char);
+    lockgen(
+        &mut lock.stats,
+        b"stats\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn lockworkers() {
-    lockgen(&mut lock.workers, b"workers\0" as *const u8 as *const libc::c_char);
+    lockgen(
+        &mut lock.workers,
+        b"workers\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn unlockconfs() {
-    unlockgen(&mut lock.confs, b"confs\0" as *const u8 as *const libc::c_char);
+    unlockgen(
+        &mut lock.confs,
+        b"confs\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn unlockdone() {
-    unlockgen(&mut lock.done, b"done\0" as *const u8 as *const libc::c_char);
+    unlockgen(
+        &mut lock.done,
+        b"done\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn unlockleafs() {
-    unlockgen(&mut lock.leafs, b"leafs\0" as *const u8 as *const libc::c_char);
+    unlockgen(
+        &mut lock.leafs,
+        b"leafs\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn unlockmem() {
     unlockgen(&mut lock.mem, b"mem\0" as *const u8 as *const libc::c_char);
@@ -1258,28 +1241,52 @@ unsafe extern "C" fn unlockmsg() {
     unlockgen(&mut lock.msg, b"msg\0" as *const u8 as *const libc::c_char);
 }
 unsafe extern "C" fn unlocknodes() {
-    unlockgen(&mut lock.nodes, b"nodes\0" as *const u8 as *const libc::c_char);
+    unlockgen(
+        &mut lock.nodes,
+        b"nodes\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn unlockopts() {
-    unlockgen(&mut lock.opts, b"opts\0" as *const u8 as *const libc::c_char);
+    unlockgen(
+        &mut lock.opts,
+        b"opts\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn unlockparleafs() {
-    unlockgen(&mut lock.parleafs, b"parleafs\0" as *const u8 as *const libc::c_char);
+    unlockgen(
+        &mut lock.parleafs,
+        b"parleafs\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn unlockparstats() {
-    unlockgen(&mut lock.parstats, b"parstats\0" as *const u8 as *const libc::c_char);
+    unlockgen(
+        &mut lock.parstats,
+        b"parstats\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn unlockparunits() {
-    unlockgen(&mut lock.parunits, b"parunits\0" as *const u8 as *const libc::c_char);
+    unlockgen(
+        &mut lock.parunits,
+        b"parunits\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn unlocksimplified() {
-    unlockgen(&mut lock.simplified, b"simplified\0" as *const u8 as *const libc::c_char);
+    unlockgen(
+        &mut lock.simplified,
+        b"simplified\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn unlockstats() {
-    unlockgen(&mut lock.stats, b"stats\0" as *const u8 as *const libc::c_char);
+    unlockgen(
+        &mut lock.stats,
+        b"stats\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn unlockworkers() {
-    unlockgen(&mut lock.workers, b"workers\0" as *const u8 as *const libc::c_char);
+    unlockgen(
+        &mut lock.workers,
+        b"workers\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn err(mut fmt: *const libc::c_char, mut args: ...) {
     let mut ap: ::core::ffi::VaListImpl;
@@ -1333,11 +1340,7 @@ unsafe extern "C" fn vrb(mut fmt: *const libc::c_char, mut args: ...) {
     fflush(stdout);
     unlockmsg();
 }
-unsafe extern "C" fn nmsg(
-    mut node: *mut Node,
-    mut fmt: *const libc::c_char,
-    mut args: ...
-) {
+unsafe extern "C" fn nmsg(mut node: *mut Node, mut fmt: *const libc::c_char, mut args: ...) {
     let mut ap: ::core::ffi::VaListImpl;
     if verbose == 0 {
         return;
@@ -1428,23 +1431,20 @@ unsafe extern "C" fn startphase(mut phase: *const libc::c_char) {
     }
     vrb(b"\0" as *const u8 as *const libc::c_char);
     vrb(
-        b"------------------- [ %s %d ] -------------------\0" as *const u8
-            as *const libc::c_char,
+        b"------------------- [ %s %d ] -------------------\0" as *const u8 as *const libc::c_char,
         phase,
         round,
     );
     vrb(b"\0" as *const u8 as *const libc::c_char);
 }
-unsafe extern "C" fn avg(
-    mut a: libc::c_double,
-    mut b: libc::c_double,
-) -> libc::c_double {
-    return if b > 0 as libc::c_int as libc::c_double { a / b } else { 0.0f64 };
+unsafe extern "C" fn avg(mut a: libc::c_double, mut b: libc::c_double) -> libc::c_double {
+    return if b > 0 as libc::c_int as libc::c_double {
+        a / b
+    } else {
+        0.0f64
+    };
 }
-unsafe extern "C" fn pcnt(
-    mut a: libc::c_double,
-    mut b: libc::c_double,
-) -> libc::c_double {
+unsafe extern "C" fn pcnt(mut a: libc::c_double, mut b: libc::c_double) -> libc::c_double {
     return avg(100.0f64 * a, b);
 }
 unsafe extern "C" fn incmem(mut bytes: size_t) {
@@ -1460,13 +1460,10 @@ unsafe extern "C" fn decmem(mut bytes: size_t) {
     currentbytes = currentbytes.wrapping_sub(bytes);
     unlockmem();
 }
-unsafe extern "C" fn alloc(
-    mut dummy: *mut libc::c_void,
-    mut bytes: size_t,
-) -> *mut libc::c_void {
+unsafe extern "C" fn alloc(mut dummy: *mut libc::c_void, mut bytes: size_t) -> *mut libc::c_void {
     let mut res: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut BYTES: size_t = bytes
-        .wrapping_mul(::core::mem::size_of::<libc::c_char>() as libc::c_ulong);
+    let mut BYTES: size_t =
+        bytes.wrapping_mul(::core::mem::size_of::<libc::c_char>() as libc::c_ulong);
     res = malloc(BYTES) as *mut libc::c_char;
     if res.is_null() {
         err(b"out of memory\0" as *const u8 as *const libc::c_char);
@@ -1482,8 +1479,8 @@ unsafe extern "C" fn dealloc(
     mut bytes: size_t,
 ) {
     let mut char_ptr: *mut libc::c_char = void_ptr as *mut libc::c_char;
-    let mut BYTES: size_t = bytes
-        .wrapping_mul(::core::mem::size_of::<libc::c_char>() as libc::c_ulong);
+    let mut BYTES: size_t =
+        bytes.wrapping_mul(::core::mem::size_of::<libc::c_char>() as libc::c_ulong);
     decmem(BYTES);
     free(char_ptr as *mut libc::c_void);
 }
@@ -1527,8 +1524,7 @@ unsafe extern "C" fn getotalmem(mut explain: libc::c_int) -> int64_t {
         res = (12 as libc::c_longlong) << 30 as libc::c_int;
         if explain != 0 {
             msg(
-                b"assuming compiled in memory size of %d GB\0" as *const u8
-                    as *const libc::c_char,
+                b"assuming compiled in memory size of %d GB\0" as *const u8 as *const libc::c_char,
                 12 as libc::c_longlong,
             );
         }
@@ -1553,14 +1549,13 @@ unsafe extern "C" fn getcores(mut explain: libc::c_int) -> libc::c_int {
     if explain != 0 {
         if syscores > 0 as libc::c_int {
             msg(
-                b"'sysconf' reports %d processors online\0" as *const u8
-                    as *const libc::c_char,
+                b"'sysconf' reports %d processors online\0" as *const u8 as *const libc::c_char,
                 syscores,
             );
         } else {
             msg(
-                b"'sysconf' fails to determine number of online processors\0"
-                    as *const u8 as *const libc::c_char,
+                b"'sysconf' fails to determine number of online processors\0" as *const u8
+                    as *const libc::c_char,
             );
         }
     }
@@ -1628,16 +1623,14 @@ unsafe extern "C" fn getcores(mut explain: libc::c_int) -> libc::c_int {
     } else {
         physids = 0 as libc::c_int;
     }
-    if coreids > 0 as libc::c_int && physids > 0 as libc::c_int
-        && {
-            procpuinfocores = coreids * physids;
-            procpuinfocores > 0 as libc::c_int
-        }
-    {
+    if coreids > 0 as libc::c_int && physids > 0 as libc::c_int && {
+        procpuinfocores = coreids * physids;
+        procpuinfocores > 0 as libc::c_int
+    } {
         if explain != 0 {
             msg(
-                b"%d cores = %d core times %d physical ids in '/proc/cpuinfo'\0"
-                    as *const u8 as *const libc::c_char,
+                b"%d cores = %d core times %d physical ids in '/proc/cpuinfo'\0" as *const u8
+                    as *const libc::c_char,
                 procpuinfocores,
                 coreids,
                 physids,
@@ -1658,10 +1651,7 @@ unsafe extern "C" fn getcores(mut explain: libc::c_int) -> libc::c_int {
         usesyscores = 1 as libc::c_int;
     } else if procpuinfocores > 0 as libc::c_int && syscores <= 0 as libc::c_int {
         if explain != 0 {
-            msg(
-                b"only '/proc/cpuinfo' result valid\0" as *const u8
-                    as *const libc::c_char,
-            );
+            msg(b"only '/proc/cpuinfo' result valid\0" as *const u8 as *const libc::c_char);
         }
         useprocpuinfo = 1 as libc::c_int;
     } else if procpuinfocores <= 0 as libc::c_int && syscores > 0 as libc::c_int {
@@ -1675,20 +1665,14 @@ unsafe extern "C" fn getcores(mut explain: libc::c_int) -> libc::c_int {
                 as *const libc::c_char,
         ) == 0) as libc::c_int;
         if intel != 0 && explain != 0 {
-            msg(
-                b"found Intel as vendor in '/proc/cpuinfo'\0" as *const u8
-                    as *const libc::c_char,
-            );
+            msg(b"found Intel as vendor in '/proc/cpuinfo'\0" as *const u8 as *const libc::c_char);
         }
         amd = (system(
             b"grep vendor /proc/cpuinfo 2>/dev/null|grep -q AMD\0" as *const u8
                 as *const libc::c_char,
         ) == 0) as libc::c_int;
         if amd != 0 && explain != 0 {
-            msg(
-                b"found AMD as vendor in '/proc/cpuinfo'\0" as *const u8
-                    as *const libc::c_char,
-            );
+            msg(b"found AMD as vendor in '/proc/cpuinfo'\0" as *const u8 as *const libc::c_char);
         }
         if amd != 0 {
             if explain != 0 {
@@ -1703,8 +1687,8 @@ unsafe extern "C" fn getcores(mut explain: libc::c_int) -> libc::c_int {
                     syscores as libc::c_double / procpuinfocores as libc::c_double,
                 );
                 msg(
-                    b"trusting 'sysconf' on Intel (assuming HyperThreading)\0"
-                        as *const u8 as *const libc::c_char,
+                    b"trusting 'sysconf' on Intel (assuming HyperThreading)\0" as *const u8
+                        as *const libc::c_char,
                 );
             }
             usesyscores = 1 as libc::c_int;
@@ -1721,8 +1705,8 @@ unsafe extern "C" fn getcores(mut explain: libc::c_int) -> libc::c_int {
     if useprocpuinfo != 0 {
         if explain != 0 {
             msg(
-                b"assuming cores = core * physical ids in '/proc/cpuinfo' = %d\0"
-                    as *const u8 as *const libc::c_char,
+                b"assuming cores = core * physical ids in '/proc/cpuinfo' = %d\0" as *const u8
+                    as *const libc::c_char,
                 procpuinfocores,
             );
         }
@@ -1730,8 +1714,8 @@ unsafe extern "C" fn getcores(mut explain: libc::c_int) -> libc::c_int {
     } else if usesyscores != 0 {
         if explain != 0 {
             msg(
-                b"assuming cores = number of processors reported by 'sysconf' = %d\0"
-                    as *const u8 as *const libc::c_char,
+                b"assuming cores = number of processors reported by 'sysconf' = %d\0" as *const u8
+                    as *const libc::c_char,
                 syscores,
             );
         }
@@ -1750,12 +1734,12 @@ unsafe extern "C" fn getcores(mut explain: libc::c_int) -> libc::c_int {
 }
 unsafe extern "C" fn usage() {
     let mut b: int64_t = getotalmem(0 as libc::c_int);
-    let mut m: libc::c_longlong = (b
-        + ((1 as libc::c_int) << 20 as libc::c_int) as int64_t
-        - 1 as libc::c_int as int64_t >> 20 as libc::c_int) as libc::c_longlong;
-    let mut g: libc::c_longlong = (b
-        + ((1 as libc::c_int) << 30 as libc::c_int) as int64_t
-        - 1 as libc::c_int as int64_t >> 30 as libc::c_int) as libc::c_longlong;
+    let mut m: libc::c_longlong = (b + ((1 as libc::c_int) << 20 as libc::c_int) as int64_t
+        - 1 as libc::c_int as int64_t
+        >> 20 as libc::c_int) as libc::c_longlong;
+    let mut g: libc::c_longlong = (b + ((1 as libc::c_int) << 30 as libc::c_int) as int64_t
+        - 1 as libc::c_int as int64_t
+        >> 30 as libc::c_int) as libc::c_longlong;
     let mut c: libc::c_int = getcores(0 as libc::c_int);
     printf(
         b"usage: treengeling [<option> ...] [<file> [<workers>]]\n\nwhere <option> is one of the following\n\n  -h             print option summary\n  --version      print version and exit\n  -v             increase verbose level\n  -S             print statistics for each solver instance too\n  -n             do not print satisfying assignments\n\n  -t <workers>   maximum number actual worker threads (system default %d)\n  -a <nodes>     maximum number active nodes (system default %d)\n\n  -m <mb>        assumed memory in mega bytes (system default %lld MB)\n  -g <gb>        assumed memory in giga bytes (system default %lld GB)\n\n  -r <posnum>    randomize splits by swapping <posnum> nodes\n  -s <seed>      unsigned 64 bit seed for randomizing splits (default 0)\n\n  -b <branches>  percentage of nodes split (default %d%%)\n\n  --balance      split larger nodes first\n  --symmetric    symmetric splitting%s\n  --asymmetric   asymmetric splitting%s\n  --eager        eager splitting by forced reduction of limit (default)\n  --lazy         disable eager splitting (opposite of '--eager')\n  --portfolio    use portfolio style option fuzzing (default off)\n\n  --locslkhd      use local searchf or look-ahead\n  --no-relevancelkhd do not use relevance (VSIDS/VMTF) look-ahead\n  --treelook=<d>  maximum depth for tree-based look-ahead (default %d)\n\n  --min=<lim>    minimum conflict limit per search (compiled default %d)\n  --init=<lim>   initial conflict limit per search (compiled default %d)\n  --max=<lim>    maximum conflict limit per search (compiled default %d)\n\n  --reduce       reduce learned clause cache for all right branches\n  --force-simp   force simplification even after light simplification\n  --no-simp      do not explicitly simplify in each round\n  --no-search    do not even search in each round\n  --no-parallel  disable additional parallel solver instance\n  --no-full      no full rounds every %d rounds\n  -f <fullint>   full round interval (default %d)\n\nand the <file> is a DIMACS file.  If the name of the file has a '.gz'\nrespectively '.bz2' suffix, it is assumed to be a file compressed with\n'gzip' respectively 'bzip2'.  In this case the parser will open a pipe\nand execute 'gunzip' respectively 'bzcat'.\n\0"
@@ -1798,8 +1782,8 @@ unsafe extern "C" fn next() -> libc::c_int {
     return res;
 }
 unsafe extern "C" fn ws(mut ch: libc::c_int) -> libc::c_int {
-    return (ch == ' ' as i32 || ch == '\t' as i32 || ch == '\n' as i32
-        || ch == '\r' as i32) as libc::c_int;
+    return (ch == ' ' as i32 || ch == '\t' as i32 || ch == '\n' as i32 || ch == '\r' as i32)
+        as libc::c_int;
 }
 unsafe extern "C" fn parse(mut lgl: *mut LGL) {
     let mut sclauses: libc::c_int = 0;
@@ -1812,10 +1796,7 @@ unsafe extern "C" fn parse(mut lgl: *mut LGL) {
     loop {
         ch = next();
         if ch == -(1 as libc::c_int) {
-            perr(
-                b"unexpected end-of-file before header\0" as *const u8
-                    as *const libc::c_char,
-            );
+            perr(b"unexpected end-of-file before header\0" as *const u8 as *const libc::c_char);
         }
         if !(ch == 'c' as i32) {
             break;
@@ -1835,8 +1816,7 @@ unsafe extern "C" fn parse(mut lgl: *mut LGL) {
     }
     if ch != 'p' as i32 {
         perr(
-            b"unexpected character 0x%02x in header\0" as *const u8
-                as *const libc::c_char,
+            b"unexpected character 0x%02x in header\0" as *const u8 as *const libc::c_char,
             ch,
         );
     }
@@ -1845,7 +1825,9 @@ unsafe extern "C" fn parse(mut lgl: *mut LGL) {
         b" cnf %d %d\0" as *const u8 as *const libc::c_char,
         &mut nvars as *mut libc::c_int,
         &mut sclauses as *mut libc::c_int,
-    ) != 2 as libc::c_int || nvars < 0 as libc::c_int || sclauses < 0 as libc::c_int
+    ) != 2 as libc::c_int
+        || nvars < 0 as libc::c_int
+        || sclauses < 0 as libc::c_int
     {
         perr(b"invalid header\0" as *const u8 as *const libc::c_char);
     }
@@ -1858,16 +1840,13 @@ unsafe extern "C" fn parse(mut lgl: *mut LGL) {
     nlits = last;
     loop {
         ch = next();
-        if ch == ' ' as i32 || ch == '\t' as i32 || ch == '\n' as i32
-            || ch == '\r' as i32
-        {
+        if ch == ' ' as i32 || ch == '\t' as i32 || ch == '\n' as i32 || ch == '\r' as i32 {
             continue;
         }
         if ch == -(1 as libc::c_int) {
             if last != 0 {
                 perr(
-                    b"zero missing after %d in last clause\0" as *const u8
-                        as *const libc::c_char,
+                    b"zero missing after %d in last clause\0" as *const u8 as *const libc::c_char,
                     last,
                 );
             }
@@ -1904,15 +1883,15 @@ unsafe extern "C" fn parse(mut lgl: *mut LGL) {
             if ch == '-' as i32 {
                 ch = next();
                 if *(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-                    & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int == 0
+                    & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+                    == 0
                 {
-                    perr(
-                        b"expected digit after '-'\0" as *const u8 as *const libc::c_char,
-                    );
+                    perr(b"expected digit after '-'\0" as *const u8 as *const libc::c_char);
                 }
                 sign = -(1 as libc::c_int);
             } else if *(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-                & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int == 0
+                & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+                == 0
             {
                 perr(b"expected digit or '-'\0" as *const u8 as *const libc::c_char);
             }
@@ -1920,7 +1899,8 @@ unsafe extern "C" fn parse(mut lgl: *mut LGL) {
             loop {
                 ch = next();
                 if !(*(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-                    & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int != 0)
+                    & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+                    != 0)
                 {
                     break;
                 }
@@ -1928,8 +1908,7 @@ unsafe extern "C" fn parse(mut lgl: *mut LGL) {
             }
             if lit > nvars {
                 perr(
-                    b"variable %d exceeds maximum %d\0" as *const u8
-                        as *const libc::c_char,
+                    b"variable %d exceeds maximum %d\0" as *const u8 as *const libc::c_char,
                     lit,
                     nvars,
                 );
@@ -1947,20 +1926,20 @@ unsafe extern "C" fn parse(mut lgl: *mut LGL) {
             }
             if ch != -(1 as libc::c_int) && ws(ch) == 0 {
                 perr(
-                    b"expected white space after %d\0" as *const u8
-                        as *const libc::c_char,
+                    b"expected white space after %d\0" as *const u8 as *const libc::c_char,
                     lit,
                 );
             }
             lgladd(lgl, lit);
             last = lit;
         }
-    };
+    }
 }
 unsafe extern "C" fn isnum(mut str: *const libc::c_char) -> libc::c_int {
     let mut p: *const libc::c_char = str;
     if *(*__ctype_b_loc()).offset(*p as libc::c_int as isize) as libc::c_int
-        & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int == 0
+        & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+        == 0
     {
         return 0 as libc::c_int;
     }
@@ -1970,7 +1949,8 @@ unsafe extern "C" fn isnum(mut str: *const libc::c_char) -> libc::c_int {
             break;
         }
         if *(*__ctype_b_loc()).offset(*p as libc::c_int as isize) as libc::c_int
-            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int == 0
+            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+            == 0
         {
             return 0 as libc::c_int;
         }
@@ -1990,9 +1970,18 @@ unsafe extern "C" fn exists(mut str: *const libc::c_char) -> libc::c_int {
         st_size: 0,
         st_blksize: 0,
         st_blocks: 0,
-        st_atim: timespec { tv_sec: 0, tv_nsec: 0 },
-        st_mtim: timespec { tv_sec: 0, tv_nsec: 0 },
-        st_ctim: timespec { tv_sec: 0, tv_nsec: 0 },
+        st_atim: timespec {
+            tv_sec: 0,
+            tv_nsec: 0,
+        },
+        st_mtim: timespec {
+            tv_sec: 0,
+            tv_nsec: 0,
+        },
+        st_ctim: timespec {
+            tv_sec: 0,
+            tv_nsec: 0,
+        },
         __glibc_reserved: [0; 3],
     };
     return (stat(str, &mut buf) == 0) as libc::c_int;
@@ -2039,10 +2028,7 @@ unsafe extern "C" fn intslen(mut ints: *const libc::c_int) -> libc::c_int {
     }
     return p.offset_from(ints) as libc::c_long as libc::c_int;
 }
-unsafe extern "C" fn appendint(
-    mut ints: *mut libc::c_int,
-    mut i: libc::c_int,
-) -> *mut libc::c_int {
+unsafe extern "C" fn appendint(mut ints: *mut libc::c_int, mut i: libc::c_int) -> *mut libc::c_int {
     let mut len: libc::c_int = 0;
     let mut res: *mut libc::c_int = 0 as *mut libc::c_int;
     let mut q: *mut libc::c_int = 0 as *mut libc::c_int;
@@ -2139,7 +2125,10 @@ unsafe extern "C" fn cubemsg(mut node: *mut Node, mut str: *const libc::c_char) 
         }
         fputs(b" 0\0" as *const u8 as *const libc::c_char, stdout);
     } else {
-        fputs(b" <cube-already-deleted>\0" as *const u8 as *const libc::c_char, stdout);
+        fputs(
+            b" <cube-already-deleted>\0" as *const u8 as *const libc::c_char,
+            stdout,
+        );
     }
     fputc('\n' as i32, stdout);
     fflush(stdout);
@@ -2149,9 +2138,7 @@ unsafe extern "C" fn initroot() {
     msg(b"initializing root solver instance\0" as *const u8 as *const libc::c_char);
     root = lglminit(
         0 as *mut libc::c_void,
-        Some(
-            alloc as unsafe extern "C" fn(*mut libc::c_void, size_t) -> *mut libc::c_void,
-        ),
+        Some(alloc as unsafe extern "C" fn(*mut libc::c_void, size_t) -> *mut libc::c_void),
         Some(
             resize
                 as unsafe extern "C" fn(
@@ -2161,19 +2148,24 @@ unsafe extern "C" fn initroot() {
                     size_t,
                 ) -> *mut libc::c_void,
         ),
-        Some(
-            dealloc
-                as unsafe extern "C" fn(
-                    *mut libc::c_void,
-                    *mut libc::c_void,
-                    size_t,
-                ) -> (),
-        ),
+        Some(dealloc as unsafe extern "C" fn(*mut libc::c_void, *mut libc::c_void, size_t) -> ()),
     );
-    lglsetopt(root, b"druplig\0" as *const u8 as *const libc::c_char, 0 as libc::c_int);
-    lglsetopt(root, b"classify\0" as *const u8 as *const libc::c_char, 0 as libc::c_int);
+    lglsetopt(
+        root,
+        b"druplig\0" as *const u8 as *const libc::c_char,
+        0 as libc::c_int,
+    );
+    lglsetopt(
+        root,
+        b"classify\0" as *const u8 as *const libc::c_char,
+        0 as libc::c_int,
+    );
     if verbose != 0 {
-        lglsetopt(root, b"verbose\0" as *const u8 as *const libc::c_char, verbose);
+        lglsetopt(
+            root,
+            b"verbose\0" as *const u8 as *const libc::c_char,
+            verbose,
+        );
     } else if showstats == 0 {
         lglsetopt(
             root,
@@ -2181,11 +2173,27 @@ unsafe extern "C" fn initroot() {
             0 as libc::c_int,
         );
     }
-    lglsetopt(root, b"abstime\0" as *const u8 as *const libc::c_char, 1 as libc::c_int);
-    lglsetopt(root, b"trep\0" as *const u8 as *const libc::c_char, 0 as libc::c_int);
-    lglsetopt(root, b"compact\0" as *const u8 as *const libc::c_char, 1 as libc::c_int);
+    lglsetopt(
+        root,
+        b"abstime\0" as *const u8 as *const libc::c_char,
+        1 as libc::c_int,
+    );
+    lglsetopt(
+        root,
+        b"trep\0" as *const u8 as *const libc::c_char,
+        0 as libc::c_int,
+    );
+    lglsetopt(
+        root,
+        b"compact\0" as *const u8 as *const libc::c_char,
+        1 as libc::c_int,
+    );
     if noparallel == 0 {
-        lglsetopt(root, b"bca\0" as *const u8 as *const libc::c_char, 0 as libc::c_int);
+        lglsetopt(
+            root,
+            b"bca\0" as *const u8 as *const libc::c_char,
+            0 as libc::c_int,
+        );
         lglseterm(
             root,
             Some(term as unsafe extern "C" fn(*mut libc::c_void) -> libc::c_int),
@@ -2206,50 +2214,35 @@ unsafe extern "C" fn initroot() {
         lglsetmsglock(
             root,
             ::core::mem::transmute::<
-                Option::<unsafe extern "C" fn() -> ()>,
-                Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
-            >(
-                Some(
-                    ::core::mem::transmute::<
-                        unsafe extern "C" fn() -> (),
-                        unsafe extern "C" fn() -> (),
-                    >(lockmsg),
-                ),
-            ),
+                Option<unsafe extern "C" fn() -> ()>,
+                Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+            >(Some(::core::mem::transmute::<
+                unsafe extern "C" fn() -> (),
+                unsafe extern "C" fn() -> (),
+            >(lockmsg))),
             ::core::mem::transmute::<
-                Option::<unsafe extern "C" fn() -> ()>,
-                Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
-            >(
-                Some(
-                    ::core::mem::transmute::<
-                        unsafe extern "C" fn() -> (),
-                        unsafe extern "C" fn() -> (),
-                    >(unlockmsg),
-                ),
-            ),
+                Option<unsafe extern "C" fn() -> ()>,
+                Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+            >(Some(::core::mem::transmute::<
+                unsafe extern "C" fn() -> (),
+                unsafe extern "C" fn() -> (),
+            >(unlockmsg))),
             0 as *mut libc::c_void,
         );
     }
     lglsetime(
         root,
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn() -> libc::c_double>,
-            Option::<unsafe extern "C" fn() -> libc::c_double>,
-        >(
-            Some(
-                ::core::mem::transmute::<
-                    unsafe extern "C" fn() -> libc::c_double,
-                    unsafe extern "C" fn() -> libc::c_double,
-                >(getime),
-            ),
-        ),
+            Option<unsafe extern "C" fn() -> libc::c_double>,
+            Option<unsafe extern "C" fn() -> libc::c_double>,
+        >(Some(::core::mem::transmute::<
+            unsafe extern "C" fn() -> libc::c_double,
+            unsafe extern "C" fn() -> libc::c_double,
+        >(getime))),
     );
     lglsetprefix(root, b"c (root) \0" as *const u8 as *const libc::c_char);
 }
-unsafe extern "C" fn newnode(
-    mut parent: *mut Node,
-    mut decision: libc::c_int,
-) -> *mut Node {
+unsafe extern "C" fn newnode(mut parent: *mut Node, mut decision: libc::c_int) -> *mut Node {
     let mut prefix: [libc::c_char; 80] = [0; 80];
     let mut res: *mut Node = 0 as *mut Node;
     locknodes();
@@ -2272,16 +2265,15 @@ unsafe extern "C" fn newnode(
     (*res).pos = numnodes;
     if sizenodes == numnodes {
         let mut NEW_SIZE: size_t = sizenodes as size_t;
-        let mut OLD_BYTES: size_t = NEW_SIZE
-            .wrapping_mul(::core::mem::size_of::<*mut Node>() as libc::c_ulong);
+        let mut OLD_BYTES: size_t =
+            NEW_SIZE.wrapping_mul(::core::mem::size_of::<*mut Node>() as libc::c_ulong);
         let mut NEW_BYTES: size_t = 0;
         if NEW_SIZE != 0 {
             NEW_SIZE = NEW_SIZE * 2 as libc::c_int as size_t;
         } else {
             NEW_SIZE = 1 as libc::c_int as size_t;
         }
-        NEW_BYTES = NEW_SIZE
-            .wrapping_mul(::core::mem::size_of::<*mut Node>() as libc::c_ulong);
+        NEW_BYTES = NEW_SIZE.wrapping_mul(::core::mem::size_of::<*mut Node>() as libc::c_ulong);
         decmem(OLD_BYTES);
         nodes = realloc(nodes as *mut libc::c_void, NEW_BYTES) as *mut *mut Node;
         if nodes.is_null() {
@@ -2337,27 +2329,19 @@ unsafe extern "C" fn newnode(
     lglsetmsglock(
         (*res).lgl,
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn() -> ()>,
-            Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
-        >(
-            Some(
-                ::core::mem::transmute::<
-                    unsafe extern "C" fn() -> (),
-                    unsafe extern "C" fn() -> (),
-                >(lockmsg),
-            ),
-        ),
+            Option<unsafe extern "C" fn() -> ()>,
+            Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+        >(Some(::core::mem::transmute::<
+            unsafe extern "C" fn() -> (),
+            unsafe extern "C" fn() -> (),
+        >(lockmsg))),
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn() -> ()>,
-            Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
-        >(
-            Some(
-                ::core::mem::transmute::<
-                    unsafe extern "C" fn() -> (),
-                    unsafe extern "C" fn() -> (),
-                >(unlockmsg),
-            ),
-        ),
+            Option<unsafe extern "C" fn() -> ()>,
+            Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+        >(Some(::core::mem::transmute::<
+            unsafe extern "C" fn() -> (),
+            unsafe extern "C" fn() -> (),
+        >(unlockmsg))),
         0 as *mut libc::c_void,
     );
     if noparallel == 0 {
@@ -2388,12 +2372,10 @@ unsafe extern "C" fn updstats(mut node: *mut Node) {
     decisions += lglgetdecs(lgl) - (*node).decisions;
     conflicts += lglgetconfs(lgl) - (*node).conflicts;
     propagations += lglgetprops(lgl) - (*node).propagations;
-    if started != 0
-        && {
-            ptr = startimeptr;
-            !ptr.is_null()
-        }
-    {
+    if started != 0 && {
+        ptr = startimeptr;
+        !ptr.is_null()
+    } {
         now = currentime();
         delta = now - startime;
         startime = now;
@@ -2423,8 +2405,7 @@ unsafe extern "C" fn delnode(mut node: *mut Node) {
     updstats(node);
     (*node).lgl = 0 as *mut LGL;
     if !((*node).cube).is_null() {
-        let mut BYTES: size_t = ((intslen((*node).cube) + 1 as libc::c_int)
-            as libc::c_ulong)
+        let mut BYTES: size_t = ((intslen((*node).cube) + 1 as libc::c_int) as libc::c_ulong)
             .wrapping_mul(::core::mem::size_of::<libc::c_int>() as libc::c_ulong);
         decmem(BYTES);
         free((*node).cube as *mut libc::c_void);
@@ -2506,8 +2487,7 @@ unsafe extern "C" fn newleaf(mut node: *mut Node) -> *mut Leaf {
 unsafe extern "C" fn deleaf(mut leaf: *mut Leaf) {
     leafmsg(leaf, b"delete\0" as *const u8 as *const libc::c_char);
     if !((*leaf).lits).is_null() {
-        let mut BYTES: size_t = ((intslen((*leaf).lits) + 1 as libc::c_int)
-            as libc::c_ulong)
+        let mut BYTES: size_t = ((intslen((*leaf).lits) + 1 as libc::c_int) as libc::c_ulong)
             .wrapping_mul(::core::mem::size_of::<libc::c_int>() as libc::c_ulong);
         decmem(BYTES);
         free((*leaf).lits as *mut libc::c_void);
@@ -2556,8 +2536,7 @@ unsafe extern "C" fn deqleaf() -> *mut Leaf {
 unsafe extern "C" fn enqnewleafromnode(mut node: *mut Node) {
     enqleaf(newleaf(node));
 }
-static mut clausetoconsume: *mut libc::c_int = 0 as *const libc::c_int
-    as *mut libc::c_int;
+static mut clausetoconsume: *mut libc::c_int = 0 as *const libc::c_int as *mut libc::c_int;
 unsafe extern "C" fn consumecls(
     mut voidptr: *mut libc::c_void,
     mut cptr: *mut *mut libc::c_int,
@@ -2697,27 +2676,19 @@ unsafe extern "C" fn startparallel(mut lgl: *mut LGL) {
     lglsetmsglock(
         parallel.lgl,
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn() -> ()>,
-            Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
-        >(
-            Some(
-                ::core::mem::transmute::<
-                    unsafe extern "C" fn() -> (),
-                    unsafe extern "C" fn() -> (),
-                >(lockmsg),
-            ),
-        ),
+            Option<unsafe extern "C" fn() -> ()>,
+            Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+        >(Some(::core::mem::transmute::<
+            unsafe extern "C" fn() -> (),
+            unsafe extern "C" fn() -> (),
+        >(lockmsg))),
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn() -> ()>,
-            Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
-        >(
-            Some(
-                ::core::mem::transmute::<
-                    unsafe extern "C" fn() -> (),
-                    unsafe extern "C" fn() -> (),
-                >(unlockmsg),
-            ),
-        ),
+            Option<unsafe extern "C" fn() -> ()>,
+            Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+        >(Some(::core::mem::transmute::<
+            unsafe extern "C" fn() -> (),
+            unsafe extern "C" fn() -> (),
+        >(unlockmsg))),
         0 as *mut libc::c_void,
     );
     parallel.decisions = lglgetdecs(parallel.lgl);
@@ -2729,15 +2700,13 @@ unsafe extern "C" fn startparallel(mut lgl: *mut LGL) {
     if pthread_create(
         &mut parallel.thread,
         0 as *const pthread_attr_t,
-        Some(
-            runparallel as unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void,
-        ),
+        Some(runparallel as unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void),
         0 as *mut libc::c_void,
     ) != 0
     {
         err(
-            b"failed to create thread for additional parallel solver instance\0"
-                as *const u8 as *const libc::c_char,
+            b"failed to create thread for additional parallel solver instance\0" as *const u8
+                as *const libc::c_char,
         );
     }
 }
@@ -2754,8 +2723,7 @@ unsafe extern "C" fn joinparallel() -> libc::c_int {
     }
     res = parallel.res;
     vrb(
-        b"joined parallel solver instance with result %d\0" as *const u8
-            as *const libc::c_char,
+        b"joined parallel solver instance with result %d\0" as *const u8 as *const libc::c_char,
         res,
     );
     return res;
@@ -2798,7 +2766,11 @@ unsafe extern "C" fn wflush() {
 unsafe extern "C" fn wprint(mut lit: libc::c_int) {
     let mut str: [libc::c_char; 20] = [0; 20];
     let mut len: libc::c_int = 0;
-    sprintf(str.as_mut_ptr(), b" %d\0" as *const u8 as *const libc::c_char, lit);
+    sprintf(
+        str.as_mut_ptr(),
+        b" %d\0" as *const u8 as *const libc::c_char,
+        lit,
+    );
     len = strlen(str.as_mut_ptr()) as libc::c_int;
     if wlen + len > 74 as libc::c_int {
         wflush();
@@ -2811,7 +2783,11 @@ unsafe extern "C" fn witness(mut lgl: *mut LGL) {
     let mut lit: libc::c_int = 0;
     idx = 1 as libc::c_int;
     while idx <= nvars {
-        lit = if lglderef(lgl, idx) < 0 as libc::c_int { -idx } else { idx };
+        lit = if lglderef(lgl, idx) < 0 as libc::c_int {
+            -idx
+        } else {
+            idx
+        };
         wprint(lit);
         idx += 1;
         idx;
@@ -2826,7 +2802,7 @@ unsafe extern "C" fn nowfull() -> libc::c_int {
 }
 unsafe extern "C" fn schedulejob(
     mut node: *mut Node,
-    mut fun: Option::<unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void>,
+    mut fun: Option<unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void>,
     mut name: *const libc::c_char,
     mut state: State,
 ) {
@@ -2849,16 +2825,15 @@ unsafe extern "C" fn schedulejob(
     (*job).pos = numjobs;
     if sizejobs == numjobs {
         let mut NEW_SIZE: size_t = sizejobs as size_t;
-        let mut OLD_BYTES: size_t = NEW_SIZE
-            .wrapping_mul(::core::mem::size_of::<*mut Job>() as libc::c_ulong);
+        let mut OLD_BYTES: size_t =
+            NEW_SIZE.wrapping_mul(::core::mem::size_of::<*mut Job>() as libc::c_ulong);
         let mut NEW_BYTES: size_t = 0;
         if NEW_SIZE != 0 {
             NEW_SIZE = NEW_SIZE * 2 as libc::c_int as size_t;
         } else {
             NEW_SIZE = 1 as libc::c_int as size_t;
         }
-        NEW_BYTES = NEW_SIZE
-            .wrapping_mul(::core::mem::size_of::<*mut Job>() as libc::c_ulong);
+        NEW_BYTES = NEW_SIZE.wrapping_mul(::core::mem::size_of::<*mut Job>() as libc::c_ulong);
         decmem(OLD_BYTES);
         jobs = realloc(jobs as *mut libc::c_void, NEW_BYTES) as *mut *mut Job;
         if jobs.is_null() {
@@ -2888,8 +2863,7 @@ unsafe extern "C" fn runjob(mut job: *mut Job) {
     ) != 0
     {
         err(
-            b"failed to create thread job %d %s [%d %lld]\0" as *const u8
-                as *const libc::c_char,
+            b"failed to create thread job %d %s [%d %lld]\0" as *const u8 as *const libc::c_char,
             (*job).pos,
             (*job).name,
             (*node).depth,
@@ -2957,12 +2931,10 @@ unsafe extern "C" fn cmpnodes(
     if res != 0 {
         return res;
     }
-    if skipn == 0 && skipm == 0
-        && {
-            res = (nodevars(m)).wrapping_sub(nodevars(n)) as libc::c_int;
-            res != 0
-        }
-    {
+    if skipn == 0 && skipm == 0 && {
+        res = (nodevars(m)).wrapping_sub(nodevars(n)) as libc::c_int;
+        res != 0
+    } {
         return dir * res;
     }
     res = (*n).depth - (*m).depth;
@@ -3007,8 +2979,7 @@ pub unsafe extern "C" fn bytes2mb(mut bytes: size_t) -> libc::c_int {
 }
 unsafe extern "C" fn printnode(mut prefix: *const libc::c_char, mut node: *mut Node) {
     msg(
-        b"  %s:  node[%d] = [%d %lld]  (%d vars, %d MB)\0" as *const u8
-            as *const libc::c_char,
+        b"  %s:  node[%d] = [%d %lld]  (%d vars, %d MB)\0" as *const u8 as *const libc::c_char,
         prefix,
         (*node).pos,
         (*node).depth,
@@ -3044,10 +3015,7 @@ unsafe extern "C" fn sortjobs() {
         ::core::mem::size_of::<*mut Job>() as libc::c_ulong,
         Some(
             cmpjobs4qsort
-                as unsafe extern "C" fn(
-                    *const libc::c_void,
-                    *const libc::c_void,
-                ) -> libc::c_int,
+                as unsafe extern "C" fn(*const libc::c_void, *const libc::c_void) -> libc::c_int,
         ),
     );
     fixjobspos();
@@ -3059,7 +3027,10 @@ unsafe extern "C" fn runjobs() {
     let mut job: *mut Job = 0 as *mut Job;
     let mut i: libc::c_int = 0;
     sortjobs();
-    vrb(b"running %d jobs\0" as *const u8 as *const libc::c_char, numjobs);
+    vrb(
+        b"running %d jobs\0" as *const u8 as *const libc::c_char,
+        numjobs,
+    );
     numworkers = 0 as libc::c_int;
     i = 0 as libc::c_int;
     while i < numjobs {
@@ -3069,7 +3040,10 @@ unsafe extern "C" fn runjobs() {
         i += 1;
         i;
     }
-    vrb(b"started running %d jobs\0" as *const u8 as *const libc::c_char, numjobs);
+    vrb(
+        b"started running %d jobs\0" as *const u8 as *const libc::c_char,
+        numjobs,
+    );
 }
 unsafe extern "C" fn joinjob(mut job: *mut Job) {
     let mut node: *mut Node = (*job).node;
@@ -3125,13 +3099,21 @@ unsafe extern "C" fn incmpnodes(
     mut p: *const libc::c_void,
     mut q: *const libc::c_void,
 ) -> libc::c_int {
-    return cmpnodes(*(p as *mut *mut Node), *(q as *mut *mut Node), 1 as libc::c_int);
+    return cmpnodes(
+        *(p as *mut *mut Node),
+        *(q as *mut *mut Node),
+        1 as libc::c_int,
+    );
 }
 unsafe extern "C" fn decmpnodes(
     mut p: *const libc::c_void,
     mut q: *const libc::c_void,
 ) -> libc::c_int {
-    return cmpnodes(*(p as *mut *mut Node), *(q as *mut *mut Node), -(1 as libc::c_int));
+    return cmpnodes(
+        *(p as *mut *mut Node),
+        *(q as *mut *mut Node),
+        -(1 as libc::c_int),
+    );
 }
 unsafe extern "C" fn printnodes(mut prefix: *const libc::c_char) {
     let mut node: *mut Node = 0 as *mut Node;
@@ -3161,9 +3143,7 @@ unsafe extern "C" fn fixnodespos() {
 }
 unsafe extern "C" fn sortnodes(
     mut name: *const libc::c_char,
-    mut cmp: Option::<
-        unsafe extern "C" fn(*const libc::c_void, *const libc::c_void) -> libc::c_int,
-    >,
+    mut cmp: Option<unsafe extern "C" fn(*const libc::c_void, *const libc::c_void) -> libc::c_int>,
 ) {
     let mut prefix: [libc::c_char; 80] = [0; 80];
     qsort(
@@ -3189,7 +3169,11 @@ unsafe extern "C" fn simpnode(mut voidptr: *mut libc::c_void) -> *mut libc::c_vo
     nmsg(node, b"simp\0" as *const u8 as *const libc::c_char);
     (*node).res = lglsimp((*node).lgl, 1 as libc::c_int);
     (*node).simplified = 1 as libc::c_int;
-    nmsg(node, b"simp result %d\0" as *const u8 as *const libc::c_char, (*node).res);
+    nmsg(
+        node,
+        b"simp result %d\0" as *const u8 as *const libc::c_char,
+        (*node).res,
+    );
     if (*node).res == 10 as libc::c_int {
         lockdone();
         done = 10 as libc::c_int;
@@ -3218,10 +3202,7 @@ unsafe extern "C" fn simp() {
         b"simp\0" as *const u8 as *const libc::c_char,
         Some(
             incmpnodes
-                as unsafe extern "C" fn(
-                    *const libc::c_void,
-                    *const libc::c_void,
-                ) -> libc::c_int,
+                as unsafe extern "C" fn(*const libc::c_void, *const libc::c_void) -> libc::c_int,
         ),
     );
     l = maxactive;
@@ -3247,12 +3228,7 @@ unsafe extern "C" fn simp() {
                 js.simp;
                 schedulejob(
                     node,
-                    Some(
-                        simpnode
-                            as unsafe extern "C" fn(
-                                *mut libc::c_void,
-                            ) -> *mut libc::c_void,
-                    ),
+                    Some(simpnode as unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void),
                     b"simp\0" as *const u8 as *const libc::c_char,
                     SIMP,
                 );
@@ -3262,8 +3238,7 @@ unsafe extern "C" fn simp() {
         i;
     }
     vrb(
-        b"scheduled %d simplification jobs in round %d\0" as *const u8
-            as *const libc::c_char,
+        b"scheduled %d simplification jobs in round %d\0" as *const u8 as *const libc::c_char,
         numjobs,
         round,
     );
@@ -3286,12 +3261,10 @@ pub unsafe extern "C" fn mysrand(mut seed: libc::c_ulonglong) {
 }
 unsafe extern "C" fn myrand() -> libc::c_uint {
     let mut res: libc::c_uint = 0;
-    rng
-        .z = (36969 as libc::c_int as libc::c_uint)
+    rng.z = (36969 as libc::c_int as libc::c_uint)
         .wrapping_mul(rng.z & 65535 as libc::c_int as libc::c_uint)
         .wrapping_add(rng.z >> 16 as libc::c_int);
-    rng
-        .w = (18000 as libc::c_int as libc::c_uint)
+    rng.w = (18000 as libc::c_int as libc::c_uint)
         .wrapping_mul(rng.w & 65535 as libc::c_int as libc::c_uint)
         .wrapping_add(rng.w >> 16 as libc::c_int);
     res = (rng.z << 16 as libc::c_int).wrapping_add(rng.w);
@@ -3323,15 +3296,11 @@ unsafe extern "C" fn lookaheadnode(mut voidptr: *mut libc::c_void) -> *mut libc:
             b"lkhd\0" as *const u8 as *const libc::c_char,
             2 as libc::c_int,
         );
-        ::core::intrinsics::atomic_xadd_seqcst(
-            &mut treelkhd,
-            1 as libc::c_int as int64_t,
-        );
+        ::core::intrinsics::atomic_xadd_seqcst(&mut treelkhd, 1 as libc::c_int as int64_t);
     } else if locslkhd != 0 {
         nmsg(
             node,
-            b"local-search based look-ahead at depth %d\0" as *const u8
-                as *const libc::c_char,
+            b"local-search based look-ahead at depth %d\0" as *const u8 as *const libc::c_char,
             (*node).depth,
         );
         lglsetopt(
@@ -3342,8 +3311,7 @@ unsafe extern "C" fn lookaheadnode(mut voidptr: *mut libc::c_void) -> *mut libc:
     } else if relevancelkhd != 0 {
         nmsg(
             node,
-            b"relevance based look-ahead at depth %d\0" as *const u8
-                as *const libc::c_char,
+            b"relevance based look-ahead at depth %d\0" as *const u8 as *const libc::c_char,
             (*node).depth,
         );
         lglsetopt(
@@ -3483,7 +3451,11 @@ unsafe extern "C" fn lookahead() {
         while k < randswap {
             i = myrandmod(numnodes as libc::c_uint) as libc::c_int;
             j = myrandmod(numnodes as libc::c_uint) as libc::c_int;
-            vrb(b"swapping nodes %d and %d\0" as *const u8 as *const libc::c_char, i, j);
+            vrb(
+                b"swapping nodes %d and %d\0" as *const u8 as *const libc::c_char,
+                i,
+                j,
+            );
             node = *nodes.offset(i as isize);
             let ref mut fresh13 = *nodes.offset(i as isize);
             *fresh13 = *nodes.offset(j as isize);
@@ -3494,7 +3466,10 @@ unsafe extern "C" fn lookahead() {
         }
         fixnodespos();
     }
-    vrb(b"starting lookahead round %d\0" as *const u8 as *const libc::c_char, round);
+    vrb(
+        b"starting lookahead round %d\0" as *const u8 as *const libc::c_char,
+        round,
+    );
     i = firstlkhd();
     while donelkhd(i) == 0 {
         node = *nodes.offset(i as isize);
@@ -3506,8 +3481,7 @@ unsafe extern "C" fn lookahead() {
         );
         nmsg(
             node,
-            b"plus already scheduled %d MB gives %d MB\0" as *const u8
-                as *const libc::c_char,
+            b"plus already scheduled %d MB gives %d MB\0" as *const u8 as *const libc::c_char,
             bytes2mb(sumbytes),
             bytes2mb(expected.wrapping_add(sumbytes)),
         );
@@ -3527,10 +3501,7 @@ unsafe extern "C" fn lookahead() {
             js.lkhd;
             schedulejob(
                 node,
-                Some(
-                    lookaheadnode
-                        as unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void,
-                ),
+                Some(lookaheadnode as unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void),
                 b"lookahead\0" as *const u8 as *const libc::c_char,
                 LKHD,
             );
@@ -3538,13 +3509,11 @@ unsafe extern "C" fn lookahead() {
         i = nextlkhd(i);
     }
     vrb(
-        b"final size is expected not to exceed %d MB\0" as *const u8
-            as *const libc::c_char,
+        b"final size is expected not to exceed %d MB\0" as *const u8 as *const libc::c_char,
         bytes2mb(sumbytes),
     );
     vrb(
-        b"scheduled %d lookahead jobs out of %d in round %d\0" as *const u8
-            as *const libc::c_char,
+        b"scheduled %d lookahead jobs out of %d in round %d\0" as *const u8 as *const libc::c_char,
         numjobs,
         numnodes,
         round,
@@ -3561,19 +3530,27 @@ unsafe extern "C" fn splitnode(mut voidptr: *mut libc::c_void) -> *mut libc::c_v
     cubemsg(node, b"extended\0" as *const u8 as *const libc::c_char);
     lgladd((*node).lgl, (*node).lookahead);
     lgladd((*node).lgl, 0 as libc::c_int);
-    nmsg(node, b"light simplification\0" as *const u8 as *const libc::c_char);
+    nmsg(
+        node,
+        b"light simplification\0" as *const u8 as *const libc::c_char,
+    );
     lglsimp((*node).lgl, 0 as libc::c_int);
     if reducecache != 0 {
-        nmsg(child, b"reducing cache\0" as *const u8 as *const libc::c_char);
+        nmsg(
+            child,
+            b"reducing cache\0" as *const u8 as *const libc::c_char,
+        );
         lglreducecache((*child).lgl);
         lglreducecache((*node).lgl);
     }
-    nmsg(child, b"light simplification\0" as *const u8 as *const libc::c_char);
+    nmsg(
+        child,
+        b"light simplification\0" as *const u8 as *const libc::c_char,
+    );
     lglsimp((*child).lgl, 0 as libc::c_int);
     nmsg(
         node,
-        b"cloned and lightly simplified node and child\0" as *const u8
-            as *const libc::c_char,
+        b"cloned and lightly simplified node and child\0" as *const u8 as *const libc::c_char,
     );
     (*node).simplified = 0 as libc::c_int;
     (*child).simplified = (*node).simplified;
@@ -3614,12 +3591,7 @@ unsafe extern "C" fn split() {
                 js.split;
                 schedulejob(
                     node,
-                    Some(
-                        splitnode
-                            as unsafe extern "C" fn(
-                                *mut libc::c_void,
-                            ) -> *mut libc::c_void,
-                    ),
+                    Some(splitnode as unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void),
                     b"split\0" as *const u8 as *const libc::c_char,
                     SPLIT,
                 );
@@ -3654,10 +3626,7 @@ unsafe extern "C" fn varspan(
         b"varspan\0" as *const u8 as *const libc::c_char,
         Some(
             incmpnodes
-                as unsafe extern "C" fn(
-                    *const libc::c_void,
-                    *const libc::c_void,
-                ) -> libc::c_int,
+                as unsafe extern "C" fn(*const libc::c_void, *const libc::c_void) -> libc::c_int,
         ),
     );
     i = 0 as libc::c_int;
@@ -3689,12 +3658,10 @@ unsafe extern "C" fn varspan(
     j = 0 as libc::c_int;
     i = 0 as libc::c_int;
     while i < numnodes {
-        if skipnode(*nodes.offset(i as isize)) == 0
-            && {
-                j += 1;
-                j == maxactive
-            }
-        {
+        if skipnode(*nodes.offset(i as isize)) == 0 && {
+            j += 1;
+            j == maxactive
+        } {
             break;
         }
         i += 1;
@@ -3722,8 +3689,8 @@ unsafe extern "C" fn report() {
     unlockmem();
     varspan(&mut minvars, &mut actvars, &mut maxvars);
     msg(
-        b"%c%d %lld%c %.1f sec, %.0f MB, %d nodes +%d -%d s%d, vars[%d..%d..%d]\0"
-            as *const u8 as *const libc::c_char,
+        b"%c%d %lld%c %.1f sec, %.0f MB, %d nodes +%d -%d s%d, vars[%d..%d..%d]\0" as *const u8
+            as *const libc::c_char,
         if isfull != 0 { '[' as i32 } else { '(' as i32 },
         round,
         ids as libc::c_longlong,
@@ -3773,12 +3740,10 @@ unsafe extern "C" fn hashtwo64(
         .wrapping_add(346961 as libc::c_int as libc::c_ulonglong);
 }
 unsafe extern "C" fn setopts(mut node: *mut Node) {
-    let mut r: libc::c_ulonglong = hashtwo64(
-        (*node).id as libc::c_ulonglong,
-        round as libc::c_ulonglong,
-    );
-    let mut def: libc::c_int = (r.wrapping_rem(2 as libc::c_int as libc::c_ulonglong)
-        == 0) as libc::c_int;
+    let mut r: libc::c_ulonglong =
+        hashtwo64((*node).id as libc::c_ulonglong, round as libc::c_ulonglong);
+    let mut def: libc::c_int =
+        (r.wrapping_rem(2 as libc::c_int as libc::c_ulonglong) == 0) as libc::c_int;
     let mut newval: libc::c_int = 0;
     let mut first: libc::c_int = 0;
     let mut lgl: *mut LGL = (*node).lgl;
@@ -3795,14 +3760,17 @@ unsafe extern "C" fn setopts(mut node: *mut Node) {
     if first != 0 {
         msg(b"\0" as *const u8 as *const libc::c_char);
         msg(
-            b"using %d options for portfolio solving:\0" as *const u8
-                as *const libc::c_char,
+            b"using %d options for portfolio solving:\0" as *const u8 as *const libc::c_char,
             nopts,
         );
         msg(b"\0" as *const u8 as *const libc::c_char);
         o = lopts.as_mut_ptr();
         while o < lopts.as_mut_ptr().offset(nopts as isize) {
-            msg(b"  --%s=%d\0" as *const u8 as *const libc::c_char, (*o).name, (*o).val);
+            msg(
+                b"  --%s=%d\0" as *const u8 as *const libc::c_char,
+                (*o).name,
+                (*o).val,
+            );
             o = o.offset(1);
             o;
         }
@@ -3815,8 +3783,7 @@ unsafe extern "C" fn setopts(mut node: *mut Node) {
             if !(lglgetopt(lgl, (*o).name) == newval) {
                 nmsg(
                     node,
-                    b"resetting option --%s=%d (default)\0" as *const u8
-                        as *const libc::c_char,
+                    b"resetting option --%s=%d (default)\0" as *const u8 as *const libc::c_char,
                     (*o).name,
                     newval,
                 );
@@ -3856,10 +3823,18 @@ unsafe extern "C" fn searchnode(mut voidptr: *mut libc::c_void) -> *mut libc::c_
         b"search for %d conflicts\0" as *const u8 as *const libc::c_char,
         thisclim,
     );
-    lglsetopt((*node).lgl, b"clim\0" as *const u8 as *const libc::c_char, thisclim);
+    lglsetopt(
+        (*node).lgl,
+        b"clim\0" as *const u8 as *const libc::c_char,
+        thisclim,
+    );
     (*node).res = lglsat((*node).lgl);
     (*node).simplified = 0 as libc::c_int;
-    nmsg(node, b"search result %d\0" as *const u8 as *const libc::c_char, (*node).res);
+    nmsg(
+        node,
+        b"search result %d\0" as *const u8 as *const libc::c_char,
+        (*node).res,
+    );
     if (*node).res == 10 as libc::c_int {
         lockdone();
         done = 10 as libc::c_int;
@@ -3870,16 +3845,15 @@ unsafe extern "C" fn searchnode(mut voidptr: *mut libc::c_void) -> *mut libc::c_
     deltaconfs = lglgetconfs((*node).lgl) - oldconfs;
     if sizeconfstack == numconfstack {
         let mut NEW_SIZE: size_t = sizeconfstack as size_t;
-        let mut OLD_BYTES: size_t = NEW_SIZE
-            .wrapping_mul(::core::mem::size_of::<int64_t>() as libc::c_ulong);
+        let mut OLD_BYTES: size_t =
+            NEW_SIZE.wrapping_mul(::core::mem::size_of::<int64_t>() as libc::c_ulong);
         let mut NEW_BYTES: size_t = 0;
         if NEW_SIZE != 0 {
             NEW_SIZE = NEW_SIZE * 2 as libc::c_int as size_t;
         } else {
             NEW_SIZE = 1 as libc::c_int as size_t;
         }
-        NEW_BYTES = NEW_SIZE
-            .wrapping_mul(::core::mem::size_of::<int64_t>() as libc::c_ulong);
+        NEW_BYTES = NEW_SIZE.wrapping_mul(::core::mem::size_of::<int64_t>() as libc::c_ulong);
         decmem(OLD_BYTES);
         confstack = realloc(confstack as *mut libc::c_void, NEW_BYTES) as *mut int64_t;
         if confstack.is_null() {
@@ -3917,7 +3891,9 @@ unsafe extern "C" fn search() {
     let mut l: libc::c_int = 0;
     lockconfs();
     numconfstack = 0 as libc::c_int;
-    if eager != 0 && clim > minclim && numnodes < maxactive
+    if eager != 0
+        && clim > minclim
+        && numnodes < maxactive
         && (softlimbytes == 0 || currentbytes < softlimbytes)
     {
         forcedclim = minclim;
@@ -3942,10 +3918,7 @@ unsafe extern "C" fn search() {
         b"search\0" as *const u8 as *const libc::c_char,
         Some(
             incmpnodes
-                as unsafe extern "C" fn(
-                    *const libc::c_void,
-                    *const libc::c_void,
-                ) -> libc::c_int,
+                as unsafe extern "C" fn(*const libc::c_void, *const libc::c_void) -> libc::c_int,
         ),
     );
     l = maxactive;
@@ -3956,8 +3929,7 @@ unsafe extern "C" fn search() {
         l = numnodes;
     }
     msg(
-        b" %d searching %d out of %d nodes %.0f%% limit %d%s\0" as *const u8
-            as *const libc::c_char,
+        b" %d searching %d out of %d nodes %.0f%% limit %d%s\0" as *const u8 as *const libc::c_char,
         round,
         l,
         numnodes,
@@ -3977,10 +3949,7 @@ unsafe extern "C" fn search() {
             js.search;
             schedulejob(
                 node,
-                Some(
-                    searchnode
-                        as unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void,
-                ),
+                Some(searchnode as unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void),
                 b"search\0" as *const u8 as *const libc::c_char,
                 SEARCH,
             );
@@ -4023,8 +3992,7 @@ unsafe extern "C" fn search() {
         );
         medianconfs = *confstack.offset((numconfstack / 2 as libc::c_int) as isize);
         msg(
-            b" %d average actual conflicts %lld median %lld\0" as *const u8
-                as *const libc::c_char,
+            b" %d average actual conflicts %lld median %lld\0" as *const u8 as *const libc::c_char,
             round,
             avgconfs as libc::c_longlong,
             medianconfs as libc::c_longlong,
@@ -4067,9 +4035,15 @@ unsafe extern "C" fn updateclim() {
         }
     }
     if oldclim != clim {
-        vrb(b"new conflict limit set to %d\0" as *const u8 as *const libc::c_char, clim);
+        vrb(
+            b"new conflict limit set to %d\0" as *const u8 as *const libc::c_char,
+            clim,
+        );
     } else {
-        vrb(b"conflict limit remains at %d\0" as *const u8 as *const libc::c_char, clim);
+        vrb(
+            b"conflict limit remains at %d\0" as *const u8 as *const libc::c_char,
+            clim,
+        );
     }
     sumclims += clim as int64_t;
     simplified = 0 as libc::c_int;
@@ -4099,11 +4073,17 @@ unsafe extern "C" fn flush() -> libc::c_int {
     }
     flushed = before - numnodes;
     if flushed != 0 {
-        vrb(b"flushed %d nodes\0" as *const u8 as *const libc::c_char, flushed);
+        vrb(
+            b"flushed %d nodes\0" as *const u8 as *const libc::c_char,
+            flushed,
+        );
     }
     if numnodes != 0 {
         res = 0 as libc::c_int;
-        vrb(b"still %d nodes left\0" as *const u8 as *const libc::c_char, numnodes);
+        vrb(
+            b"still %d nodes left\0" as *const u8 as *const libc::c_char,
+            numnodes,
+        );
     } else {
         res = 20 as libc::c_int;
         msg(b"no more nodes left\0" as *const u8 as *const libc::c_char);
@@ -4142,8 +4122,7 @@ unsafe extern "C" fn stats() {
         round,
         ids as libc::c_longlong,
         maxnumnodes,
-        (noparallel == 0) as libc::c_int as libc::c_longlong
-            + threads as libc::c_longlong,
+        (noparallel == 0) as libc::c_int as libc::c_longlong + threads as libc::c_longlong,
         maxnumworkers + (noparallel == 0) as libc::c_int,
     );
     msg(
@@ -4167,7 +4146,10 @@ unsafe extern "C" fn stats() {
     msg(
         b"%.0f%% utilization for %d%s worker threads on %d cores\0" as *const u8
             as *const libc::c_char,
-        pcnt(t, (maxworkers + (noparallel == 0) as libc::c_int) as libc::c_double * w),
+        pcnt(
+            t,
+            (maxworkers + (noparallel == 0) as libc::c_int) as libc::c_double * w,
+        ),
         maxworkers,
         if noparallel == 0 {
             b" + 1\0" as *const u8 as *const libc::c_char
@@ -4184,8 +4166,7 @@ unsafe extern "C" fn stats() {
             nparallel,
         );
         msg(
-            b"%lld units consumed %.0f%% of %lld produced\0" as *const u8
-                as *const libc::c_char,
+            b"%lld units consumed %.0f%% of %lld produced\0" as *const u8 as *const libc::c_char,
             parallel.consumed.units as libc::c_longlong,
             pcnt(
                 parallel.consumed.units as libc::c_double,
@@ -4206,14 +4187,12 @@ unsafe extern "C" fn stats() {
     }
     msg(b"\0" as *const u8 as *const libc::c_char);
     msg(
-        b"%lld conflicts, %.0f conflicts per second\0" as *const u8
-            as *const libc::c_char,
+        b"%lld conflicts, %.0f conflicts per second\0" as *const u8 as *const libc::c_char,
         conflicts as libc::c_longlong,
         avg(conflicts as libc::c_double, w),
     );
     msg(
-        b"%lld decisions, %.0f decisions per second\0" as *const u8
-            as *const libc::c_char,
+        b"%lld decisions, %.0f decisions per second\0" as *const u8 as *const libc::c_char,
         decisions as libc::c_longlong,
         avg(decisions as libc::c_double, w),
     );
@@ -4244,37 +4223,36 @@ unsafe extern "C" fn stats() {
             as *const libc::c_char,
         totalkhd - treelkhd,
         otherlkhdstr,
-        pcnt((totalkhd - treelkhd) as libc::c_double, totalkhd as libc::c_double),
+        pcnt(
+            (totalkhd - treelkhd) as libc::c_double,
+            totalkhd as libc::c_double,
+        ),
         totalkhd,
     );
     msg(b"\0" as *const u8 as *const libc::c_char);
     msg(
-        b"%7d %3.0f%% lookaheads      %7.2f seconds %4.0f%%\0" as *const u8
-            as *const libc::c_char,
+        b"%7d %3.0f%% lookaheads      %7.2f seconds %4.0f%%\0" as *const u8 as *const libc::c_char,
         js.lkhd,
         pcnt(js.lkhd as libc::c_double, js.cnt as libc::c_double),
         wct.lkhd,
         pcnt(wct.lkhd, w),
     );
     msg(
-        b"%7d %3.0f%% splits          %7.2f seconds %4.0f%%\0" as *const u8
-            as *const libc::c_char,
+        b"%7d %3.0f%% splits          %7.2f seconds %4.0f%%\0" as *const u8 as *const libc::c_char,
         js.split,
         pcnt(js.split as libc::c_double, js.cnt as libc::c_double),
         wct.split,
         pcnt(wct.split, w),
     );
     msg(
-        b"%7d %3.0f%% simplifications %7.2f seconds %4.0f%%\0" as *const u8
-            as *const libc::c_char,
+        b"%7d %3.0f%% simplifications %7.2f seconds %4.0f%%\0" as *const u8 as *const libc::c_char,
         js.simp,
         pcnt(js.simp as libc::c_double, js.cnt as libc::c_double),
         wct.simp,
         pcnt(wct.simp, w),
     );
     msg(
-        b"%7d %3.0f%% searches        %7.2f seconds %4.0f%%\0" as *const u8
-            as *const libc::c_char,
+        b"%7d %3.0f%% searches        %7.2f seconds %4.0f%%\0" as *const u8 as *const libc::c_char,
         js.search,
         pcnt(js.search as libc::c_double, js.cnt as libc::c_double),
         wct.search,
@@ -4285,18 +4263,16 @@ unsafe extern "C" fn stats() {
             as *const libc::c_char,
     );
     msg(
-        b"%7d 100%% scheduled jobs  %7.2f seconds, %.0f MB\0" as *const u8
-            as *const libc::c_char,
+        b"%7d 100%% scheduled jobs  %7.2f seconds, %.0f MB\0" as *const u8 as *const libc::c_char,
         js.cnt,
         w,
-        maxbytes as libc::c_double
-            / ((1 as libc::c_int) << 20 as libc::c_int) as libc::c_double,
+        maxbytes as libc::c_double / ((1 as libc::c_int) << 20 as libc::c_int) as libc::c_double,
     );
 }
 unsafe extern "C" fn parallelwins(mut res: libc::c_int) {
     msg(
-        b"%s parallel solver instance wins with result %d after %.2f seconds\0"
-            as *const u8 as *const libc::c_char,
+        b"%s parallel solver instance wins with result %d after %.2f seconds\0" as *const u8
+            as *const libc::c_char,
         if nparallel == 1 as libc::c_int {
             b"first\0" as *const u8 as *const libc::c_char
         } else {
@@ -4366,8 +4342,7 @@ unsafe extern "C" fn finish() -> libc::c_int {
         res = parallel.res;
         unlockdone();
         vrb(
-            b"no node result thus parallel result %d\0" as *const u8
-                as *const libc::c_char,
+            b"no node result thus parallel result %d\0" as *const u8 as *const libc::c_char,
             res,
         );
         if res != 0 {
@@ -4375,8 +4350,8 @@ unsafe extern "C" fn finish() -> libc::c_int {
         }
     } else {
         vrb(
-            b"no satisfiable node found but still %d nodes left in round %d\0"
-                as *const u8 as *const libc::c_char,
+            b"no satisfiable node found but still %d nodes left in round %d\0" as *const u8
+                as *const libc::c_char,
             numnodes,
             round,
         );
@@ -4384,10 +4359,10 @@ unsafe extern "C" fn finish() -> libc::c_int {
     return res;
 }
 static mut catchedsig: libc::c_int = 0;
-static mut sig_int_handler: Option::<unsafe extern "C" fn(libc::c_int) -> ()> = None;
-static mut sig_segv_handler: Option::<unsafe extern "C" fn(libc::c_int) -> ()> = None;
-static mut sig_abrt_handler: Option::<unsafe extern "C" fn(libc::c_int) -> ()> = None;
-static mut sig_term_handler: Option::<unsafe extern "C" fn(libc::c_int) -> ()> = None;
+static mut sig_int_handler: Option<unsafe extern "C" fn(libc::c_int) -> ()> = None;
+static mut sig_segv_handler: Option<unsafe extern "C" fn(libc::c_int) -> ()> = None;
+static mut sig_abrt_handler: Option<unsafe extern "C" fn(libc::c_int) -> ()> = None;
+static mut sig_term_handler: Option<unsafe extern "C" fn(libc::c_int) -> ()> = None;
 unsafe extern "C" fn resetsighandlers() {
     signal(2 as libc::c_int, sig_int_handler);
     signal(11 as libc::c_int, sig_segv_handler);
@@ -4398,12 +4373,18 @@ unsafe extern "C" fn caughtsigmsg(mut sig: libc::c_int) {
     if verbose == 0 {
         return;
     }
-    printf(b"c\nc CAUGHT SIGNAL %d\nc\n\0" as *const u8 as *const libc::c_char, sig);
+    printf(
+        b"c\nc CAUGHT SIGNAL %d\nc\n\0" as *const u8 as *const libc::c_char,
+        sig,
+    );
     fflush(stdout);
 }
 unsafe extern "C" fn catchsig(mut sig: libc::c_int) {
     if catchedsig == 0 {
-        fputs(b"c s UNKNOWN\n\0" as *const u8 as *const libc::c_char, stdout);
+        fputs(
+            b"c s UNKNOWN\n\0" as *const u8 as *const libc::c_char,
+            stdout,
+        );
         fflush(stdout);
         catchedsig = 1 as libc::c_int;
         caughtsigmsg(sig);
@@ -4457,13 +4438,9 @@ unsafe extern "C" fn has(
     if l < k {
         return 0 as libc::c_int;
     }
-    return (strcmp(str.offset(l as isize).offset(-(k as isize)), suffix) == 0)
-        as libc::c_int;
+    return (strcmp(str.offset(l as isize).offset(-(k as isize)), suffix) == 0) as libc::c_int;
 }
-unsafe extern "C" fn cmd(
-    mut fmt: *const libc::c_char,
-    mut name: *const libc::c_char,
-) -> *mut FILE {
+unsafe extern "C" fn cmd(mut fmt: *const libc::c_char, mut name: *const libc::c_char) -> *mut FILE {
     let mut res: *mut FILE = 0 as *mut FILE;
     let mut s: *mut libc::c_char = malloc(
         (strlen(fmt))
@@ -4504,7 +4481,10 @@ unsafe extern "C" fn parselopt(
         return 0 as libc::c_int;
     }
     if *resptr != 0 {
-        err(b"multiple '--%s=...' options\0" as *const u8 as *const libc::c_char, opt);
+        err(
+            b"multiple '--%s=...' options\0" as *const u8 as *const libc::c_char,
+            opt,
+        );
     }
     if isnum(p) == 0 {
         err(
@@ -4533,7 +4513,10 @@ pub unsafe extern "C" fn parseu64(
     p = p.offset(1);
     ch = *fresh18 as libc::c_int;
     if ch == 0 {
-        err(b"empty string argument to '%s'\0" as *const u8 as *const libc::c_char, opt);
+        err(
+            b"empty string argument to '%s'\0" as *const u8 as *const libc::c_char,
+            opt,
+        );
     }
     res = (ch - '0' as i32) as libc::c_ulonglong;
     loop {
@@ -4541,14 +4524,16 @@ pub unsafe extern "C" fn parseu64(
         p = p.offset(1);
         ch = *fresh19 as libc::c_int;
         if !(*(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int != 0)
+            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+            != 0)
         {
             break;
         }
         let mut current_block_9: u64;
         let mut digit: libc::c_int = 0;
         if (!(0 as libc::c_ulonglong) >> 1 as libc::c_int)
-            .wrapping_div(10 as libc::c_int as libc::c_ulonglong) < res
+            .wrapping_div(10 as libc::c_int as libc::c_ulonglong)
+            < res
         {
             current_block_9 = 5801668696158960501;
         } else {
@@ -4558,8 +4543,7 @@ pub unsafe extern "C" fn parseu64(
             match current_block_9 {
                 5801668696158960501 => {
                     err(
-                        b"argument to '%s' too large\0" as *const u8
-                            as *const libc::c_char,
+                        b"argument to '%s' too large\0" as *const u8 as *const libc::c_char,
                         opt,
                     );
                     current_block_9 = 4906268039856690917;
@@ -4568,7 +4552,8 @@ pub unsafe extern "C" fn parseu64(
                     res = res.wrapping_mul(10 as libc::c_int as libc::c_ulonglong);
                     digit = ch - '0' as i32;
                     if (!(0 as libc::c_ulonglong) >> 1 as libc::c_int)
-                        .wrapping_sub(digit as libc::c_ulonglong) < res
+                        .wrapping_sub(digit as libc::c_ulonglong)
+                        < res
                     {
                         current_block_9 = 5801668696158960501;
                     } else {
@@ -4581,18 +4566,14 @@ pub unsafe extern "C" fn parseu64(
     }
     if ch != 0 {
         err(
-            b"invalid unsigned 64 bit number in '%s %s'\0" as *const u8
-                as *const libc::c_char,
+            b"invalid unsigned 64 bit number in '%s %s'\0" as *const u8 as *const libc::c_char,
             opt,
             arg,
         );
     }
     return res as libc::c_int;
 }
-unsafe fn main_0(
-    mut argc: libc::c_int,
-    mut argv: *mut *mut libc::c_char,
-) -> libc::c_int {
+unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> libc::c_int {
     let mut seed: libc::c_ulonglong = 0 as libc::c_int as libc::c_ulonglong;
     let mut i: libc::c_int = 0;
     let mut res: libc::c_int = 0;
@@ -4604,8 +4585,10 @@ unsafe fn main_0(
     init();
     i = 1 as libc::c_int;
     while i < argc {
-        if strcmp(*argv.offset(i as isize), b"-h\0" as *const u8 as *const libc::c_char)
-            == 0
+        if strcmp(
+            *argv.offset(i as isize),
+            b"-h\0" as *const u8 as *const libc::c_char,
+        ) == 0
         {
             usage();
         } else if strcmp(
@@ -4639,18 +4622,16 @@ unsafe fn main_0(
         ) == 0
         {
             optimize = 1 as libc::c_int;
-        } else if *(*argv.offset(i as isize)).offset(0 as libc::c_int as isize)
-            as libc::c_int == '-' as i32
-            && *(*argv.offset(i as isize)).offset(1 as libc::c_int as isize)
-                as libc::c_int == 'O' as i32
+        } else if *(*argv.offset(i as isize)).offset(0 as libc::c_int as isize) as libc::c_int
+            == '-' as i32
+            && *(*argv.offset(i as isize)).offset(1 as libc::c_int as isize) as libc::c_int
+                == 'O' as i32
             && isnum((*argv.offset(i as isize)).offset(2 as libc::c_int as isize)) != 0
         {
             if optimize >= 0 as libc::c_int {
                 err(b"multiple '-O...' options\0" as *const u8 as *const libc::c_char);
             }
-            optimize = atoi(
-                (*argv.offset(i as isize)).offset(2 as libc::c_int as isize),
-            );
+            optimize = atoi((*argv.offset(i as isize)).offset(2 as libc::c_int as isize));
             if optimize < 0 as libc::c_int {
                 err(
                     b"invalid number in '%s'\0" as *const u8 as *const libc::c_char,
@@ -4714,15 +4695,13 @@ unsafe fn main_0(
             if i == argc {
                 err(b"argument to '-f' missing\0" as *const u8 as *const libc::c_char);
             }
-            if isnum(*argv.offset(i as isize)) == 0
-                || {
-                    fullint = atoi(*argv.offset(i as isize));
-                    fullint < 0 as libc::c_int
-                }
-            {
+            if isnum(*argv.offset(i as isize)) == 0 || {
+                fullint = atoi(*argv.offset(i as isize));
+                fullint < 0 as libc::c_int
+            } {
                 err(
-                    b"expected (non negative) number as argument in '-f %s'\0"
-                        as *const u8 as *const libc::c_char,
+                    b"expected (non negative) number as argument in '-f %s'\0" as *const u8
+                        as *const libc::c_char,
                     *argv.offset(i as isize),
                 );
             }
@@ -4768,10 +4747,7 @@ unsafe fn main_0(
         ) == 0
         {
             if hardlimbytes != 0 {
-                err(
-                    b"multiple memory limit specification\0" as *const u8
-                        as *const libc::c_char,
-                );
+                err(b"multiple memory limit specification\0" as *const u8 as *const libc::c_char);
             }
             i += 1;
             if i == argc {
@@ -4779,8 +4755,7 @@ unsafe fn main_0(
             }
             if isnum(*argv.offset(i as isize)) == 0 {
                 err(
-                    b"expected number as argument in '-m %s'\0" as *const u8
-                        as *const libc::c_char,
+                    b"expected number as argument in '-m %s'\0" as *const u8 as *const libc::c_char,
                     *argv.offset(i as isize),
                 );
             }
@@ -4790,8 +4765,7 @@ unsafe fn main_0(
             }
             if hardlimbytes <= 0 as libc::c_int as size_t {
                 err(
-                    b"invalid number of MB in '-m %s'\0" as *const u8
-                        as *const libc::c_char,
+                    b"invalid number of MB in '-m %s'\0" as *const u8 as *const libc::c_char,
                     *argv.offset(i as isize),
                 );
             }
@@ -4801,10 +4775,7 @@ unsafe fn main_0(
         ) == 0
         {
             if hardlimbytes != 0 {
-                err(
-                    b"multiple memory limit specification\0" as *const u8
-                        as *const libc::c_char,
-                );
+                err(b"multiple memory limit specification\0" as *const u8 as *const libc::c_char);
             }
             i += 1;
             if i == argc {
@@ -4812,8 +4783,7 @@ unsafe fn main_0(
             }
             if isnum(*argv.offset(i as isize)) == 0 {
                 err(
-                    b"expected number as argument in '-g %s'\0" as *const u8
-                        as *const libc::c_char,
+                    b"expected number as argument in '-g %s'\0" as *const u8 as *const libc::c_char,
                     *argv.offset(i as isize),
                 );
             }
@@ -4823,8 +4793,7 @@ unsafe fn main_0(
             }
             if hardlimbytes <= 0 as libc::c_int as size_t {
                 err(
-                    b"invalid number of GB in '-g %s'\0" as *const u8
-                        as *const libc::c_char,
+                    b"invalid number of GB in '-g %s'\0" as *const u8 as *const libc::c_char,
                     *argv.offset(i as isize),
                 );
             }
@@ -4834,16 +4803,10 @@ unsafe fn main_0(
         ) == 0
         {
             if maxworkers > 0 as libc::c_int {
-                err(
-                    b"multiple '-t <workers>' options\0" as *const u8
-                        as *const libc::c_char,
-                );
+                err(b"multiple '-t <workers>' options\0" as *const u8 as *const libc::c_char);
             }
             if maxworkers2 > 0 as libc::c_int {
-                err(
-                    b"both '-t <workers>' and '<workers>'\0" as *const u8
-                        as *const libc::c_char,
-                );
+                err(b"both '-t <workers>' and '<workers>'\0" as *const u8 as *const libc::c_char);
             }
             i += 1;
             if i == argc {
@@ -4851,16 +4814,14 @@ unsafe fn main_0(
             }
             if isnum(*argv.offset(i as isize)) == 0 {
                 err(
-                    b"expected number as argument in '-t %s'\0" as *const u8
-                        as *const libc::c_char,
+                    b"expected number as argument in '-t %s'\0" as *const u8 as *const libc::c_char,
                     *argv.offset(i as isize),
                 );
             }
             maxworkers = atoi(*argv.offset(i as isize));
             if maxworkers <= 0 as libc::c_int {
                 err(
-                    b"expected positive number in '-t %s'\0" as *const u8
-                        as *const libc::c_char,
+                    b"expected positive number in '-t %s'\0" as *const u8 as *const libc::c_char,
                     *argv.offset(i as isize),
                 );
             }
@@ -4870,10 +4831,7 @@ unsafe fn main_0(
         ) == 0
         {
             if maxactive > 0 as libc::c_int {
-                err(
-                    b"multiple '-a <nodes>' options\0" as *const u8
-                        as *const libc::c_char,
-                );
+                err(b"multiple '-a <nodes>' options\0" as *const u8 as *const libc::c_char);
             }
             i += 1;
             if i == argc {
@@ -4881,16 +4839,14 @@ unsafe fn main_0(
             }
             if isnum(*argv.offset(i as isize)) == 0 {
                 err(
-                    b"expected number as argument in '-a %s'\0" as *const u8
-                        as *const libc::c_char,
+                    b"expected number as argument in '-a %s'\0" as *const u8 as *const libc::c_char,
                     *argv.offset(i as isize),
                 );
             }
             maxactive = atoi(*argv.offset(i as isize));
             if maxactive <= 0 as libc::c_int {
                 err(
-                    b"expected positive number in '-a %s'\0" as *const u8
-                        as *const libc::c_char,
+                    b"expected positive number in '-a %s'\0" as *const u8 as *const libc::c_char,
                     *argv.offset(i as isize),
                 );
             }
@@ -4900,10 +4856,7 @@ unsafe fn main_0(
         ) == 0
         {
             if branches >= 0 as libc::c_int {
-                err(
-                    b"multiple '-b <branches>' options\0" as *const u8
-                        as *const libc::c_char,
-                );
+                err(b"multiple '-b <branches>' options\0" as *const u8 as *const libc::c_char);
             }
             i += 1;
             if i == argc {
@@ -4911,16 +4864,14 @@ unsafe fn main_0(
             }
             if isnum(*argv.offset(i as isize)) == 0 {
                 err(
-                    b"expected number as argument in '-b %s'\0" as *const u8
-                        as *const libc::c_char,
+                    b"expected number as argument in '-b %s'\0" as *const u8 as *const libc::c_char,
                     *argv.offset(i as isize),
                 );
             }
             branches = atoi(*argv.offset(i as isize));
             if branches <= 0 as libc::c_int {
                 err(
-                    b"expected positive number in '-b %s'\0" as *const u8
-                        as *const libc::c_char,
+                    b"expected positive number in '-b %s'\0" as *const u8 as *const libc::c_char,
                     *argv.offset(i as isize),
                 );
             }
@@ -4937,10 +4888,7 @@ unsafe fn main_0(
         ) == 0
         {
             if randswap > 0 as libc::c_int {
-                err(
-                    b"multiple '-r <posnum>' options\0" as *const u8
-                        as *const libc::c_char,
-                );
+                err(b"multiple '-r <posnum>' options\0" as *const u8 as *const libc::c_char);
             }
             i += 1;
             if i == argc {
@@ -4948,16 +4896,14 @@ unsafe fn main_0(
             }
             if isnum(*argv.offset(i as isize)) == 0 {
                 err(
-                    b"expected number as argument in '-r %s'\0" as *const u8
-                        as *const libc::c_char,
+                    b"expected number as argument in '-r %s'\0" as *const u8 as *const libc::c_char,
                     *argv.offset(i as isize),
                 );
             }
             randswap = atoi(*argv.offset(i as isize));
             if randswap <= 0 as libc::c_int {
                 err(
-                    b"expected positive number in '-r %s'\0" as *const u8
-                        as *const libc::c_char,
+                    b"expected positive number in '-r %s'\0" as *const u8 as *const libc::c_char,
                     *argv.offset(i as isize),
                 );
             }
@@ -4968,10 +4914,7 @@ unsafe fn main_0(
         {
             i += 1;
             if i == argc {
-                err(
-                    b"argument to '-s' missing (try '-h')\0" as *const u8
-                        as *const libc::c_char,
-                );
+                err(b"argument to '-s' missing (try '-h')\0" as *const u8 as *const libc::c_char);
             }
             seed = parseu64(
                 *argv.offset(i as isize),
@@ -5024,19 +4967,19 @@ unsafe fn main_0(
                         );
                     } else if fname.is_null() && isnum(*argv.offset(i as isize)) != 0 {
                         err(
-                            b"<file> file name can not be a positive number '%s'\0"
-                                as *const u8 as *const libc::c_char,
+                            b"<file> file name can not be a positive number '%s'\0" as *const u8
+                                as *const libc::c_char,
                             *argv.offset(i as isize),
                         );
                     } else if !fname.is_null() && maxworkers2 != 0 {
                         err(
-                            b"too many arguments (including <file> and <workers>)\0"
-                                as *const u8 as *const libc::c_char,
+                            b"too many arguments (including <file> and <workers>)\0" as *const u8
+                                as *const libc::c_char,
                         );
                     } else if !fname.is_null() && isnum(*argv.offset(i as isize)) == 0 {
                         err(
-                            b"expected positive number for <workers> but got '%s'\0"
-                                as *const u8 as *const libc::c_char,
+                            b"expected positive number for <workers> but got '%s'\0" as *const u8
+                                as *const libc::c_char,
                             *argv.offset(i as isize),
                         );
                     } else if !fname.is_null() {
@@ -5050,8 +4993,7 @@ unsafe fn main_0(
                         }
                     } else if exists(*argv.offset(i as isize)) == 0 {
                         err(
-                            b"can not stat file '%s'\0" as *const u8
-                                as *const libc::c_char,
+                            b"can not stat file '%s'\0" as *const u8 as *const libc::c_char,
                             *argv.offset(i as isize),
                         );
                     } else {
@@ -5102,17 +5044,22 @@ unsafe fn main_0(
         clf = 1 as libc::c_int;
     }
     if file.is_null() {
-        err(b"can not read '%s'\0" as *const u8 as *const libc::c_char, fname);
+        err(
+            b"can not read '%s'\0" as *const u8 as *const libc::c_char,
+            fname,
+        );
     }
     lglbnr(
         b"Treengeling Cube and Conquer SAT Solver\0" as *const u8 as *const libc::c_char,
         b"c \0" as *const u8 as *const libc::c_char,
         stdout,
     );
-    msg(b"verbose level %d\0" as *const u8 as *const libc::c_char, verbose);
     msg(
-        b"will %sprint statistics for each solver instance\0" as *const u8
-            as *const libc::c_char,
+        b"verbose level %d\0" as *const u8 as *const libc::c_char,
+        verbose,
+    );
+    msg(
+        b"will %sprint statistics for each solver instance\0" as *const u8 as *const libc::c_char,
         if showstats != 0 {
             b"\0" as *const u8 as *const libc::c_char
         } else {
@@ -5129,25 +5076,14 @@ unsafe fn main_0(
     );
     msg(b"\0" as *const u8 as *const libc::c_char);
     if balance != 0 {
-        msg(
-            b"splitting large nodes first ('-b' option)\0" as *const u8
-                as *const libc::c_char,
-        );
+        msg(b"splitting large nodes first ('-b' option)\0" as *const u8 as *const libc::c_char);
     } else {
-        msg(
-            b"splitting small nodes first (no '-b' option)\0" as *const u8
-                as *const libc::c_char,
-        );
+        msg(b"splitting small nodes first (no '-b' option)\0" as *const u8 as *const libc::c_char);
     }
     if asymmetric != 0 {
-        msg(
-            b"asymmetric splitting ('--asymmetric')\0" as *const u8
-                as *const libc::c_char,
-        );
+        msg(b"asymmetric splitting ('--asymmetric')\0" as *const u8 as *const libc::c_char);
     } else {
-        msg(
-            b"symmetric splitting ('--symmetric')\0" as *const u8 as *const libc::c_char,
-        );
+        msg(b"symmetric splitting ('--symmetric')\0" as *const u8 as *const libc::c_char);
     }
     if portfolio != 0 {
         msg(
@@ -5162,8 +5098,7 @@ unsafe fn main_0(
     }
     if fullint != 0 {
         msg(
-            b"full search/simplification round interval %d\0" as *const u8
-                as *const libc::c_char,
+            b"full search/simplification round interval %d\0" as *const u8 as *const libc::c_char,
             fullint,
         );
     } else {
@@ -5173,15 +5108,13 @@ unsafe fn main_0(
         msg(b"no tree-based look-ahead at all\0" as *const u8 as *const libc::c_char);
     } else {
         msg(
-            b"tree-based look-ahead up to depth %d\0" as *const u8
-                as *const libc::c_char,
+            b"tree-based look-ahead up to depth %d\0" as *const u8 as *const libc::c_char,
             treelookdepth,
         );
     }
     if relevancelkhd != 0 {
         msg(
-            b"relevance based look-ahead starts at depth %d\0" as *const u8
-                as *const libc::c_char,
+            b"relevance based look-ahead starts at depth %d\0" as *const u8 as *const libc::c_char,
             treelookdepth + 1 as libc::c_int,
         );
     } else if locslkhd != 0 {
@@ -5192,18 +5125,19 @@ unsafe fn main_0(
         );
     } else {
         msg(
-            b"JWH based look-ahead starts at depth %d\0" as *const u8
-                as *const libc::c_char,
+            b"JWH based look-ahead starts at depth %d\0" as *const u8 as *const libc::c_char,
             treelookdepth + 1 as libc::c_int,
         );
     }
     if randswap != 0 {
         msg(
-            b"will swap %d nodes randomly during lookahead\0" as *const u8
-                as *const libc::c_char,
+            b"will swap %d nodes randomly during lookahead\0" as *const u8 as *const libc::c_char,
             randswap,
         );
-        msg(b"random seed %llu\0" as *const u8 as *const libc::c_char, seed);
+        msg(
+            b"random seed %llu\0" as *const u8 as *const libc::c_char,
+            seed,
+        );
         mysrand(seed);
     } else {
         msg(b"no randomization in lookahead\0" as *const u8 as *const libc::c_char);
@@ -5213,29 +5147,26 @@ unsafe fn main_0(
     if maxworkers == 0 {
         maxworkers = ncores;
         msg(
-            b"maximum %d workers (no '-t <worker>' option)\0" as *const u8
-                as *const libc::c_char,
+            b"maximum %d workers (no '-t <worker>' option)\0" as *const u8 as *const libc::c_char,
             maxworkers,
         );
     } else if maxworkers2 != 0 {
         msg(
-            b"maximum %d workers as specified ('%d')\0" as *const u8
-                as *const libc::c_char,
+            b"maximum %d workers as specified ('%d')\0" as *const u8 as *const libc::c_char,
             maxworkers,
             maxworkers2,
         );
     } else {
         msg(
-            b"maximum %d workers as specified ('-t %d')\0" as *const u8
-                as *const libc::c_char,
+            b"maximum %d workers as specified ('-t %d')\0" as *const u8 as *const libc::c_char,
             maxworkers,
             maxworkers,
         );
     }
     if noparallel != 0 {
         msg(
-            b"not using additional parallel solver instances ('--no-parallel')\0"
-                as *const u8 as *const libc::c_char,
+            b"not using additional parallel solver instances ('--no-parallel')\0" as *const u8
+                as *const libc::c_char,
         );
     } else if maxworkers == 1 as libc::c_int {
         msg(
@@ -5277,8 +5208,7 @@ unsafe fn main_0(
     } else {
         branches = 50 as libc::c_int;
         msg(
-            b"default ratio of split nodes is %d%%\0" as *const u8
-                as *const libc::c_char,
+            b"default ratio of split nodes is %d%%\0" as *const u8 as *const libc::c_char,
             branches,
         );
     }
@@ -5292,13 +5222,12 @@ unsafe fn main_0(
         );
     } else {
         msg(
-            b"hard memory limit %d MB as specified\0" as *const u8
-                as *const libc::c_char,
+            b"hard memory limit %d MB as specified\0" as *const u8 as *const libc::c_char,
             bytes2mb(hardlimbytes),
         );
     }
-    softlimbytes = hardlimbytes.wrapping_add(2 as libc::c_int as size_t)
-        / 3 as libc::c_int as size_t;
+    softlimbytes =
+        hardlimbytes.wrapping_add(2 as libc::c_int as size_t) / 3 as libc::c_int as size_t;
     msg(
         b"soft memory limit of %d MB\0" as *const u8 as *const libc::c_char,
         bytes2mb(softlimbytes),
@@ -5307,14 +5236,12 @@ unsafe fn main_0(
     if minclim == 0 {
         minclim = 1000 as libc::c_int;
         msg(
-            b"default minimum conflict limit of %d conflicts\0" as *const u8
-                as *const libc::c_char,
+            b"default minimum conflict limit of %d conflicts\0" as *const u8 as *const libc::c_char,
             minclim,
         );
     } else {
         msg(
-            b"minimum conflict limit set to %d ('--min=%d')\0" as *const u8
-                as *const libc::c_char,
+            b"minimum conflict limit set to %d ('--min=%d')\0" as *const u8 as *const libc::c_char,
             minclim,
             minclim,
         );
@@ -5322,14 +5249,12 @@ unsafe fn main_0(
     if initclim == 0 {
         initclim = 10000 as libc::c_int;
         msg(
-            b"default initial conflict limit of %d conflicts\0" as *const u8
-                as *const libc::c_char,
+            b"default initial conflict limit of %d conflicts\0" as *const u8 as *const libc::c_char,
             initclim,
         );
     } else {
         msg(
-            b"initial conflict limit set to %d ('--init=%d')\0" as *const u8
-                as *const libc::c_char,
+            b"initial conflict limit set to %d ('--init=%d')\0" as *const u8 as *const libc::c_char,
             initclim,
             initclim,
         );
@@ -5337,14 +5262,12 @@ unsafe fn main_0(
     if maxclim == 0 {
         maxclim = 100000 as libc::c_int;
         msg(
-            b"default maximum conflict limit of %d conflicts\0" as *const u8
-                as *const libc::c_char,
+            b"default maximum conflict limit of %d conflicts\0" as *const u8 as *const libc::c_char,
             maxclim,
         );
     } else {
         msg(
-            b"maximum conflict limit set to %d ('--max=%d')\0" as *const u8
-                as *const libc::c_char,
+            b"maximum conflict limit set to %d ('--max=%d')\0" as *const u8 as *const libc::c_char,
             maxclim,
             maxclim,
         );
@@ -5358,8 +5281,7 @@ unsafe fn main_0(
         );
     } else {
         msg(
-            b"optimization level %d as specified ('-O%d')\0" as *const u8
-                as *const libc::c_char,
+            b"optimization level %d as specified ('-O%d')\0" as *const u8 as *const libc::c_char,
             optimize,
             optimize,
         );
@@ -5392,8 +5314,8 @@ unsafe fn main_0(
     js.simp;
     propagations += lglgetprops(root);
     msg(
-        b"root solver instance optimization with result %d took %.2f seconds\0"
-            as *const u8 as *const libc::c_char,
+        b"root solver instance optimization with result %d took %.2f seconds\0" as *const u8
+            as *const libc::c_char,
         res,
         sec,
     );
@@ -5460,7 +5382,10 @@ unsafe fn main_0(
             releaseparallel();
         }
         msg(b"\0" as *const u8 as *const libc::c_char);
-        msg(b"cleaning up after %d rounds\0" as *const u8 as *const libc::c_char, round);
+        msg(
+            b"cleaning up after %d rounds\0" as *const u8 as *const libc::c_char,
+            round,
+        );
         while numnodes != 0 {
             delnode(*nodes.offset(0 as libc::c_int as isize));
         }
@@ -5492,7 +5417,7 @@ unsafe fn main_0(
     return res;
 }
 pub fn main() {
-    let mut args: Vec::<*mut libc::c_char> = Vec::new();
+    let mut args: Vec<*mut libc::c_char> = Vec::new();
     for arg in ::std::env::args() {
         args.push(
             (::std::ffi::CString::new(arg))
@@ -5502,12 +5427,10 @@ pub fn main() {
     }
     args.push(::core::ptr::null_mut());
     unsafe {
-        ::std::process::exit(
-            main_0(
-                (args.len() - 1) as libc::c_int,
-                args.as_mut_ptr() as *mut *mut libc::c_char,
-            ) as i32,
-        )
+        ::std::process::exit(main_0(
+            (args.len() - 1) as libc::c_int,
+            args.as_mut_ptr() as *mut *mut libc::c_char,
+        ) as i32)
     }
 }
 unsafe extern "C" fn run_static_initializers() {

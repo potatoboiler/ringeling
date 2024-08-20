@@ -1,0 +1,44 @@
+[package]
+name = "bingeling"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "lglmain"
+test = false
+bench = false
+
+[[bin]]
+name = "ilingeling"
+test = false
+bench = false
+
+[[bin]]
+name = "plingeling"
+test = false
+bench = false
+
+[[bin]]
+name = "treengeling"
+test = false
+bench = false
+
+[[bin]]
+name = "lglddtrace"
+test = false
+bench = false
+
+[[bin]]
+name = "lglmbt"
+test = false
+bench = false
+
+[[bin]]
+name = "lgluntrace"
+test = false
+bench = false
+
+[dependencies]
+libc.workspace = true
+c2rust-bitfields.workspace = true
+c2rust-bitfields-derive.workspace = true

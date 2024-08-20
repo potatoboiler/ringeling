@@ -1,15 +1,19 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 #![feature(c_variadic, extern_types)]
 extern "C" {
     pub type _IO_wide_data;
     pub type _IO_codecvt;
     pub type _IO_marker;
     pub type LGL;
-    fn strtol(
-        _: *const libc::c_char,
-        _: *mut *mut libc::c_char,
-        _: libc::c_int,
-    ) -> libc::c_long;
+    fn strtol(_: *const libc::c_char, _: *mut *mut libc::c_char, _: libc::c_int) -> libc::c_long;
     fn malloc(_: libc::c_ulong) -> *mut libc::c_void;
     fn free(_: *mut libc::c_void);
     fn exit(_: libc::c_int) -> !;
@@ -22,11 +26,7 @@ extern "C" {
     fn fprintf(_: *mut FILE, _: *const libc::c_char, _: ...) -> libc::c_int;
     fn printf(_: *const libc::c_char, _: ...) -> libc::c_int;
     fn sprintf(_: *mut libc::c_char, _: *const libc::c_char, _: ...) -> libc::c_int;
-    fn vfprintf(
-        _: *mut FILE,
-        _: *const libc::c_char,
-        _: ::core::ffi::VaList,
-    ) -> libc::c_int;
+    fn vfprintf(_: *mut FILE, _: *const libc::c_char, _: ::core::ffi::VaList) -> libc::c_int;
     fn getc(__stream: *mut FILE) -> libc::c_int;
     fn fputc(__c: libc::c_int, __stream: *mut FILE) -> libc::c_int;
     fn fputs(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
@@ -131,7 +131,7 @@ pub const _ISdigit: C2RustUnnamed = 2048;
 pub const _ISalpha: C2RustUnnamed = 1024;
 pub const _ISlower: C2RustUnnamed = 512;
 pub const _ISupper: C2RustUnnamed = 256;
-pub type __sighandler_t = Option::<unsafe extern "C" fn(libc::c_int) -> ()>;
+pub type __sighandler_t = Option<unsafe extern "C" fn(libc::c_int) -> ()>;
 #[inline]
 unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
     return strtol(
@@ -153,7 +153,10 @@ static mut lineno: libc::c_int = 0;
 static mut name: *const libc::c_char = 0 as *const libc::c_char;
 unsafe extern "C" fn die(mut fmt: *const libc::c_char, mut args: ...) {
     let mut ap: ::core::ffi::VaListImpl;
-    fputs(b"*** lgluntrace: \0" as *const u8 as *const libc::c_char, stderr);
+    fputs(
+        b"*** lgluntrace: \0" as *const u8 as *const libc::c_char,
+        stderr,
+    );
     ap = args.clone();
     vfprintf(stderr, fmt, ap.as_va_list());
     fputc('\n' as i32, stderr);
@@ -164,8 +167,7 @@ unsafe extern "C" fn perr(mut fmt: *const libc::c_char, mut args: ...) {
     let mut ap: ::core::ffi::VaListImpl;
     fprintf(
         stderr,
-        b"*** lgluntrace: parse error in '%s' line %d: \0" as *const u8
-            as *const libc::c_char,
+        b"*** lgluntrace: parse error in '%s' line %d: \0" as *const u8 as *const libc::c_char,
         name,
         lineno,
     );
@@ -180,7 +182,10 @@ unsafe extern "C" fn msg(mut fmt: *const libc::c_char, mut args: ...) {
     if verbose == 0 {
         return;
     }
-    fputs(b"c [lgluntrace] \0" as *const u8 as *const libc::c_char, stdout);
+    fputs(
+        b"c [lgluntrace] \0" as *const u8 as *const libc::c_char,
+        stdout,
+    );
     ap = args.clone();
     vprintf(fmt, ap.as_va_list());
     fputc('\n' as i32, stdout);
@@ -197,14 +202,16 @@ unsafe extern "C" fn isnumstr(mut str: *const libc::c_char) -> libc::c_int {
     let fresh0 = p;
     p = p.offset(1);
     if *(*__ctype_b_loc()).offset(*fresh0 as libc::c_int as isize) as libc::c_int
-        & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int == 0
+        & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+        == 0
     {
         return 0 as libc::c_int;
     }
     loop {
         ch = *p as libc::c_int;
         if !(*(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int != 0)
+            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+            != 0)
         {
             break;
         }
@@ -215,10 +222,17 @@ unsafe extern "C" fn isnumstr(mut str: *const libc::c_char) -> libc::c_int {
 }
 unsafe extern "C" fn intarg(mut op: *mut libc::c_char) -> libc::c_int {
     let mut tok: *const libc::c_char = 0 as *const libc::c_char;
-    tok = strtok(0 as *mut libc::c_char, b" \0" as *const u8 as *const libc::c_char);
-    if tok.is_null() || isnumstr(tok) == 0
-        || !(strtok(0 as *mut libc::c_char, b" \0" as *const u8 as *const libc::c_char))
-            .is_null()
+    tok = strtok(
+        0 as *mut libc::c_char,
+        b" \0" as *const u8 as *const libc::c_char,
+    );
+    if tok.is_null()
+        || isnumstr(tok) == 0
+        || !(strtok(
+            0 as *mut libc::c_char,
+            b" \0" as *const u8 as *const libc::c_char,
+        ))
+        .is_null()
     {
         perr(
             b"expected integer argument for '%s'\0" as *const u8 as *const libc::c_char,
@@ -228,28 +242,32 @@ unsafe extern "C" fn intarg(mut op: *mut libc::c_char) -> libc::c_int {
     }
     return atoi(tok);
 }
-unsafe extern "C" fn noarg(
-    mut str: *const libc::c_char,
-    mut op: *mut libc::c_char,
-) -> libc::c_int {
+unsafe extern "C" fn noarg(mut str: *const libc::c_char, mut op: *mut libc::c_char) -> libc::c_int {
     if strcmp(str, op) != 0 {
         return 0 as libc::c_int;
     }
-    if !(strtok(0 as *mut libc::c_char, b" \0" as *const u8 as *const libc::c_char))
-        .is_null()
+    if !(strtok(
+        0 as *mut libc::c_char,
+        b" \0" as *const u8 as *const libc::c_char,
+    ))
+    .is_null()
     {
-        perr(b"argument after '%s'\0" as *const u8 as *const libc::c_char, op);
+        perr(
+            b"argument after '%s'\0" as *const u8 as *const libc::c_char,
+            op,
+        );
     }
     return 1 as libc::c_int;
 }
 unsafe extern "C" fn exitonsig(mut sig: libc::c_int) {
-    msg(b"exit(%d) on signal %d\0" as *const u8 as *const libc::c_char, sig, sig);
+    msg(
+        b"exit(%d) on signal %d\0" as *const u8 as *const libc::c_char,
+        sig,
+        sig,
+    );
     exit(sig);
 }
-unsafe fn main_0(
-    mut argc: libc::c_int,
-    mut argv: *mut *mut libc::c_char,
-) -> libc::c_int {
+unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> libc::c_int {
     let mut i: libc::c_int = 0;
     let mut len: libc::c_int = 0;
     let mut ch: libc::c_int = 0;
@@ -264,8 +282,10 @@ unsafe fn main_0(
     let mut lgl: *mut LGL = 0 as *mut LGL;
     i = 1 as libc::c_int;
     while i < argc {
-        if strcmp(*argv.offset(i as isize), b"-h\0" as *const u8 as *const libc::c_char)
-            == 0
+        if strcmp(
+            *argv.offset(i as isize),
+            b"-h\0" as *const u8 as *const libc::c_char,
+        ) == 0
         {
             printf(
                 b"usage: lgluntrace [-h][-v][-e][<trace>[.gz]]\n\0" as *const u8
@@ -284,8 +304,8 @@ unsafe fn main_0(
         ) == 0
         {
             exitonabort = 1 as libc::c_int;
-        } else if *(*argv.offset(i as isize)).offset(0 as libc::c_int as isize)
-            as libc::c_int == '-' as i32
+        } else if *(*argv.offset(i as isize)).offset(0 as libc::c_int as isize) as libc::c_int
+            == '-' as i32
         {
             die(
                 b"invalid command line option '%s' (try '-h')\0" as *const u8
@@ -309,13 +329,17 @@ unsafe fn main_0(
         len = strlen(name) as libc::c_int;
         if len >= 3 as libc::c_int
             && strcmp(
-                name.offset(len as isize).offset(-(3 as libc::c_int as isize)),
+                name.offset(len as isize)
+                    .offset(-(3 as libc::c_int as isize)),
                 b".gz\0" as *const u8 as *const libc::c_char,
             ) == 0
         {
-            cmd = malloc((len + 20 as libc::c_int) as libc::c_ulong)
-                as *mut libc::c_char;
-            sprintf(cmd, b"gunzip -c %s\0" as *const u8 as *const libc::c_char, name);
+            cmd = malloc((len + 20 as libc::c_int) as libc::c_ulong) as *mut libc::c_char;
+            sprintf(
+                cmd,
+                b"gunzip -c %s\0" as *const u8 as *const libc::c_char,
+                name,
+            );
             file = popen(cmd, b"r\0" as *const u8 as *const libc::c_char);
             free(cmd as *mut libc::c_void);
             if !file.is_null() {
@@ -328,17 +352,17 @@ unsafe fn main_0(
             }
         }
         if file.is_null() {
-            die(b"can not read '%s'\0" as *const u8 as *const libc::c_char, name);
+            die(
+                b"can not read '%s'\0" as *const u8 as *const libc::c_char,
+                name,
+            );
         }
     } else {
         name = b"<stdin>\0" as *const u8 as *const libc::c_char;
         file = stdin;
     }
     if exitonabort != 0 {
-        msg(
-            b"setting signal handlers since '-e' specified\0" as *const u8
-                as *const libc::c_char,
-        );
+        msg(b"setting signal handlers since '-e' specified\0" as *const u8 as *const libc::c_char);
         signal(
             2 as libc::c_int,
             Some(exitonsig as unsafe extern "C" fn(libc::c_int) -> ()),
@@ -372,8 +396,7 @@ unsafe fn main_0(
         }
         if ch != '\n' as i32 {
             if len + 1 as libc::c_int
-                >= ::core::mem::size_of::<[libc::c_char; 80]>() as libc::c_ulong
-                    as libc::c_int
+                >= ::core::mem::size_of::<[libc::c_char; 80]>() as libc::c_ulong as libc::c_int
             {
                 perr(b"line buffer exceeded\0" as *const u8 as *const libc::c_char);
             }
@@ -396,14 +419,10 @@ unsafe fn main_0(
             } else if strcmp(tok, b"add\0" as *const u8 as *const libc::c_char) == 0 {
                 lgladd(
                     lgl,
-                    intarg(
-                        b"add\0" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                    ),
+                    intarg(b"add\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                 );
             } else if strcmp(tok, b"return\0" as *const u8 as *const libc::c_char) == 0 {
-                arg = intarg(
-                    b"return\0" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                );
+                arg = intarg(b"return\0" as *const u8 as *const libc::c_char as *mut libc::c_char);
                 if arg != res {
                     die(
                         b"expected return value %d but got %d\0" as *const u8
@@ -415,34 +434,22 @@ unsafe fn main_0(
             } else if strcmp(tok, b"deref\0" as *const u8 as *const libc::c_char) == 0 {
                 res = lglderef(
                     lgl,
-                    intarg(
-                        b"deref\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"deref\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                 );
             } else if strcmp(tok, b"failed\0" as *const u8 as *const libc::c_char) == 0 {
                 res = lglfailed(
                     lgl,
-                    intarg(
-                        b"failed\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"failed\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                 );
             } else if strcmp(tok, b"fixed\0" as *const u8 as *const libc::c_char) == 0 {
                 res = lglfixed(
                     lgl,
-                    intarg(
-                        b"fixed\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"fixed\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                 );
             } else if strcmp(tok, b"repr\0" as *const u8 as *const libc::c_char) == 0 {
                 res = lglrepr(
                     lgl,
-                    intarg(
-                        b"repr\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"repr\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                 );
             } else if noarg(
                 tok,
@@ -464,8 +471,7 @@ unsafe fn main_0(
                 res = lglchanged(lgl);
             } else if noarg(
                 tok,
-                b"inconsistent\0" as *const u8 as *const libc::c_char
-                    as *mut libc::c_char,
+                b"inconsistent\0" as *const u8 as *const libc::c_char as *mut libc::c_char,
             ) != 0
             {
                 res = lglinconsistent(lgl);
@@ -502,10 +508,7 @@ unsafe fn main_0(
             } else if strcmp(tok, b"assume\0" as *const u8 as *const libc::c_char) == 0 {
                 lglassume(
                     lgl,
-                    intarg(
-                        b"assume\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"assume\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                 );
             } else if noarg(
                 tok,
@@ -522,10 +525,7 @@ unsafe fn main_0(
             } else if strcmp(tok, b"simp\0" as *const u8 as *const libc::c_char) == 0 {
                 res = lglsimp(
                     lgl,
-                    intarg(
-                        b"simp\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"simp\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                 );
             } else if noarg(
                 tok,
@@ -536,60 +536,38 @@ unsafe fn main_0(
             } else if strcmp(tok, b"freeze\0" as *const u8 as *const libc::c_char) == 0 {
                 lglfreeze(
                     lgl,
-                    intarg(
-                        b"freeze\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"freeze\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                 );
             } else if strcmp(tok, b"melt\0" as *const u8 as *const libc::c_char) == 0 {
                 lglmelt(
                     lgl,
-                    intarg(
-                        b"melt\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"melt\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                 );
             } else if strcmp(tok, b"reuse\0" as *const u8 as *const libc::c_char) == 0 {
                 lglreuse(
                     lgl,
-                    intarg(
-                        b"reuse\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"reuse\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                 );
             } else if strcmp(tok, b"frozen\0" as *const u8 as *const libc::c_char) == 0 {
                 res = lglfrozen(
                     lgl,
-                    intarg(
-                        b"frozen\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"frozen\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                 );
             } else if strcmp(tok, b"usable\0" as *const u8 as *const libc::c_char) == 0 {
                 res = lglusable(
                     lgl,
-                    intarg(
-                        b"usable\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"usable\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                 );
-            } else if strcmp(tok, b"reusable\0" as *const u8 as *const libc::c_char) == 0
-            {
+            } else if strcmp(tok, b"reusable\0" as *const u8 as *const libc::c_char) == 0 {
                 res = lglreusable(
                     lgl,
-                    intarg(
-                        b"reusable\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"reusable\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                 );
-            } else if strcmp(tok, b"setimportant\0" as *const u8 as *const libc::c_char)
-                == 0
-            {
+            } else if strcmp(tok, b"setimportant\0" as *const u8 as *const libc::c_char) == 0 {
                 lglsetimportant(
                     lgl,
                     intarg(
-                        b"setimportant\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
+                        b"setimportant\0" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     ),
                 );
             } else if noarg(
@@ -598,23 +576,16 @@ unsafe fn main_0(
             ) != 0
             {
                 lglsetphases(lgl);
-            } else if strcmp(tok, b"setphase\0" as *const u8 as *const libc::c_char) == 0
-            {
+            } else if strcmp(tok, b"setphase\0" as *const u8 as *const libc::c_char) == 0 {
                 lglsetphase(
                     lgl,
-                    intarg(
-                        b"setphase\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"setphase\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                 );
-            } else if strcmp(tok, b"resetphase\0" as *const u8 as *const libc::c_char)
-                == 0
-            {
+            } else if strcmp(tok, b"resetphase\0" as *const u8 as *const libc::c_char) == 0 {
                 lglresetphase(
                     lgl,
                     intarg(
-                        b"resetphase\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
+                        b"resetphase\0" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     ),
                 );
             } else if strcmp(tok, b"option\0" as *const u8 as *const libc::c_char) == 0 {
@@ -628,10 +599,7 @@ unsafe fn main_0(
                 lglsetopt(
                     lgl,
                     opt,
-                    intarg(
-                        b"option\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"option\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                 );
             } else if noarg(
                 tok,
@@ -640,7 +608,10 @@ unsafe fn main_0(
             {
                 lglrelease(lgl);
             } else {
-                perr(b"invalid command '%s'\0" as *const u8 as *const libc::c_char, tok);
+                perr(
+                    b"invalid command '%s'\0" as *const u8 as *const libc::c_char,
+                    tok,
+                );
             }
             lineno += 1;
             lineno;
@@ -657,7 +628,7 @@ unsafe fn main_0(
     return 0 as libc::c_int;
 }
 pub fn main() {
-    let mut args: Vec::<*mut libc::c_char> = Vec::new();
+    let mut args: Vec<*mut libc::c_char> = Vec::new();
     for arg in ::std::env::args() {
         args.push(
             (::std::ffi::CString::new(arg))
@@ -667,11 +638,9 @@ pub fn main() {
     }
     args.push(::core::ptr::null_mut());
     unsafe {
-        ::std::process::exit(
-            main_0(
-                (args.len() - 1) as libc::c_int,
-                args.as_mut_ptr() as *mut *mut libc::c_char,
-            ) as i32,
-        )
+        ::std::process::exit(main_0(
+            (args.len() - 1) as libc::c_int,
+            args.as_mut_ptr() as *mut *mut libc::c_char,
+        ) as i32)
     }
 }

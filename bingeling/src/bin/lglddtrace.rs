@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 #![feature(c_variadic, extern_types)]
 extern "C" {
     pub type _IO_wide_data;
@@ -21,40 +29,25 @@ extern "C" {
     fn fprintf(_: *mut FILE, _: *const libc::c_char, _: ...) -> libc::c_int;
     fn printf(_: *const libc::c_char, _: ...) -> libc::c_int;
     fn sprintf(_: *mut libc::c_char, _: *const libc::c_char, _: ...) -> libc::c_int;
-    fn vfprintf(
-        _: *mut FILE,
-        _: *const libc::c_char,
-        _: ::core::ffi::VaList,
-    ) -> libc::c_int;
+    fn vfprintf(_: *mut FILE, _: *const libc::c_char, _: ::core::ffi::VaList) -> libc::c_int;
     fn getc(__stream: *mut FILE) -> libc::c_int;
     fn fputc(__c: libc::c_int, __stream: *mut FILE) -> libc::c_int;
     fn fputs(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
     fn pclose(__stream: *mut FILE) -> libc::c_int;
     fn popen(__command: *const libc::c_char, __modes: *const libc::c_char) -> *mut FILE;
-    fn strtol(
-        _: *const libc::c_char,
-        _: *mut *mut libc::c_char,
-        _: libc::c_int,
-    ) -> libc::c_long;
+    fn strtol(_: *const libc::c_char, _: *mut *mut libc::c_char, _: libc::c_int) -> libc::c_long;
     fn malloc(_: libc::c_ulong) -> *mut libc::c_void;
     fn calloc(_: libc::c_ulong, _: libc::c_ulong) -> *mut libc::c_void;
     fn realloc(_: *mut libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
     fn free(_: *mut libc::c_void);
     fn exit(_: libc::c_int) -> !;
     fn abs(_: libc::c_int) -> libc::c_int;
-    fn memset(
-        _: *mut libc::c_void,
-        _: libc::c_int,
-        _: libc::c_ulong,
-    ) -> *mut libc::c_void;
+    fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
     fn strdup(_: *const libc::c_char) -> *mut libc::c_char;
     fn strtok(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
     fn strlen(_: *const libc::c_char) -> libc::c_ulong;
-    fn setrlimit(
-        __resource: __rlimit_resource_t,
-        __rlimits: *const rlimit,
-    ) -> libc::c_int;
+    fn setrlimit(__resource: __rlimit_resource_t, __rlimits: *const rlimit) -> libc::c_int;
     fn gettimeofday(__tv: *mut timeval, __tz: *mut libc::c_void) -> libc::c_int;
     fn wait(__stat_loc: *mut libc::c_int) -> __pid_t;
     fn close(__fd: libc::c_int) -> libc::c_int;
@@ -81,7 +74,7 @@ extern "C" {
     fn lglonabort(
         _: *mut LGL,
         state: *mut libc::c_void,
-        callback: Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+        callback: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
     );
     fn lglincvar(_: *mut LGL) -> libc::c_int;
     fn lgladd(_: *mut LGL, lit_0: libc::c_int);
@@ -296,11 +289,7 @@ static mut opts: *mut Opt = 0 as *const Opt as *mut Opt;
 static mut nopts: libc::c_int = 0;
 static mut szopts: libc::c_int = 0;
 static mut sumoptvals: libc::c_longlong = 0;
-unsafe extern "C" fn event(
-    mut type_0: Type,
-    mut arg: libc::c_int,
-    mut opt: *const libc::c_char,
-) {
+unsafe extern "C" fn event(mut type_0: Type, mut arg: libc::c_int, mut opt: *const libc::c_char) {
     let mut e: *mut Event = 0 as *mut Event;
     let mut idx: libc::c_int = 0;
     if nevents == szevents {
@@ -320,7 +309,11 @@ unsafe extern "C" fn event(
     e = events.offset(fresh0 as isize);
     (*e).type_0 = type_0;
     (*e).arg = arg;
-    (*e).opt = if !opt.is_null() { strdup(opt) } else { 0 as *mut libc::c_char };
+    (*e).opt = if !opt.is_null() {
+        strdup(opt)
+    } else {
+        0 as *mut libc::c_char
+    };
     (*e).removed = 2147483647 as libc::c_int;
     match type_0 as libc::c_uint {
         0 | 1 | 2 | 3 | 4 | 15 | 16 | 17 | 6 | 7 | 9 | 26 | 21 | 23 | 22 | 14 => {
@@ -340,9 +333,7 @@ unsafe extern "C" fn event(
                     map = realloc(
                         map as *mut libc::c_void,
                         (szmap as libc::c_ulong)
-                            .wrapping_mul(
-                                ::core::mem::size_of::<libc::c_int>() as libc::c_ulong,
-                            ),
+                            .wrapping_mul(::core::mem::size_of::<libc::c_int>() as libc::c_ulong),
                     ) as *mut libc::c_int;
                 }
                 nmap = idx;
@@ -354,7 +345,10 @@ unsafe extern "C" fn event(
 }
 unsafe extern "C" fn die(mut fmt: *const libc::c_char, mut args: ...) {
     let mut ap: ::core::ffi::VaListImpl;
-    fputs(b"*** lglddtrace: \0" as *const u8 as *const libc::c_char, stderr);
+    fputs(
+        b"*** lglddtrace: \0" as *const u8 as *const libc::c_char,
+        stderr,
+    );
     ap = args.clone();
     vfprintf(stderr, fmt, ap.as_va_list());
     fputc('\n' as i32, stderr);
@@ -365,8 +359,7 @@ unsafe extern "C" fn perr(mut fmt: *const libc::c_char, mut args: ...) {
     let mut ap: ::core::ffi::VaListImpl;
     fprintf(
         stderr,
-        b"*** lglddtrace: parse error in '%s' line %d: \0" as *const u8
-            as *const libc::c_char,
+        b"*** lglddtrace: parse error in '%s' line %d: \0" as *const u8 as *const libc::c_char,
         iname,
         lineno,
     );
@@ -384,7 +377,10 @@ unsafe extern "C" fn rep(mut fmt: *const libc::c_char, mut args: ...) {
     if isatty(1 as libc::c_int) == 0 {
         return;
     }
-    fputs(b"c [lglddtrace] \0" as *const u8 as *const libc::c_char, stdout);
+    fputs(
+        b"c [lglddtrace] \0" as *const u8 as *const libc::c_char,
+        stdout,
+    );
     ap = args.clone();
     vprintf(fmt, ap.as_va_list());
     fputs(b"       \r\0" as *const u8 as *const libc::c_char, stdout);
@@ -395,7 +391,10 @@ unsafe extern "C" fn msg(mut fmt: *const libc::c_char, mut args: ...) {
     if verbose == 0 {
         return;
     }
-    fputs(b"c [lglddtrace] \0" as *const u8 as *const libc::c_char, stdout);
+    fputs(
+        b"c [lglddtrace] \0" as *const u8 as *const libc::c_char,
+        stdout,
+    );
     ap = args.clone();
     vprintf(fmt, ap.as_va_list());
     fputc('\n' as i32, stdout);
@@ -412,14 +411,16 @@ unsafe extern "C" fn isnumstr(mut str: *const libc::c_char) -> libc::c_int {
     let fresh1 = p;
     p = p.offset(1);
     if *(*__ctype_b_loc()).offset(*fresh1 as libc::c_int as isize) as libc::c_int
-        & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int == 0
+        & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+        == 0
     {
         return 0 as libc::c_int;
     }
     loop {
         ch = *p as libc::c_int;
         if !(*(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int != 0)
+            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+            != 0)
         {
             break;
         }
@@ -430,39 +431,44 @@ unsafe extern "C" fn isnumstr(mut str: *const libc::c_char) -> libc::c_int {
 }
 unsafe extern "C" fn intarg(mut op: *mut libc::c_char) -> libc::c_int {
     let mut tok: *const libc::c_char = 0 as *const libc::c_char;
-    tok = strtok(0 as *mut libc::c_char, b" \0" as *const u8 as *const libc::c_char);
-    if tok.is_null() || isnumstr(tok) == 0
-        || !(strtok(0 as *mut libc::c_char, b" \0" as *const u8 as *const libc::c_char))
-            .is_null()
+    tok = strtok(
+        0 as *mut libc::c_char,
+        b" \0" as *const u8 as *const libc::c_char,
+    );
+    if tok.is_null()
+        || isnumstr(tok) == 0
+        || !(strtok(
+            0 as *mut libc::c_char,
+            b" \0" as *const u8 as *const libc::c_char,
+        ))
+        .is_null()
     {
         perr(
             b"expected integer argument for '%s'\0" as *const u8 as *const libc::c_char,
             op,
         );
     }
-    if !tok.is_null() {} else {
+    if !tok.is_null() {
+    } else {
         __assert_fail(
             b"tok\0" as *const u8 as *const libc::c_char,
             b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
             166 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 19],
-                &[libc::c_char; 19],
-            >(b"int intarg(char *)\0"))
+            (*::core::mem::transmute::<&[u8; 19], &[libc::c_char; 19]>(b"int intarg(char *)\0"))
                 .as_ptr(),
         );
     }
     'c_5090: {
-        if !tok.is_null() {} else {
+        if !tok.is_null() {
+        } else {
             __assert_fail(
                 b"tok\0" as *const u8 as *const libc::c_char,
                 b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                 166 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 19],
-                    &[libc::c_char; 19],
-                >(b"int intarg(char *)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 19], &[libc::c_char; 19]>(
+                    b"int intarg(char *)\0",
+                ))
+                .as_ptr(),
             );
         }
     };
@@ -483,7 +489,10 @@ unsafe extern "C" fn process() {
     let mut null: libc::c_int = 0;
     let mut tmp: libc::c_int = 0;
     let mut res: libc::c_int = 0;
-    let mut rlim: rlimit = rlimit { rlim_cur: 0, rlim_max: 0 };
+    let mut rlim: rlimit = rlimit {
+        rlim_cur: 0,
+        rlim_max: 0,
+    };
     let mut lgl: *mut LGL = 0 as *mut LGL;
     let mut e: *mut Event = 0 as *mut Event;
     let mut o: *mut Opt = 0 as *mut Opt;
@@ -492,60 +501,59 @@ unsafe extern "C" fn process() {
     setrlimit(RLIMIT_CPU as libc::c_int, &mut rlim);
     saved1 = dup(1 as libc::c_int);
     saved2 = dup(2 as libc::c_int);
-    null = open(b"/dev/null\0" as *const u8 as *const libc::c_char, 0o1 as libc::c_int);
+    null = open(
+        b"/dev/null\0" as *const u8 as *const libc::c_char,
+        0o1 as libc::c_int,
+    );
     close(1 as libc::c_int);
     close(2 as libc::c_int);
     tmp = dup(null);
-    if tmp == 1 as libc::c_int {} else {
+    if tmp == 1 as libc::c_int {
+    } else {
         __assert_fail(
             b"tmp == 1\0" as *const u8 as *const libc::c_char,
             b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
             189 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 19],
-                &[libc::c_char; 19],
-            >(b"void process(void)\0"))
+            (*::core::mem::transmute::<&[u8; 19], &[libc::c_char; 19]>(b"void process(void)\0"))
                 .as_ptr(),
         );
     }
     'c_6042: {
-        if tmp == 1 as libc::c_int {} else {
+        if tmp == 1 as libc::c_int {
+        } else {
             __assert_fail(
                 b"tmp == 1\0" as *const u8 as *const libc::c_char,
                 b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                 189 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 19],
-                    &[libc::c_char; 19],
-                >(b"void process(void)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 19], &[libc::c_char; 19]>(
+                    b"void process(void)\0",
+                ))
+                .as_ptr(),
             );
         }
     };
     tmp = dup(null);
-    if tmp == 2 as libc::c_int {} else {
+    if tmp == 2 as libc::c_int {
+    } else {
         __assert_fail(
             b"tmp == 2\0" as *const u8 as *const libc::c_char,
             b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
             191 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 19],
-                &[libc::c_char; 19],
-            >(b"void process(void)\0"))
+            (*::core::mem::transmute::<&[u8; 19], &[libc::c_char; 19]>(b"void process(void)\0"))
                 .as_ptr(),
         );
     }
     'c_5999: {
-        if tmp == 2 as libc::c_int {} else {
+        if tmp == 2 as libc::c_int {
+        } else {
             __assert_fail(
                 b"tmp == 2\0" as *const u8 as *const libc::c_char,
                 b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                 191 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 19],
-                    &[libc::c_char; 19],
-                >(b"void process(void)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 19], &[libc::c_char; 19]>(
+                    b"void process(void)\0",
+                ))
+                .as_ptr(),
             );
         }
     };
@@ -632,29 +640,29 @@ unsafe extern "C" fn process() {
                         Some(onabort as unsafe extern "C" fn(*mut libc::c_void) -> ()),
                     );
                     if !opts.is_null() {
-                        if ddopts != 0 {} else {
+                        if ddopts != 0 {
+                        } else {
                             __assert_fail(
                                 b"ddopts\0" as *const u8 as *const libc::c_char,
                                 b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                 224 as libc::c_int as libc::c_uint,
-                                (*::core::mem::transmute::<
-                                    &[u8; 19],
-                                    &[libc::c_char; 19],
-                                >(b"void process(void)\0"))
-                                    .as_ptr(),
+                                (*::core::mem::transmute::<&[u8; 19], &[libc::c_char; 19]>(
+                                    b"void process(void)\0",
+                                ))
+                                .as_ptr(),
                             );
                         }
                         'c_5631: {
-                            if ddopts != 0 {} else {
+                            if ddopts != 0 {
+                            } else {
                                 __assert_fail(
                                     b"ddopts\0" as *const u8 as *const libc::c_char,
                                     b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                     224 as libc::c_int as libc::c_uint,
-                                    (*::core::mem::transmute::<
-                                        &[u8; 19],
-                                        &[libc::c_char; 19],
-                                    >(b"void process(void)\0"))
-                                        .as_ptr(),
+                                    (*::core::mem::transmute::<&[u8; 19], &[libc::c_char; 19]>(
+                                        b"void process(void)\0",
+                                    ))
+                                    .as_ptr(),
                                 );
                             }
                         };
@@ -685,61 +693,58 @@ unsafe extern "C" fn process() {
                 }
                 11 => {
                     if checkreturn != 0 {
-                        if (*e).arg == res {} else {
+                        if (*e).arg == res {
+                        } else {
                             __assert_fail(
                                 b"e->arg == res\0" as *const u8 as *const libc::c_char,
                                 b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                 235 as libc::c_int as libc::c_uint,
-                                (*::core::mem::transmute::<
-                                    &[u8; 19],
-                                    &[libc::c_char; 19],
-                                >(b"void process(void)\0"))
-                                    .as_ptr(),
+                                (*::core::mem::transmute::<&[u8; 19], &[libc::c_char; 19]>(
+                                    b"void process(void)\0",
+                                ))
+                                .as_ptr(),
                             );
                         }
                         'c_5474: {
-                            if (*e).arg == res {} else {
+                            if (*e).arg == res {
+                            } else {
                                 __assert_fail(
                                     b"e->arg == res\0" as *const u8 as *const libc::c_char,
                                     b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                     235 as libc::c_int as libc::c_uint,
-                                    (*::core::mem::transmute::<
-                                        &[u8; 19],
-                                        &[libc::c_char; 19],
-                                    >(b"void process(void)\0"))
-                                        .as_ptr(),
+                                    (*::core::mem::transmute::<&[u8; 19], &[libc::c_char; 19]>(
+                                        b"void process(void)\0",
+                                    ))
+                                    .as_ptr(),
                                 );
                             }
                         };
                     }
                 }
                 12 | _ => {
-                    if (*e).type_0 as libc::c_uint == SAT as libc::c_int as libc::c_uint
-                    {} else {
+                    if (*e).type_0 as libc::c_uint == SAT as libc::c_int as libc::c_uint {
+                    } else {
                         __assert_fail(
                             b"e->type == SAT\0" as *const u8 as *const libc::c_char,
                             b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                             238 as libc::c_int as libc::c_uint,
-                            (*::core::mem::transmute::<
-                                &[u8; 19],
-                                &[libc::c_char; 19],
-                            >(b"void process(void)\0"))
-                                .as_ptr(),
+                            (*::core::mem::transmute::<&[u8; 19], &[libc::c_char; 19]>(
+                                b"void process(void)\0",
+                            ))
+                            .as_ptr(),
                         );
                     }
                     'c_5422: {
-                        if (*e).type_0 as libc::c_uint
-                            == SAT as libc::c_int as libc::c_uint
-                        {} else {
+                        if (*e).type_0 as libc::c_uint == SAT as libc::c_int as libc::c_uint {
+                        } else {
                             __assert_fail(
                                 b"e->type == SAT\0" as *const u8 as *const libc::c_char,
                                 b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                 238 as libc::c_int as libc::c_uint,
-                                (*::core::mem::transmute::<
-                                    &[u8; 19],
-                                    &[libc::c_char; 19],
-                                >(b"void process(void)\0"))
-                                    .as_ptr(),
+                                (*::core::mem::transmute::<&[u8; 19], &[libc::c_char; 19]>(
+                                    b"void process(void)\0",
+                                ))
+                                .as_ptr(),
                             );
                         }
                     };
@@ -754,56 +759,52 @@ unsafe extern "C" fn process() {
     close(2 as libc::c_int);
     close(1 as libc::c_int);
     tmp = dup(saved1);
-    if tmp == 1 as libc::c_int {} else {
+    if tmp == 1 as libc::c_int {
+    } else {
         __assert_fail(
             b"tmp == 1\0" as *const u8 as *const libc::c_char,
             b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
             247 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 19],
-                &[libc::c_char; 19],
-            >(b"void process(void)\0"))
+            (*::core::mem::transmute::<&[u8; 19], &[libc::c_char; 19]>(b"void process(void)\0"))
                 .as_ptr(),
         );
     }
     'c_5278: {
-        if tmp == 1 as libc::c_int {} else {
+        if tmp == 1 as libc::c_int {
+        } else {
             __assert_fail(
                 b"tmp == 1\0" as *const u8 as *const libc::c_char,
                 b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                 247 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 19],
-                    &[libc::c_char; 19],
-                >(b"void process(void)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 19], &[libc::c_char; 19]>(
+                    b"void process(void)\0",
+                ))
+                .as_ptr(),
             );
         }
     };
     tmp = dup(saved2);
-    if tmp == 2 as libc::c_int {} else {
+    if tmp == 2 as libc::c_int {
+    } else {
         __assert_fail(
             b"tmp == 2\0" as *const u8 as *const libc::c_char,
             b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
             249 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 19],
-                &[libc::c_char; 19],
-            >(b"void process(void)\0"))
+            (*::core::mem::transmute::<&[u8; 19], &[libc::c_char; 19]>(b"void process(void)\0"))
                 .as_ptr(),
         );
     }
     'c_5233: {
-        if tmp == 2 as libc::c_int {} else {
+        if tmp == 2 as libc::c_int {
+        } else {
             __assert_fail(
                 b"tmp == 2\0" as *const u8 as *const libc::c_char,
                 b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                 249 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 19],
-                    &[libc::c_char; 19],
-                >(b"void process(void)\0"))
-                    .as_ptr(),
+                (*::core::mem::transmute::<&[u8; 19], &[libc::c_char; 19]>(
+                    b"void process(void)\0",
+                ))
+                .as_ptr(),
             );
         }
     };
@@ -819,10 +820,7 @@ unsafe extern "C" fn run() -> libc::c_int {
         }
         tmp = wait(&mut status);
         if tmp != id {
-            die(
-                b"'wait' did not return child process\0" as *const u8
-                    as *const libc::c_char,
-            );
+            die(b"'wait' did not return child process\0" as *const u8 as *const libc::c_char);
         }
     } else {
         process();
@@ -839,28 +837,23 @@ unsafe extern "C" fn lit(mut lit_0: libc::c_int) -> libc::c_int {
         return 0 as libc::c_int;
     }
     idx = abs(lit_0);
-    if (0 as libc::c_int) < idx && idx <= nmap {} else {
+    if (0 as libc::c_int) < idx && idx <= nmap {
+    } else {
         __assert_fail(
             b"0 < idx && idx <= nmap\0" as *const u8 as *const libc::c_char,
             b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
             268 as libc::c_int as libc::c_uint,
-            (*::core::mem::transmute::<
-                &[u8; 13],
-                &[libc::c_char; 13],
-            >(b"int lit(int)\0"))
-                .as_ptr(),
+            (*::core::mem::transmute::<&[u8; 13], &[libc::c_char; 13]>(b"int lit(int)\0")).as_ptr(),
         );
     }
     'c_6238: {
-        if (0 as libc::c_int) < idx && idx <= nmap {} else {
+        if (0 as libc::c_int) < idx && idx <= nmap {
+        } else {
             __assert_fail(
                 b"0 < idx && idx <= nmap\0" as *const u8 as *const libc::c_char,
                 b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                 268 as libc::c_int as libc::c_uint,
-                (*::core::mem::transmute::<
-                    &[u8; 13],
-                    &[libc::c_char; 13],
-                >(b"int lit(int)\0"))
+                (*::core::mem::transmute::<&[u8; 13], &[libc::c_char; 13]>(b"int lit(int)\0"))
                     .as_ptr(),
             );
         }
@@ -984,7 +977,10 @@ unsafe extern "C" fn print(mut e: *mut Event, mut file: *mut FILE) {
             );
         }
         30 => {
-            fprintf(file, b"inconsistent\n\0" as *const u8 as *const libc::c_char);
+            fprintf(
+                file,
+                b"inconsistent\n\0" as *const u8 as *const libc::c_char,
+            );
         }
         31 => {
             fprintf(file, b"lkhd\n\0" as *const u8 as *const libc::c_char);
@@ -995,29 +991,29 @@ unsafe extern "C" fn print(mut e: *mut Event, mut file: *mut FILE) {
         5 => {
             fprintf(file, b"init\n\0" as *const u8 as *const libc::c_char);
             if !opts.is_null() {
-                if ddopts != 0 {} else {
+                if ddopts != 0 {
+                } else {
                     __assert_fail(
                         b"ddopts\0" as *const u8 as *const libc::c_char,
                         b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                         302 as libc::c_int as libc::c_uint,
-                        (*::core::mem::transmute::<
-                            &[u8; 28],
-                            &[libc::c_char; 28],
-                        >(b"void print(Event *, FILE *)\0"))
-                            .as_ptr(),
+                        (*::core::mem::transmute::<&[u8; 28], &[libc::c_char; 28]>(
+                            b"void print(Event *, FILE *)\0",
+                        ))
+                        .as_ptr(),
                     );
                 }
                 'c_6595: {
-                    if ddopts != 0 {} else {
+                    if ddopts != 0 {
+                    } else {
                         __assert_fail(
                             b"ddopts\0" as *const u8 as *const libc::c_char,
                             b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                             302 as libc::c_int as libc::c_uint,
-                            (*::core::mem::transmute::<
-                                &[u8; 28],
-                                &[libc::c_char; 28],
-                            >(b"void print(Event *, FILE *)\0"))
-                                .as_ptr(),
+                            (*::core::mem::transmute::<&[u8; 28], &[libc::c_char; 28]>(
+                                b"void print(Event *, FILE *)\0",
+                            ))
+                            .as_ptr(),
                         );
                     }
                 };
@@ -1077,34 +1073,36 @@ unsafe extern "C" fn print(mut e: *mut Event, mut file: *mut FILE) {
             );
         }
         13 => {
-            fprintf(file, b"simp %d\n\0" as *const u8 as *const libc::c_char, (*e).arg);
+            fprintf(
+                file,
+                b"simp %d\n\0" as *const u8 as *const libc::c_char,
+                (*e).arg,
+            );
         }
         12 | _ => {
-            if (*e).type_0 as libc::c_uint == SAT as libc::c_int as libc::c_uint
-            {} else {
+            if (*e).type_0 as libc::c_uint == SAT as libc::c_int as libc::c_uint {
+            } else {
                 __assert_fail(
                     b"e->type == SAT\0" as *const u8 as *const libc::c_char,
                     b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                     316 as libc::c_int as libc::c_uint,
-                    (*::core::mem::transmute::<
-                        &[u8; 28],
-                        &[libc::c_char; 28],
-                    >(b"void print(Event *, FILE *)\0"))
-                        .as_ptr(),
+                    (*::core::mem::transmute::<&[u8; 28], &[libc::c_char; 28]>(
+                        b"void print(Event *, FILE *)\0",
+                    ))
+                    .as_ptr(),
                 );
             }
             'c_6385: {
-                if (*e).type_0 as libc::c_uint == SAT as libc::c_int as libc::c_uint
-                {} else {
+                if (*e).type_0 as libc::c_uint == SAT as libc::c_int as libc::c_uint {
+                } else {
                     __assert_fail(
                         b"e->type == SAT\0" as *const u8 as *const libc::c_char,
                         b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                         316 as libc::c_int as libc::c_uint,
-                        (*::core::mem::transmute::<
-                            &[u8; 28],
-                            &[libc::c_char; 28],
-                        >(b"void print(Event *, FILE *)\0"))
-                            .as_ptr(),
+                        (*::core::mem::transmute::<&[u8; 28], &[libc::c_char; 28]>(
+                            b"void print(Event *, FILE *)\0",
+                        ))
+                        .as_ptr(),
                     );
                 }
             };
@@ -1146,29 +1144,29 @@ unsafe extern "C" fn type2str(mut type_0: Type) -> *const libc::c_char {
         11 => return b"return\0" as *const u8 as *const libc::c_char,
         13 => return b"simp\0" as *const u8 as *const libc::c_char,
         12 | _ => {
-            if type_0 as libc::c_uint == SAT as libc::c_int as libc::c_uint {} else {
+            if type_0 as libc::c_uint == SAT as libc::c_int as libc::c_uint {
+            } else {
                 __assert_fail(
                     b"type == SAT\0" as *const u8 as *const libc::c_char,
                     b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                     356 as libc::c_int as libc::c_uint,
-                    (*::core::mem::transmute::<
-                        &[u8; 27],
-                        &[libc::c_char; 27],
-                    >(b"const char *type2str(Type)\0"))
-                        .as_ptr(),
+                    (*::core::mem::transmute::<&[u8; 27], &[libc::c_char; 27]>(
+                        b"const char *type2str(Type)\0",
+                    ))
+                    .as_ptr(),
                 );
             }
             'c_7023: {
-                if type_0 as libc::c_uint == SAT as libc::c_int as libc::c_uint {} else {
+                if type_0 as libc::c_uint == SAT as libc::c_int as libc::c_uint {
+                } else {
                     __assert_fail(
                         b"type == SAT\0" as *const u8 as *const libc::c_char,
                         b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                         356 as libc::c_int as libc::c_uint,
-                        (*::core::mem::transmute::<
-                            &[u8; 27],
-                            &[libc::c_char; 27],
-                        >(b"const char *type2str(Type)\0"))
-                            .as_ptr(),
+                        (*::core::mem::transmute::<&[u8; 27], &[libc::c_char; 27]>(
+                            b"const char *type2str(Type)\0",
+                        ))
+                        .as_ptr(),
                     );
                 }
             };
@@ -1177,10 +1175,16 @@ unsafe extern "C" fn type2str(mut type_0: Type) -> *const libc::c_char {
     };
 }
 unsafe extern "C" fn noarg(mut op: Type) {
-    if !(strtok(0 as *mut libc::c_char, b" \0" as *const u8 as *const libc::c_char))
-        .is_null()
+    if !(strtok(
+        0 as *mut libc::c_char,
+        b" \0" as *const u8 as *const libc::c_char,
+    ))
+    .is_null()
     {
-        perr(b"argument after '%s'\0" as *const u8 as *const libc::c_char, type2str(op));
+        perr(
+            b"argument after '%s'\0" as *const u8 as *const libc::c_char,
+            type2str(op),
+        );
     }
     event(op, 0 as libc::c_int, 0 as *const libc::c_char);
 }
@@ -1212,12 +1216,18 @@ unsafe extern "C" fn prt(mut final_0: libc::c_int) {
     len = strlen(oname) as libc::c_int;
     if len >= 3 as libc::c_int
         && strcmp(
-            oname.offset(len as isize).offset(-(3 as libc::c_int as isize)),
+            oname
+                .offset(len as isize)
+                .offset(-(3 as libc::c_int as isize)),
             b".gz\0" as *const u8 as *const libc::c_char,
         ) == 0
     {
         cmd = malloc((len + 20 as libc::c_int) as libc::c_ulong) as *mut libc::c_char;
-        sprintf(cmd, b"gzip -c > %s\0" as *const u8 as *const libc::c_char, oname);
+        sprintf(
+            cmd,
+            b"gzip -c > %s\0" as *const u8 as *const libc::c_char,
+            oname,
+        );
         file = popen(cmd, b"w\0" as *const u8 as *const libc::c_char);
         if !file.is_null() {
             close_0 = 2 as libc::c_int;
@@ -1230,7 +1240,10 @@ unsafe extern "C" fn prt(mut final_0: libc::c_int) {
         }
     }
     if file.is_null() {
-        die(b"can not write to '%s'\0" as *const u8 as *const libc::c_char, oname);
+        die(
+            b"can not write to '%s'\0" as *const u8 as *const libc::c_char,
+            oname,
+        );
     }
     prevents = 0 as libc::c_int;
     i = 0 as libc::c_int;
@@ -1305,12 +1318,11 @@ unsafe extern "C" fn dd() {
             if !(reme(e) != 0) {
                 idx = 0 as libc::c_int;
                 match (*e).type_0 as libc::c_uint {
-                    0 | 1 | 2 | 3 | 26 | 21 | 23 | 22 | 14 | 15 | 16 | 17 | 4 | 6 | 7
-                    | 9 => {
+                    0 | 1 | 2 | 3 | 26 | 21 | 23 | 22 | 14 | 15 | 16 | 17 | 4 | 6 | 7 | 9 => {
                         idx = (*e).arg;
                     }
-                    5 | 8 | 10 | 11 | 12 | 13 | 29 | 24 | 25 | 30 | 31 | 27 | 19 | 20
-                    | 28 | 18 | _ => {}
+                    5 | 8 | 10 | 11 | 12 | 13 | 29 | 24 | 25 | 30 | 31 | 27 | 19 | 20 | 28 | 18
+                    | _ => {}
                 }
                 if !(idx == 0) {
                     idx = abs(idx);
@@ -1337,29 +1349,29 @@ unsafe extern "C" fn dd() {
             while idx <= nmap {
                 if *used.offset(idx as isize) != 0 {
                     if *smap.offset(idx as isize) != mapto {
-                        if mapto < *smap.offset(idx as isize) {} else {
+                        if mapto < *smap.offset(idx as isize) {
+                        } else {
                             __assert_fail(
                                 b"mapto < smap[idx]\0" as *const u8 as *const libc::c_char,
                                 b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                 479 as libc::c_int as libc::c_uint,
-                                (*::core::mem::transmute::<
-                                    &[u8; 14],
-                                    &[libc::c_char; 14],
-                                >(b"void dd(void)\0"))
-                                    .as_ptr(),
+                                (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                    b"void dd(void)\0",
+                                ))
+                                .as_ptr(),
                             );
                         }
                         'c_9636: {
-                            if mapto < *smap.offset(idx as isize) {} else {
+                            if mapto < *smap.offset(idx as isize) {
+                            } else {
                                 __assert_fail(
                                     b"mapto < smap[idx]\0" as *const u8 as *const libc::c_char,
                                     b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                     479 as libc::c_int as libc::c_uint,
-                                    (*::core::mem::transmute::<
-                                        &[u8; 14],
-                                        &[libc::c_char; 14],
-                                    >(b"void dd(void)\0"))
-                                        .as_ptr(),
+                                    (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                        b"void dd(void)\0",
+                                    ))
+                                    .as_ptr(),
                                 );
                             }
                         };
@@ -1422,13 +1434,11 @@ unsafe extern "C" fn dd() {
                     while (to + 1 as libc::c_int) < nevents {
                         e = events.offset(to as isize).offset(1 as libc::c_int as isize);
                         if (*e).type_0 as libc::c_uint != cluster as libc::c_uint {
-                            if !(cluster as libc::c_uint
-                                == DEREF as libc::c_int as libc::c_uint
+                            if !(cluster as libc::c_uint == DEREF as libc::c_int as libc::c_uint
                                 && (*e).type_0 as libc::c_uint
                                     == RETURN as libc::c_int as libc::c_uint)
                             {
-                                if !(cluster as libc::c_uint
-                                    == SAT as libc::c_int as libc::c_uint
+                                if !(cluster as libc::c_uint == SAT as libc::c_int as libc::c_uint
                                     && (*e).type_0 as libc::c_uint
                                         == RETURN as libc::c_int as libc::c_uint)
                                 {
@@ -1438,12 +1448,9 @@ unsafe extern "C" fn dd() {
                                 to;
                                 break;
                             }
-                        } else if cluster as libc::c_uint
-                            == INIT as libc::c_int as libc::c_uint
-                            || cluster as libc::c_uint
-                                == SAT as libc::c_int as libc::c_uint
-                            || cluster as libc::c_uint
-                                == RELEASE as libc::c_int as libc::c_uint
+                        } else if cluster as libc::c_uint == INIT as libc::c_int as libc::c_uint
+                            || cluster as libc::c_uint == SAT as libc::c_int as libc::c_uint
+                            || cluster as libc::c_uint == RELEASE as libc::c_int as libc::c_uint
                         {
                             break;
                         }
@@ -1455,50 +1462,46 @@ unsafe extern "C" fn dd() {
                         && (*events.offset(to as isize)).type_0 as libc::c_uint
                             == ADD as libc::c_int as libc::c_uint
                     {
-                        while (to + 1 as libc::c_int) < nevents
-                            && {
-                                e = events.offset(to as isize);
-                                reme(e) != 0
-                                    || (*e).type_0 as libc::c_uint
-                                        == ADD as libc::c_int as libc::c_uint && (*e).arg != 0
-                            }
-                        {
+                        while (to + 1 as libc::c_int) < nevents && {
+                            e = events.offset(to as isize);
+                            reme(e) != 0
+                                || (*e).type_0 as libc::c_uint == ADD as libc::c_int as libc::c_uint
+                                    && (*e).arg != 0
+                        } {
                             to += 1;
                             to;
                         }
                     }
                 } else if (to + 1 as libc::c_int) < nevents {
-                    while (to + 1 as libc::c_int) < nevents
-                        && reme(events.offset(to as isize)) != 0
+                    while (to + 1 as libc::c_int) < nevents && reme(events.offset(to as isize)) != 0
                     {
                         to += 1;
                         to;
                     }
                 }
-                if r < ranges.offset(nevents as isize) {} else {
+                if r < ranges.offset(nevents as isize) {
+                } else {
                     __assert_fail(
                         b"r < ranges + nevents\0" as *const u8 as *const libc::c_char,
                         b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                         534 as libc::c_int as libc::c_uint,
-                        (*::core::mem::transmute::<
-                            &[u8; 14],
-                            &[libc::c_char; 14],
-                        >(b"void dd(void)\0"))
-                            .as_ptr(),
+                        (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                            b"void dd(void)\0",
+                        ))
+                        .as_ptr(),
                     );
                 }
                 'c_9234: {
-                    if r < ranges.offset(nevents as isize) {} else {
+                    if r < ranges.offset(nevents as isize) {
+                    } else {
                         __assert_fail(
-                            b"r < ranges + nevents\0" as *const u8
-                                as *const libc::c_char,
+                            b"r < ranges + nevents\0" as *const u8 as *const libc::c_char,
                             b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                             534 as libc::c_int as libc::c_uint,
-                            (*::core::mem::transmute::<
-                                &[u8; 14],
-                                &[libc::c_char; 14],
-                            >(b"void dd(void)\0"))
-                                .as_ptr(),
+                            (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                b"void dd(void)\0",
+                            ))
+                            .as_ptr(),
                         );
                     }
                 };
@@ -1518,8 +1521,7 @@ unsafe extern "C" fn dd() {
                     while i <= to {
                         e = events.offset(i as isize);
                         if !(reme(e) != 0 && verbose < 4 as libc::c_int) {
-                            if (*e).type_0 as libc::c_uint
-                                == OPTION as libc::c_int as libc::c_uint
+                            if (*e).type_0 as libc::c_uint == OPTION as libc::c_int as libc::c_uint
                             {
                                 msg(
                                     b"range %d [%d] %s %s %d%s\0" as *const u8
@@ -1537,8 +1539,7 @@ unsafe extern "C" fn dd() {
                                 );
                             } else {
                                 msg(
-                                    b"range %d [%d] %s %d%s\0" as *const u8
-                                        as *const libc::c_char,
+                                    b"range %d [%d] %s %d%s\0" as *const u8 as *const libc::c_char,
                                     r.offset_from(ranges) as libc::c_long,
                                     i,
                                     type2str((*e).type_0),
@@ -1576,8 +1577,7 @@ unsafe extern "C" fn dd() {
                 pos = 0 as libc::c_int;
                 loop {
                     rep(
-                        b"g%d w%d : %6d .. %-6d / %d %lld\0" as *const u8
-                            as *const libc::c_char,
+                        b"g%d w%d : %6d .. %-6d / %d %lld\0" as *const u8 as *const libc::c_char,
                         rgran,
                         width,
                         pos,
@@ -1607,29 +1607,29 @@ unsafe extern "C" fn dd() {
                                 j += 1;
                                 j;
                             }
-                            if found != 0 {} else {
+                            if found != 0 {
+                            } else {
                                 __assert_fail(
                                     b"found\0" as *const u8 as *const libc::c_char,
                                     b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                     581 as libc::c_int as libc::c_uint,
-                                    (*::core::mem::transmute::<
-                                        &[u8; 14],
-                                        &[libc::c_char; 14],
-                                    >(b"void dd(void)\0"))
-                                        .as_ptr(),
+                                    (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                        b"void dd(void)\0",
+                                    ))
+                                    .as_ptr(),
                                 );
                             }
                             'c_8856: {
-                                if found != 0 {} else {
+                                if found != 0 {
+                                } else {
                                     __assert_fail(
                                         b"found\0" as *const u8 as *const libc::c_char,
                                         b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                         581 as libc::c_int as libc::c_uint,
-                                        (*::core::mem::transmute::<
-                                            &[u8; 14],
-                                            &[libc::c_char; 14],
-                                        >(b"void dd(void)\0"))
-                                            .as_ptr(),
+                                        (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                            b"void dd(void)\0",
+                                        ))
+                                        .as_ptr(),
                                     );
                                 }
                             };
@@ -1652,21 +1652,22 @@ unsafe extern "C" fn dd() {
                         while i < nranges && i < pos + width {
                             r = ranges.offset(i as isize);
                             if !((*r).removed < runs - 1 as libc::c_int) {
-                                if (*r).removed == runs - 1 as libc::c_int {} else {
+                                if (*r).removed == runs - 1 as libc::c_int {
+                                } else {
                                     __assert_fail(
                                         b"r->removed == runs - 1\0" as *const u8
                                             as *const libc::c_char,
                                         b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                         594 as libc::c_int as libc::c_uint,
-                                        (*::core::mem::transmute::<
-                                            &[u8; 14],
-                                            &[libc::c_char; 14],
-                                        >(b"void dd(void)\0"))
-                                            .as_ptr(),
+                                        (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                            b"void dd(void)\0",
+                                        ))
+                                        .as_ptr(),
                                     );
                                 }
                                 'c_8732: {
-                                    if (*r).removed == runs - 1 as libc::c_int {} else {
+                                    if (*r).removed == runs - 1 as libc::c_int {
+                                    } else {
                                         __assert_fail(
                                             b"r->removed == runs - 1\0" as *const u8
                                                 as *const libc::c_char,
@@ -1675,8 +1676,10 @@ unsafe extern "C" fn dd() {
                                             (*::core::mem::transmute::<
                                                 &[u8; 14],
                                                 &[libc::c_char; 14],
-                                            >(b"void dd(void)\0"))
-                                                .as_ptr(),
+                                            >(
+                                                b"void dd(void)\0"
+                                            ))
+                                            .as_ptr(),
                                         );
                                     }
                                 };
@@ -1684,29 +1687,38 @@ unsafe extern "C" fn dd() {
                                 j = (*r).from;
                                 while j <= (*r).to {
                                     e = events.offset(j as isize);
-                                    if (*e).removed < runs {} else {
+                                    if (*e).removed < runs {
+                                    } else {
                                         __assert_fail(
-                                            b"e->removed < runs\0" as *const u8 as *const libc::c_char,
+                                            b"e->removed < runs\0" as *const u8
+                                                as *const libc::c_char,
                                             b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                             598 as libc::c_int as libc::c_uint,
                                             (*::core::mem::transmute::<
                                                 &[u8; 14],
                                                 &[libc::c_char; 14],
-                                            >(b"void dd(void)\0"))
-                                                .as_ptr(),
+                                            >(
+                                                b"void dd(void)\0"
+                                            ))
+                                            .as_ptr(),
                                         );
                                     }
                                     'c_8662: {
-                                        if (*e).removed < runs {} else {
+                                        if (*e).removed < runs {
+                                        } else {
                                             __assert_fail(
-                                                b"e->removed < runs\0" as *const u8 as *const libc::c_char,
-                                                b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
+                                                b"e->removed < runs\0" as *const u8
+                                                    as *const libc::c_char,
+                                                b"lglddtrace.c\0" as *const u8
+                                                    as *const libc::c_char,
                                                 598 as libc::c_int as libc::c_uint,
                                                 (*::core::mem::transmute::<
                                                     &[u8; 14],
                                                     &[libc::c_char; 14],
-                                                >(b"void dd(void)\0"))
-                                                    .as_ptr(),
+                                                >(
+                                                    b"void dd(void)\0"
+                                                ))
+                                                .as_ptr(),
                                             );
                                         }
                                     };
@@ -1753,44 +1765,26 @@ unsafe extern "C" fn dd() {
                 let mut lgl: *mut LGL = lglinit();
                 it = lglfirstopt(lgl);
                 loop {
-                    it = lglnextopt(
-                        lgl,
-                        it,
-                        &mut name,
-                        &mut opt.val,
-                        &mut opt.min,
-                        &mut opt.max,
-                    );
+                    it = lglnextopt(lgl, it, &mut name, &mut opt.val, &mut opt.min, &mut opt.max);
                     if it.is_null() {
                         break;
                     }
                     if strcmp(name, b"log\0" as *const u8 as *const libc::c_char) == 0 {
                         continue;
                     }
-                    if strcmp(name, b"check\0" as *const u8 as *const libc::c_char) == 0
-                    {
+                    if strcmp(name, b"check\0" as *const u8 as *const libc::c_char) == 0 {
                         continue;
                     }
-                    if strcmp(name, b"verbose\0" as *const u8 as *const libc::c_char)
-                        == 0
-                    {
+                    if strcmp(name, b"verbose\0" as *const u8 as *const libc::c_char) == 0 {
                         continue;
                     }
-                    if strcmp(name, b"witness\0" as *const u8 as *const libc::c_char)
-                        == 0
-                    {
+                    if strcmp(name, b"witness\0" as *const u8 as *const libc::c_char) == 0 {
                         continue;
                     }
-                    if strcmp(name, b"exitonabort\0" as *const u8 as *const libc::c_char)
-                        == 0
-                    {
+                    if strcmp(name, b"exitonabort\0" as *const u8 as *const libc::c_char) == 0 {
                         continue;
                     }
-                    if strcmp(
-                        name,
-                        b"sleeponabort\0" as *const u8 as *const libc::c_char,
-                    ) == 0
-                    {
+                    if strcmp(name, b"sleeponabort\0" as *const u8 as *const libc::c_char) == 0 {
                         continue;
                     }
                     if nopts == szopts {
@@ -1802,9 +1796,7 @@ unsafe extern "C" fn dd() {
                         opts = realloc(
                             opts as *mut libc::c_void,
                             (szopts as libc::c_ulong)
-                                .wrapping_mul(
-                                    ::core::mem::size_of::<Opt>() as libc::c_ulong,
-                                ),
+                                .wrapping_mul(::core::mem::size_of::<Opt>() as libc::c_ulong),
                         ) as *mut Opt;
                     }
                     opt.name = strdup(name);
@@ -1814,16 +1806,13 @@ unsafe extern "C" fn dd() {
                 }
                 e = events;
                 while e < events.offset(nevents as isize) {
-                    if !((*e).type_0 as libc::c_uint
-                        != OPTION as libc::c_int as libc::c_uint)
-                    {
+                    if !((*e).type_0 as libc::c_uint != OPTION as libc::c_int as libc::c_uint) {
                         o = opts;
                         while o < opts.offset(nopts as isize) {
                             if strcmp((*e).opt, (*o).name) == 0 {
                                 (*o).val = (*e).arg;
-                                sumoptvals
-                                    += (*o).val as libc::c_longlong
-                                        - (*o).min as libc::c_longlong;
+                                sumoptvals +=
+                                    (*o).val as libc::c_longlong - (*o).min as libc::c_longlong;
                             }
                             o = o.offset(1);
                             o;
@@ -1836,8 +1825,8 @@ unsafe extern "C" fn dd() {
             }
             o = opts;
             while o < opts.offset(nopts as isize) {
-                let mut delta: libc::c_longlong = (*o).val as libc::c_longlong
-                    - (*o).min as libc::c_longlong;
+                let mut delta: libc::c_longlong =
+                    (*o).val as libc::c_longlong - (*o).min as libc::c_longlong;
                 rep(
                     b"o %d / %d %lld                            \0" as *const u8
                         as *const libc::c_char,
@@ -1876,29 +1865,29 @@ unsafe extern "C" fn dd() {
                     while (*o).val > (*o).min {
                         let mut oldval_0: libc::c_int = (*o).val;
                         let mut newval: libc::c_int = oldval_0 - 1 as libc::c_int;
-                        if newval >= (*o).min {} else {
+                        if newval >= (*o).min {
+                        } else {
                             __assert_fail(
                                 b"newval >= o->min\0" as *const u8 as *const libc::c_char,
                                 b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                 666 as libc::c_int as libc::c_uint,
-                                (*::core::mem::transmute::<
-                                    &[u8; 14],
-                                    &[libc::c_char; 14],
-                                >(b"void dd(void)\0"))
-                                    .as_ptr(),
+                                (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                    b"void dd(void)\0",
+                                ))
+                                .as_ptr(),
                             );
                         }
                         'c_8135: {
-                            if newval >= (*o).min {} else {
+                            if newval >= (*o).min {
+                            } else {
                                 __assert_fail(
                                     b"newval >= o->min\0" as *const u8 as *const libc::c_char,
                                     b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                     666 as libc::c_int as libc::c_uint,
-                                    (*::core::mem::transmute::<
-                                        &[u8; 14],
-                                        &[libc::c_char; 14],
-                                    >(b"void dd(void)\0"))
-                                        .as_ptr(),
+                                    (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                        b"void dd(void)\0",
+                                    ))
+                                    .as_ptr(),
                                 );
                             }
                         };
@@ -1922,31 +1911,30 @@ unsafe extern "C" fn dd() {
                                 reported = 0 as libc::c_int;
                             }
                             changed = 1 as libc::c_int;
-                            if oldval_0 - newval == 1 as libc::c_int {} else {
+                            if oldval_0 - newval == 1 as libc::c_int {
+                            } else {
                                 __assert_fail(
-                                    b"oldval - newval == 1\0" as *const u8
-                                        as *const libc::c_char,
+                                    b"oldval - newval == 1\0" as *const u8 as *const libc::c_char,
                                     b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                     677 as libc::c_int as libc::c_uint,
-                                    (*::core::mem::transmute::<
-                                        &[u8; 14],
-                                        &[libc::c_char; 14],
-                                    >(b"void dd(void)\0"))
-                                        .as_ptr(),
+                                    (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                        b"void dd(void)\0",
+                                    ))
+                                    .as_ptr(),
                                 );
                             }
                             'c_8023: {
-                                if oldval_0 - newval == 1 as libc::c_int {} else {
+                                if oldval_0 - newval == 1 as libc::c_int {
+                                } else {
                                     __assert_fail(
                                         b"oldval - newval == 1\0" as *const u8
                                             as *const libc::c_char,
                                         b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                         677 as libc::c_int as libc::c_uint,
-                                        (*::core::mem::transmute::<
-                                            &[u8; 14],
-                                            &[libc::c_char; 14],
-                                        >(b"void dd(void)\0"))
-                                            .as_ptr(),
+                                        (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                            b"void dd(void)\0",
+                                        ))
+                                        .as_ptr(),
                                     );
                                 }
                             };
@@ -1957,29 +1945,29 @@ unsafe extern "C" fn dd() {
                 } else {
                     let mut upper: libc::c_int = (*o).val;
                     let mut lower: libc::c_int = (*o).min;
-                    if lower <= upper {} else {
+                    if lower <= upper {
+                    } else {
                         __assert_fail(
                             b"lower <= upper\0" as *const u8 as *const libc::c_char,
                             b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                             684 as libc::c_int as libc::c_uint,
-                            (*::core::mem::transmute::<
-                                &[u8; 14],
-                                &[libc::c_char; 14],
-                            >(b"void dd(void)\0"))
-                                .as_ptr(),
+                            (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                b"void dd(void)\0",
+                            ))
+                            .as_ptr(),
                         );
                     }
                     'c_7971: {
-                        if lower <= upper {} else {
+                        if lower <= upper {
+                        } else {
                             __assert_fail(
                                 b"lower <= upper\0" as *const u8 as *const libc::c_char,
                                 b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                 684 as libc::c_int as libc::c_uint,
-                                (*::core::mem::transmute::<
-                                    &[u8; 14],
-                                    &[libc::c_char; 14],
-                                >(b"void dd(void)\0"))
-                                    .as_ptr(),
+                                (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                    b"void dd(void)\0",
+                                ))
+                                .as_ptr(),
                             );
                         }
                     };
@@ -2006,29 +1994,29 @@ unsafe extern "C" fn dd() {
                                 reported = 0 as libc::c_int;
                             }
                             changed = 1 as libc::c_int;
-                            if newval_0 < upper {} else {
+                            if newval_0 < upper {
+                            } else {
                                 __assert_fail(
                                     b"newval < upper\0" as *const u8 as *const libc::c_char,
                                     b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                     698 as libc::c_int as libc::c_uint,
-                                    (*::core::mem::transmute::<
-                                        &[u8; 14],
-                                        &[libc::c_char; 14],
-                                    >(b"void dd(void)\0"))
-                                        .as_ptr(),
+                                    (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                        b"void dd(void)\0",
+                                    ))
+                                    .as_ptr(),
                                 );
                             }
                             'c_7878: {
-                                if newval_0 < upper {} else {
+                                if newval_0 < upper {
+                                } else {
                                     __assert_fail(
                                         b"newval < upper\0" as *const u8 as *const libc::c_char,
                                         b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                         698 as libc::c_int as libc::c_uint,
-                                        (*::core::mem::transmute::<
-                                            &[u8; 14],
-                                            &[libc::c_char; 14],
-                                        >(b"void dd(void)\0"))
-                                            .as_ptr(),
+                                        (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                            b"void dd(void)\0",
+                                        ))
+                                        .as_ptr(),
                                     );
                                 }
                             };
@@ -2039,58 +2027,58 @@ unsafe extern "C" fn dd() {
                             if lower == newval_0 {
                                 break;
                             }
-                            if lower < newval_0 {} else {
+                            if lower < newval_0 {
+                            } else {
                                 __assert_fail(
                                     b"lower < newval\0" as *const u8 as *const libc::c_char,
                                     b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                     705 as libc::c_int as libc::c_uint,
-                                    (*::core::mem::transmute::<
-                                        &[u8; 14],
-                                        &[libc::c_char; 14],
-                                    >(b"void dd(void)\0"))
-                                        .as_ptr(),
+                                    (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                        b"void dd(void)\0",
+                                    ))
+                                    .as_ptr(),
                                 );
                             }
                             'c_7806: {
-                                if lower < newval_0 {} else {
+                                if lower < newval_0 {
+                                } else {
                                     __assert_fail(
                                         b"lower < newval\0" as *const u8 as *const libc::c_char,
                                         b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                         705 as libc::c_int as libc::c_uint,
-                                        (*::core::mem::transmute::<
-                                            &[u8; 14],
-                                            &[libc::c_char; 14],
-                                        >(b"void dd(void)\0"))
-                                            .as_ptr(),
+                                        (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                            b"void dd(void)\0",
+                                        ))
+                                        .as_ptr(),
                                     );
                                 }
                             };
                             lower = newval_0;
                         }
                     }
-                    if lower <= upper {} else {
+                    if lower <= upper {
+                    } else {
                         __assert_fail(
                             b"lower <= upper\0" as *const u8 as *const libc::c_char,
                             b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                             709 as libc::c_int as libc::c_uint,
-                            (*::core::mem::transmute::<
-                                &[u8; 14],
-                                &[libc::c_char; 14],
-                            >(b"void dd(void)\0"))
-                                .as_ptr(),
+                            (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                b"void dd(void)\0",
+                            ))
+                            .as_ptr(),
                         );
                     }
                     'c_7719: {
-                        if lower <= upper {} else {
+                        if lower <= upper {
+                        } else {
                             __assert_fail(
                                 b"lower <= upper\0" as *const u8 as *const libc::c_char,
                                 b"lglddtrace.c\0" as *const u8 as *const libc::c_char,
                                 709 as libc::c_int as libc::c_uint,
-                                (*::core::mem::transmute::<
-                                    &[u8; 14],
-                                    &[libc::c_char; 14],
-                                >(b"void dd(void)\0"))
-                                    .as_ptr(),
+                                (*::core::mem::transmute::<&[u8; 14], &[libc::c_char; 14]>(
+                                    b"void dd(void)\0",
+                                ))
+                                .as_ptr(),
                             );
                         }
                     };
@@ -2100,8 +2088,7 @@ unsafe extern "C" fn dd() {
                         newline();
                     }
                     msg(
-                        b"final option %s set to %d\0" as *const u8
-                            as *const libc::c_char,
+                        b"final option %s set to %d\0" as *const u8 as *const libc::c_char,
                         (*o).name,
                         (*o).val,
                     );
@@ -2125,17 +2112,17 @@ unsafe extern "C" fn dd() {
 }
 unsafe extern "C" fn getime() -> libc::c_double {
     let mut res: libc::c_double = 0 as libc::c_int as libc::c_double;
-    let mut tv: timeval = timeval { tv_sec: 0, tv_usec: 0 };
+    let mut tv: timeval = timeval {
+        tv_sec: 0,
+        tv_usec: 0,
+    };
     if gettimeofday(&mut tv, 0 as *mut libc::c_void) == 0 {
         res = 1e-6f64 * tv.tv_usec as libc::c_double;
         res += tv.tv_sec as libc::c_double;
     }
     return res;
 }
-unsafe fn main_0(
-    mut argc: libc::c_int,
-    mut argv: *mut *mut libc::c_char,
-) -> libc::c_int {
+unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> libc::c_int {
     let mut i: libc::c_int = 0;
     let mut len: libc::c_int = 0;
     let mut ch: libc::c_int = 0;
@@ -2151,12 +2138,14 @@ unsafe fn main_0(
     let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
     i = 1 as libc::c_int;
     while i < argc {
-        if strcmp(*argv.offset(i as isize), b"-h\0" as *const u8 as *const libc::c_char)
-            == 0
+        if strcmp(
+            *argv.offset(i as isize),
+            b"-h\0" as *const u8 as *const libc::c_char,
+        ) == 0
         {
             printf(
-                b"usage: lglddtrace [-h][-v][-s][-d][-f][-O] <in>[.gz] <out>[.gz]\n\0"
-                    as *const u8 as *const libc::c_char,
+                b"usage: lglddtrace [-h][-v][-s][-d][-f][-O] <in>[.gz] <out>[.gz]\n\0" as *const u8
+                    as *const libc::c_char,
             );
             exit(0 as libc::c_int);
         } else if strcmp(
@@ -2180,8 +2169,8 @@ unsafe fn main_0(
         {
             ddopts += 1;
             ddopts;
-        } else if *(*argv.offset(i as isize)).offset(0 as libc::c_int as isize)
-            as libc::c_int == '-' as i32
+        } else if *(*argv.offset(i as isize)).offset(0 as libc::c_int as isize) as libc::c_int
+            == '-' as i32
         {
             die(
                 b"invalid command line option '%s' (try '-h')\0" as *const u8
@@ -2189,10 +2178,7 @@ unsafe fn main_0(
                 *argv.offset(i as isize),
             );
         } else if !oname.is_null() {
-            die(
-                b"two many options pecified (try '-h')\0" as *const u8
-                    as *const libc::c_char,
-            );
+            die(b"two many options pecified (try '-h')\0" as *const u8 as *const libc::c_char);
         } else if !iname.is_null() {
             oname = *argv.offset(i as isize);
         } else {
@@ -2210,12 +2196,18 @@ unsafe fn main_0(
     len = strlen(iname) as libc::c_int;
     if len >= 3 as libc::c_int
         && strcmp(
-            iname.offset(len as isize).offset(-(3 as libc::c_int as isize)),
+            iname
+                .offset(len as isize)
+                .offset(-(3 as libc::c_int as isize)),
             b".gz\0" as *const u8 as *const libc::c_char,
         ) == 0
     {
         cmd = malloc((len + 20 as libc::c_int) as libc::c_ulong) as *mut libc::c_char;
-        sprintf(cmd, b"gunzip -c %s\0" as *const u8 as *const libc::c_char, iname);
+        sprintf(
+            cmd,
+            b"gunzip -c %s\0" as *const u8 as *const libc::c_char,
+            iname,
+        );
         file = popen(cmd, b"r\0" as *const u8 as *const libc::c_char);
         free(cmd as *mut libc::c_void);
         if !file.is_null() {
@@ -2228,7 +2220,10 @@ unsafe fn main_0(
         }
     }
     if file.is_null() {
-        die(b"can not read '%s'\0" as *const u8 as *const libc::c_char, iname);
+        die(
+            b"can not read '%s'\0" as *const u8 as *const libc::c_char,
+            iname,
+        );
     }
     msg(b"reading %s\0" as *const u8 as *const libc::c_char, iname);
     len = 0 as libc::c_int;
@@ -2245,8 +2240,7 @@ unsafe fn main_0(
         }
         if ch != '\n' as i32 {
             if len + 1 as libc::c_int
-                >= ::core::mem::size_of::<[libc::c_char; 80]>() as libc::c_ulong
-                    as libc::c_int
+                >= ::core::mem::size_of::<[libc::c_char; 80]>() as libc::c_ulong as libc::c_int
             {
                 perr(b"line buffer exceeded\0" as *const u8 as *const libc::c_char);
             }
@@ -2271,100 +2265,67 @@ unsafe fn main_0(
             } else if strcmp(tok, b"add\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     ADD,
-                    intarg(
-                        b"add\0" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                    ),
+                    intarg(b"add\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     0 as *const libc::c_char,
                 );
             } else if strcmp(tok, b"return\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     RETURN,
-                    intarg(
-                        b"return\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"return\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     0 as *const libc::c_char,
                 );
             } else if strcmp(tok, b"deref\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     DEREF,
-                    intarg(
-                        b"deref\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"deref\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     0 as *const libc::c_char,
                 );
             } else if strcmp(tok, b"fixed\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     FIXED,
-                    intarg(
-                        b"fixed\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"fixed\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     0 as *const libc::c_char,
                 );
             } else if strcmp(tok, b"frozen\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     FROZEN,
-                    intarg(
-                        b"frozen\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"frozen\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     0 as *const libc::c_char,
                 );
-            } else if strcmp(tok, b"reusable\0" as *const u8 as *const libc::c_char) == 0
-            {
+            } else if strcmp(tok, b"reusable\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     REUSABLE,
-                    intarg(
-                        b"reusable\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"reusable\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     0 as *const libc::c_char,
                 );
             } else if strcmp(tok, b"usable\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     USABLE,
-                    intarg(
-                        b"usable\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"usable\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     0 as *const libc::c_char,
                 );
             } else if strcmp(tok, b"repr\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     REPR,
-                    intarg(
-                        b"repr\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"repr\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     0 as *const libc::c_char,
                 );
             } else if strcmp(tok, b"failed\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     FAILED,
-                    intarg(
-                        b"failed\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"failed\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     0 as *const libc::c_char,
                 );
             } else if strcmp(tok, b"assume\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     ASSUME,
-                    intarg(
-                        b"assume\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"assume\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     0 as *const libc::c_char,
                 );
             } else if strcmp(tok, b"phase\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     PHASE,
-                    intarg(
-                        b"phase\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"phase\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     0 as *const libc::c_char,
                 );
             } else if strcmp(tok, b"init\0" as *const u8 as *const libc::c_char) == 0 {
@@ -2374,73 +2335,49 @@ unsafe fn main_0(
             } else if strcmp(tok, b"simp\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     SIMP,
-                    intarg(
-                        b"simp\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"simp\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     0 as *const libc::c_char,
                 );
-            } else if strcmp(tok, b"setphases\0" as *const u8 as *const libc::c_char)
-                == 0
-            {
+            } else if strcmp(tok, b"setphases\0" as *const u8 as *const libc::c_char) == 0 {
                 noarg(SETPHASES);
             } else if strcmp(tok, b"freeze\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     FREEZE,
-                    intarg(
-                        b"freeze\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"freeze\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     0 as *const libc::c_char,
                 );
-            } else if strcmp(tok, b"setimportant\0" as *const u8 as *const libc::c_char)
-                == 0
-            {
+            } else if strcmp(tok, b"setimportant\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     SETIMPORTANT,
                     intarg(
-                        b"setimportant\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
+                        b"setimportant\0" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     ),
                     0 as *const libc::c_char,
                 );
-            } else if strcmp(tok, b"setphase\0" as *const u8 as *const libc::c_char) == 0
-            {
+            } else if strcmp(tok, b"setphase\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     SETPHASE,
-                    intarg(
-                        b"setphase\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"setphase\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     0 as *const libc::c_char,
                 );
-            } else if strcmp(tok, b"resetphase\0" as *const u8 as *const libc::c_char)
-                == 0
-            {
+            } else if strcmp(tok, b"resetphase\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     SETPHASE,
                     intarg(
-                        b"resetphase\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
+                        b"resetphase\0" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     ),
                     0 as *const libc::c_char,
                 );
             } else if strcmp(tok, b"melt\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     MELT,
-                    intarg(
-                        b"melt\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"melt\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     0 as *const libc::c_char,
                 );
             } else if strcmp(tok, b"reuse\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     REUSE,
-                    intarg(
-                        b"reuse\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"reuse\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     0 as *const libc::c_char,
                 );
             } else if strcmp(tok, b"option\0" as *const u8 as *const libc::c_char) == 0 {
@@ -2453,22 +2390,16 @@ unsafe fn main_0(
                 }
                 event(
                     OPTION,
-                    intarg(
-                        b"option\0" as *const u8 as *const libc::c_char
-                            as *mut libc::c_char,
-                    ),
+                    intarg(b"option\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
                     opt,
                 );
-            } else if strcmp(tok, b"release\0" as *const u8 as *const libc::c_char) == 0
-            {
+            } else if strcmp(tok, b"release\0" as *const u8 as *const libc::c_char) == 0 {
                 noarg(RELEASE);
             } else if strcmp(tok, b"incvar\0" as *const u8 as *const libc::c_char) == 0 {
                 noarg(INCVAR);
             } else if strcmp(tok, b"maxvar\0" as *const u8 as *const libc::c_char) == 0 {
                 noarg(MAXVAR);
-            } else if strcmp(tok, b"inconsistent\0" as *const u8 as *const libc::c_char)
-                == 0
-            {
+            } else if strcmp(tok, b"inconsistent\0" as *const u8 as *const libc::c_char) == 0 {
                 noarg(INCONSISTENT);
             } else if strcmp(tok, b"lkhd\0" as *const u8 as *const libc::c_char) == 0 {
                 noarg(LKHD);
@@ -2478,14 +2409,15 @@ unsafe fn main_0(
                 noarg(REDUCE);
             } else if strcmp(tok, b"flush\0" as *const u8 as *const libc::c_char) == 0 {
                 noarg(FLUSH);
-            } else if strcmp(tok, b"chkclone\0" as *const u8 as *const libc::c_char) == 0
-            {
+            } else if strcmp(tok, b"chkclone\0" as *const u8 as *const libc::c_char) == 0 {
                 noarg(CHKCLONE);
-            } else if strcmp(tok, b"changed\0" as *const u8 as *const libc::c_char) == 0
-            {
+            } else if strcmp(tok, b"changed\0" as *const u8 as *const libc::c_char) == 0 {
                 noarg(CHANGED);
             } else {
-                perr(b"invalid command '%s'\0" as *const u8 as *const libc::c_char, tok);
+                perr(
+                    b"invalid command '%s'\0" as *const u8 as *const libc::c_char,
+                    tok,
+                );
             }
             lineno += 1;
             lineno;
@@ -2500,7 +2432,11 @@ unsafe fn main_0(
     if close_0 == 2 as libc::c_int {
         pclose(file);
     }
-    msg(b"parsed %d events in %s\0" as *const u8 as *const libc::c_char, count, iname);
+    msg(
+        b"parsed %d events in %s\0" as *const u8 as *const libc::c_char,
+        count,
+        iname,
+    );
     golden = run();
     delta = getime() - start;
     timelimit = delta as libc::c_int;
@@ -2517,7 +2453,10 @@ unsafe fn main_0(
         timelimit = 1 as libc::c_int;
     }
     timelimit *= 100 as libc::c_int;
-    msg(b"time limit %d seconds\0" as *const u8 as *const libc::c_char, timelimit);
+    msg(
+        b"time limit %d seconds\0" as *const u8 as *const libc::c_char,
+        timelimit,
+    );
     dd();
     prt(1 as libc::c_int);
     i = 0 as libc::c_int;
@@ -2542,7 +2481,7 @@ unsafe fn main_0(
     return 0 as libc::c_int;
 }
 pub fn main() {
-    let mut args: Vec::<*mut libc::c_char> = Vec::new();
+    let mut args: Vec<*mut libc::c_char> = Vec::new();
     for arg in ::std::env::args() {
         args.push(
             (::std::ffi::CString::new(arg))
@@ -2552,11 +2491,9 @@ pub fn main() {
     }
     args.push(::core::ptr::null_mut());
     unsafe {
-        ::std::process::exit(
-            main_0(
-                (args.len() - 1) as libc::c_int,
-                args.as_mut_ptr() as *mut *mut libc::c_char,
-            ) as i32,
-        )
+        ::std::process::exit(main_0(
+            (args.len() - 1) as libc::c_int,
+            args.as_mut_ptr() as *mut *mut libc::c_char,
+        ) as i32)
     }
 }

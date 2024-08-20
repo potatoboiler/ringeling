@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 #![feature(extern_types)]
 extern "C" {
     pub type _IO_wide_data;
@@ -11,7 +19,7 @@ extern "C" {
     fn lglversion() -> *const libc::c_char;
     fn lglseterm(
         _: *mut LGL,
-        term: Option::<unsafe extern "C" fn(*mut libc::c_void) -> libc::c_int>,
+        term: Option<unsafe extern "C" fn(*mut libc::c_void) -> libc::c_int>,
         _: *mut libc::c_void,
     );
     fn lglsec(_: *mut LGL) -> libc::c_double;
@@ -31,11 +39,7 @@ extern "C" {
     fn fputs(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
     fn pclose(__stream: *mut FILE) -> libc::c_int;
     fn popen(__command: *const libc::c_char, __modes: *const libc::c_char) -> *mut FILE;
-    fn strtol(
-        _: *const libc::c_char,
-        _: *mut *mut libc::c_char,
-        _: libc::c_int,
-    ) -> libc::c_long;
+    fn strtol(_: *const libc::c_char, _: *mut *mut libc::c_char, _: libc::c_int) -> libc::c_long;
     fn malloc(_: libc::c_ulong) -> *mut libc::c_void;
     fn realloc(_: *mut libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
     fn free(_: *mut libc::c_void);
@@ -68,7 +72,7 @@ extern "C" {
     fn lglctrav(
         _: *mut LGL,
         state: *mut libc::c_void,
-        trav: Option::<unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> ()>,
+        trav: Option<unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> ()>,
     );
     fn lglprint(_: *mut LGL, _: *mut FILE);
     fn lglassume(_: *mut LGL, lit: libc::c_int);
@@ -80,11 +84,7 @@ extern "C" {
     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
     fn strchr(_: *const libc::c_char, _: libc::c_int) -> *mut libc::c_char;
     fn strlen(_: *const libc::c_char) -> libc::c_ulong;
-    fn strncmp(
-        _: *const libc::c_char,
-        _: *const libc::c_char,
-        _: libc::c_ulong,
-    ) -> libc::c_int;
+    fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
     fn strdup(_: *const libc::c_char) -> *mut libc::c_char;
     fn alarm(__seconds: libc::c_uint) -> libc::c_uint;
     fn unlink(__name: *const libc::c_char) -> libc::c_int;
@@ -140,7 +140,7 @@ pub const _ISdigit: C2RustUnnamed = 2048;
 pub const _ISalpha: C2RustUnnamed = 1024;
 pub const _ISlower: C2RustUnnamed = 512;
 pub const _ISupper: C2RustUnnamed = 256;
-pub type __sighandler_t = Option::<unsafe extern "C" fn(libc::c_int) -> ()>;
+pub type __sighandler_t = Option<unsafe extern "C" fn(libc::c_int) -> ()>;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct OBuf {
@@ -162,12 +162,12 @@ static mut force: libc::c_int = 0;
 static mut targets: *mut libc::c_int = 0 as *const libc::c_int as *mut libc::c_int;
 static mut sztargets: libc::c_int = 0;
 static mut ntargets: libc::c_int = 0;
-static mut sig_int_handler: Option::<unsafe extern "C" fn(libc::c_int) -> ()> = None;
-static mut sig_segv_handler: Option::<unsafe extern "C" fn(libc::c_int) -> ()> = None;
-static mut sig_abrt_handler: Option::<unsafe extern "C" fn(libc::c_int) -> ()> = None;
-static mut sig_term_handler: Option::<unsafe extern "C" fn(libc::c_int) -> ()> = None;
-static mut sig_bus_handler: Option::<unsafe extern "C" fn(libc::c_int) -> ()> = None;
-static mut sig_alrm_handler: Option::<unsafe extern "C" fn(libc::c_int) -> ()> = None;
+static mut sig_int_handler: Option<unsafe extern "C" fn(libc::c_int) -> ()> = None;
+static mut sig_segv_handler: Option<unsafe extern "C" fn(libc::c_int) -> ()> = None;
+static mut sig_abrt_handler: Option<unsafe extern "C" fn(libc::c_int) -> ()> = None;
+static mut sig_term_handler: Option<unsafe extern "C" fn(libc::c_int) -> ()> = None;
+static mut sig_bus_handler: Option<unsafe extern "C" fn(libc::c_int) -> ()> = None;
+static mut sig_alrm_handler: Option<unsafe extern "C" fn(libc::c_int) -> ()> = None;
 unsafe extern "C" fn resetsighandlers() {
     signal(2 as libc::c_int, sig_int_handler);
     signal(11 as libc::c_int, sig_segv_handler);
@@ -179,7 +179,10 @@ unsafe extern "C" fn caughtsigmsg(mut sig: libc::c_int) {
     if verbose < 0 as libc::c_int {
         return;
     }
-    printf(b"c\nc CAUGHT SIGNAL %d\0" as *const u8 as *const libc::c_char, sig);
+    printf(
+        b"c\nc CAUGHT SIGNAL %d\0" as *const u8 as *const libc::c_char,
+        sig,
+    );
     match sig {
         2 => {
             printf(b" SIGINT\0" as *const u8 as *const libc::c_char);
@@ -208,7 +211,10 @@ unsafe extern "C" fn catchsig(mut sig: libc::c_int) {
     if catchedsig == 0 {
         catchedsig = 1 as libc::c_int;
         caughtsigmsg(sig);
-        fputs(b"c s UNKNOWN\n\0" as *const u8 as *const libc::c_char, stdout);
+        fputs(
+            b"c s UNKNOWN\n\0" as *const u8 as *const libc::c_char,
+            stdout,
+        );
         fflush(stdout);
         if verbose >= 0 as libc::c_int {
             lglflushtimers(lgl4sigh);
@@ -291,12 +297,19 @@ unsafe extern "C" fn print2obuf(
 ) {
     let mut str: [libc::c_char; 20] = [0; 20];
     let mut len: libc::c_int = 0;
-    sprintf(str.as_mut_ptr(), b" %d\0" as *const u8 as *const libc::c_char, i);
+    sprintf(
+        str.as_mut_ptr(),
+        b" %d\0" as *const u8 as *const libc::c_char,
+        i,
+    );
     len = strlen(str.as_mut_ptr()) as libc::c_int;
     if (*obuf).pos + len > 79 as libc::c_int {
         flushobuf(obuf, simponly, file);
     }
-    strcpy(((*obuf).line).as_mut_ptr().offset((*obuf).pos as isize), str.as_mut_ptr());
+    strcpy(
+        ((*obuf).line).as_mut_ptr().offset((*obuf).pos as isize),
+        str.as_mut_ptr(),
+    );
     (*obuf).pos += len;
 }
 unsafe extern "C" fn writefile(
@@ -308,13 +321,18 @@ unsafe extern "C" fn writefile(
     let mut res: *mut FILE = 0 as *mut FILE;
     if len >= 3 as libc::c_int
         && strcmp(
-            name.offset(len as isize).offset(-(3 as libc::c_int as isize)),
+            name.offset(len as isize)
+                .offset(-(3 as libc::c_int as isize)),
             b".gz\0" as *const u8 as *const libc::c_char,
         ) == 0
     {
         tmp = malloc((len + 20 as libc::c_int) as libc::c_ulong) as *mut libc::c_char;
         unlink(name);
-        sprintf(tmp, b"gzip -c > %s\0" as *const u8 as *const libc::c_char, name);
+        sprintf(
+            tmp,
+            b"gzip -c > %s\0" as *const u8 as *const libc::c_char,
+            name,
+        );
         res = popen(tmp, b"w\0" as *const u8 as *const libc::c_char);
         if !res.is_null() {
             *clptr = 2 as libc::c_int;
@@ -329,8 +347,7 @@ unsafe extern "C" fn writefile(
     if res.is_null() {
         fprintf(
             stderr,
-            b"*** lingeling error: can not write %s\n\0" as *const u8
-                as *const libc::c_char,
+            b"*** lingeling error: can not write %s\n\0" as *const u8 as *const libc::c_char,
             name,
         );
     }
@@ -344,10 +361,7 @@ unsafe extern "C" fn closefile(mut file: *mut FILE, mut type_0: libc::c_int) {
         pclose(file);
     }
 }
-unsafe extern "C" fn lgltravcounter(
-    mut voidptr: *mut libc::c_void,
-    mut lit: libc::c_int,
-) {
+unsafe extern "C" fn lgltravcounter(mut voidptr: *mut libc::c_void, mut lit: libc::c_int) {
     let mut cntptr: *mut libc::c_int = voidptr as *mut libc::c_int;
     if lit == 0 {
         *cntptr += 1 as libc::c_int;
@@ -378,10 +392,7 @@ static mut primes: [libc::c_int; 5] = [
     200000081 as libc::c_int,
 ];
 static mut nprimes: libc::c_uint = 0;
-unsafe fn main_0(
-    mut argc: libc::c_int,
-    mut argv: *mut *mut libc::c_char,
-) -> libc::c_int {
+unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> libc::c_int {
     let mut current_block: u64;
     let mut res: libc::c_int = 0;
     let mut i: libc::c_int = 0;
@@ -408,7 +419,10 @@ unsafe fn main_0(
     let mut simplevel: libc::c_int = 0;
     let mut tmp: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut lgl: *mut LGL = 0 as *mut LGL;
-    let mut obuf: OBuf = OBuf { line: [0; 81], pos: 0 };
+    let mut obuf: OBuf = OBuf {
+        line: [0; 81],
+        pos: 0,
+    };
     lineno = 1 as libc::c_int;
     out = 0 as *mut FILE;
     simplevel = 0 as libc::c_int;
@@ -428,8 +442,10 @@ unsafe fn main_0(
             current_block = 17727836384662615028;
             break;
         }
-        if strcmp(*argv.offset(i as isize), b"-h\0" as *const u8 as *const libc::c_char)
-            == 0
+        if strcmp(
+            *argv.offset(i as isize),
+            b"-h\0" as *const u8 as *const libc::c_char,
+        ) == 0
             || strcmp(
                 *argv.offset(i as isize),
                 b"--help\0" as *const u8 as *const libc::c_char,
@@ -441,8 +457,7 @@ unsafe fn main_0(
             );
             printf(b"\n\0" as *const u8 as *const libc::c_char);
             printf(
-                b"where <option> is one of the following:\n\0" as *const u8
-                    as *const libc::c_char,
+                b"where <option> is one of the following:\n\0" as *const u8 as *const libc::c_char,
             );
             printf(b"\n\0" as *const u8 as *const libc::c_char);
             printf(
@@ -450,8 +465,8 @@ unsafe fn main_0(
                     as *const libc::c_char,
             );
             printf(
-                b"-s               only simplify and print to output file\n\0"
-                    as *const u8 as *const libc::c_char,
+                b"-s               only simplify and print to output file\n\0" as *const u8
+                    as *const libc::c_char,
             );
             printf(
                 b"-O<L>            set simplification level to <L>\n\0" as *const u8
@@ -462,14 +477,10 @@ unsafe fn main_0(
                     as *const libc::c_char,
             );
             printf(
-                b"-p <options>     read options from file\n\0" as *const u8
-                    as *const libc::c_char,
+                b"-p <options>     read options from file\n\0" as *const u8 as *const libc::c_char,
             );
             printf(b"\n\0" as *const u8 as *const libc::c_char);
-            printf(
-                b"-T <seconds>     set time limit\n\0" as *const u8
-                    as *const libc::c_char,
-            );
+            printf(b"-T <seconds>     set time limit\n\0" as *const u8 as *const libc::c_char);
             printf(b"\n\0" as *const u8 as *const libc::c_char);
             printf(
                 b"-a <assumption>  use multiple assumptions\n\0" as *const u8
@@ -493,55 +504,44 @@ unsafe fn main_0(
                     as *const libc::c_char,
             );
             printf(
-                b"-P|--pcs         print (full) PCS file\n\0" as *const u8
+                b"-P|--pcs         print (full) PCS file\n\0" as *const u8 as *const libc::c_char,
+            );
+            printf(
+                b"--pcs-mixed      print mixed PCS file\n\0" as *const u8 as *const libc::c_char,
+            );
+            printf(
+                b"--pcs-reduced    print reduced PCS file\n\0" as *const u8 as *const libc::c_char,
+            );
+            printf(
+                b"-e|--embedded    ditto but in an embedded format print\n\0" as *const u8
                     as *const libc::c_char,
             );
             printf(
-                b"--pcs-mixed      print mixed PCS file\n\0" as *const u8
-                    as *const libc::c_char,
-            );
-            printf(
-                b"--pcs-reduced    print reduced PCS file\n\0" as *const u8
-                    as *const libc::c_char,
-            );
-            printf(
-                b"-e|--embedded    ditto but in an embedded format print\n\0"
-                    as *const u8 as *const libc::c_char,
-            );
-            printf(
-                b"-n|--no-witness   do not print solution (see '--witness')\n\0"
-                    as *const u8 as *const libc::c_char,
-            );
-            printf(b"\n\0" as *const u8 as *const libc::c_char);
-            printf(
-                b"-c               increase checking level\n\0" as *const u8
-                    as *const libc::c_char,
-            );
-            printf(
-                b"-l               increase logging level\n\0" as *const u8
-                    as *const libc::c_char,
-            );
-            printf(
-                b"-v               increase verbose level\n\0" as *const u8
+                b"-n|--no-witness   do not print solution (see '--witness')\n\0" as *const u8
                     as *const libc::c_char,
             );
             printf(b"\n\0" as *const u8 as *const libc::c_char);
             printf(
-                b"--verify         online forward check\n\0" as *const u8
-                    as *const libc::c_char,
+                b"-c               increase checking level\n\0" as *const u8 as *const libc::c_char,
             );
             printf(
-                b"--proof          generate proof file\n\0" as *const u8
-                    as *const libc::c_char,
+                b"-l               increase logging level\n\0" as *const u8 as *const libc::c_char,
+            );
+            printf(
+                b"-v               increase verbose level\n\0" as *const u8 as *const libc::c_char,
             );
             printf(b"\n\0" as *const u8 as *const libc::c_char);
             printf(
-                b"--thanks=<whom>  alternative way of specifying the seed\n\0"
-                    as *const u8 as *const libc::c_char,
+                b"--verify         online forward check\n\0" as *const u8 as *const libc::c_char,
+            );
+            printf(b"--proof          generate proof file\n\0" as *const u8 as *const libc::c_char);
+            printf(b"\n\0" as *const u8 as *const libc::c_char);
+            printf(
+                b"--thanks=<whom>  alternative way of specifying the seed\n\0" as *const u8
+                    as *const libc::c_char,
             );
             printf(
-                b"                 (inspired by Vampire)\n\0" as *const u8
-                    as *const libc::c_char,
+                b"                 (inspired by Vampire)\n\0" as *const u8 as *const libc::c_char,
             );
             printf(b"\n\0" as *const u8 as *const libc::c_char);
             printf(
@@ -573,10 +573,10 @@ unsafe fn main_0(
             ) == 0
             {
                 simponly = 1 as libc::c_int;
-            } else if *(*argv.offset(i as isize)).offset(0 as libc::c_int as isize)
-                as libc::c_int == '-' as i32
-                && *(*argv.offset(i as isize)).offset(1 as libc::c_int as isize)
-                    as libc::c_int == 'O' as i32
+            } else if *(*argv.offset(i as isize)).offset(0 as libc::c_int as isize) as libc::c_int
+                == '-' as i32
+                && *(*argv.offset(i as isize)).offset(1 as libc::c_int as isize) as libc::c_int
+                    == 'O' as i32
             {
                 if simplevel > 0 as libc::c_int {
                     fprintf(
@@ -588,9 +588,7 @@ unsafe fn main_0(
                     current_block = 14603147171032977705;
                     break;
                 } else {
-                    simplevel = atoi(
-                        (*argv.offset(i as isize)).offset(2 as libc::c_int as isize),
-                    );
+                    simplevel = atoi((*argv.offset(i as isize)).offset(2 as libc::c_int as isize));
                     if simplevel <= 0 as libc::c_int {
                         fprintf(
                             stderr,
@@ -631,8 +629,8 @@ unsafe fn main_0(
                 } else if !oname.is_null() {
                     fprintf(
                         stderr,
-                        b"*** lingeling error: multiple output files '%s' and '%s'\n\0"
-                            as *const u8 as *const libc::c_char,
+                        b"*** lingeling error: multiple output files '%s' and '%s'\n\0" as *const u8
+                            as *const libc::c_char,
                         oname,
                         *argv.offset(i as isize),
                     );
@@ -660,8 +658,8 @@ unsafe fn main_0(
                 } else if !pname.is_null() {
                     fprintf(
                         stderr,
-                        b"*** lingeling error: multiple option files '%s' and '%s'\n\0"
-                            as *const u8 as *const libc::c_char,
+                        b"*** lingeling error: multiple option files '%s' and '%s'\n\0" as *const u8
+                            as *const libc::c_char,
                         pname,
                         *argv.offset(i as isize),
                     );
@@ -698,8 +696,7 @@ unsafe fn main_0(
                 } else {
                     p = *argv.offset(i as isize);
                     while *p as libc::c_int != 0
-                        && *(*__ctype_b_loc()).offset(*p as libc::c_int as isize)
-                            as libc::c_int
+                        && *(*__ctype_b_loc()).offset(*p as libc::c_int as isize) as libc::c_int
                             & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
                             != 0
                     {
@@ -715,8 +712,8 @@ unsafe fn main_0(
                     {
                         fprintf(
                             stderr,
-                            b"*** lingeling error: invalid time limit '-T %s'\n\0"
-                                as *const u8 as *const libc::c_char,
+                            b"*** lingeling error: invalid time limit '-T %s'\n\0" as *const u8
+                                as *const libc::c_char,
                             *argv.offset(i as isize),
                         );
                         res = 1 as libc::c_int;
@@ -744,8 +741,8 @@ unsafe fn main_0(
                     if target == 0 {
                         fprintf(
                             stderr,
-                            b"*** lingeling error: invalid literal in '-a %d'\n\0"
-                                as *const u8 as *const libc::c_char,
+                            b"*** lingeling error: invalid literal in '-a %d'\n\0" as *const u8
+                                as *const libc::c_char,
                             target,
                         );
                         res = 1 as libc::c_int;
@@ -808,10 +805,7 @@ unsafe fn main_0(
                     b"--pcs\0" as *const u8 as *const libc::c_char,
                 ) == 0
             {
-                printf(
-                    b"# generated by 'lingeling --pcs'\n\0" as *const u8
-                        as *const libc::c_char,
-                );
+                printf(b"# generated by 'lingeling --pcs'\n\0" as *const u8 as *const libc::c_char);
                 printf(
                     b"# version %s\n\0" as *const u8 as *const libc::c_char,
                     lglversion(),
@@ -894,8 +888,7 @@ unsafe fn main_0(
                 lglsetopt(
                     lgl,
                     b"log\0" as *const u8 as *const libc::c_char,
-                    lglgetopt(lgl, b"log\0" as *const u8 as *const libc::c_char)
-                        + 1 as libc::c_int,
+                    lglgetopt(lgl, b"log\0" as *const u8 as *const libc::c_char) + 1 as libc::c_int,
                 );
             } else if strcmp(
                 *argv.offset(i as isize),
@@ -908,11 +901,11 @@ unsafe fn main_0(
                     lglgetopt(lgl, b"verbose\0" as *const u8 as *const libc::c_char)
                         + 1 as libc::c_int,
                 );
-            } else if *(*argv.offset(i as isize)).offset(0 as libc::c_int as isize)
-                as libc::c_int == '-' as i32
+            } else if *(*argv.offset(i as isize)).offset(0 as libc::c_int as isize) as libc::c_int
+                == '-' as i32
             {
-                if *(*argv.offset(i as isize)).offset(1 as libc::c_int as isize)
-                    as libc::c_int == '-' as i32
+                if *(*argv.offset(i as isize)).offset(1 as libc::c_int as isize) as libc::c_int
+                    == '-' as i32
                 {
                     match_0 = strchr(
                         (*argv.offset(i as isize)).offset(2 as libc::c_int as isize),
@@ -924,8 +917,8 @@ unsafe fn main_0(
                             p = p.offset(1);
                             p;
                         }
-                        len = p.offset_from(*argv.offset(i as isize)) as libc::c_long
-                            as libc::c_int;
+                        len =
+                            p.offset_from(*argv.offset(i as isize)) as libc::c_long as libc::c_int;
                         if strncmp(
                             *argv.offset(i as isize),
                             b"--write-api-trace=\0" as *const u8 as *const libc::c_char,
@@ -967,7 +960,8 @@ unsafe fn main_0(
                                 15067877082424188916 => {}
                                 _ => {
                                     len = (match_0.offset_from(*argv.offset(i as isize))
-                                        as libc::c_long - 2 as libc::c_int as libc::c_long)
+                                        as libc::c_long
+                                        - 2 as libc::c_int as libc::c_long)
                                         as libc::c_int;
                                     tmp = malloc((len + 1 as libc::c_int) as libc::c_ulong)
                                         as *mut libc::c_char;
@@ -1020,9 +1014,7 @@ unsafe fn main_0(
                             }
                         }
                     }
-                } else if *(*argv.offset(i as isize)).offset(2 as libc::c_int as isize)
-                    != 0
-                {
+                } else if *(*argv.offset(i as isize)).offset(2 as libc::c_int as isize) != 0 {
                     current_block = 15067877082424188916;
                 } else if lglhasopt(
                     lgl,
@@ -1084,9 +1076,7 @@ unsafe fn main_0(
                     stdout,
                 );
                 if simponly != 0 {
-                    printf(
-                        b"c simplifying only\n\0" as *const u8 as *const libc::c_char,
-                    );
+                    printf(b"c simplifying only\n\0" as *const u8 as *const libc::c_char);
                 }
                 if !oname.is_null() {
                     printf(
@@ -1117,9 +1107,7 @@ unsafe fn main_0(
                     let fresh4 = i_0;
                     i_0 = i_0.wrapping_add(1);
                     seed = seed
-                        .wrapping_add(
-                            (primes[fresh4 as usize] as libc::c_uint).wrapping_mul(ch),
-                        );
+                        .wrapping_add((primes[fresh4 as usize] as libc::c_uint).wrapping_mul(ch));
                     if i_0 == nprimes {
                         i_0 = 0 as libc::c_int as libc::c_uint;
                     }
@@ -1159,8 +1147,8 @@ unsafe fn main_0(
                 if pfile.is_null() {
                     fprintf(
                         stderr,
-                        b"*** lingeling error: can not read option file %s\n\0"
-                            as *const u8 as *const libc::c_char,
+                        b"*** lingeling error: can not read option file %s\n\0" as *const u8
+                            as *const libc::c_char,
                         pname,
                     );
                     res = 1 as libc::c_int;
@@ -1168,8 +1156,7 @@ unsafe fn main_0(
                 } else {
                     if verbose >= 0 as libc::c_int {
                         printf(
-                            b"c reading options file %s\n\0" as *const u8
-                                as *const libc::c_char,
+                            b"c reading options file %s\n\0" as *const u8 as *const libc::c_char,
                             pname,
                         );
                         fflush(stdout);
@@ -1177,8 +1164,7 @@ unsafe fn main_0(
                     nopts = lglreadopts(lgl, pfile);
                     if verbose >= 0 as libc::c_int {
                         printf(
-                            b"c read and set %d options\nc\n\0" as *const u8
-                                as *const libc::c_char,
+                            b"c read and set %d options\nc\n\0" as *const u8 as *const libc::c_char,
                             nopts,
                         );
                         fflush(stdout);
@@ -1212,8 +1198,7 @@ unsafe fn main_0(
                             printf(b"c\n\0" as *const u8 as *const libc::c_char);
                             if verbose >= 2 as libc::c_int {
                                 printf(
-                                    b"c final options:\nc\n\0" as *const u8
-                                        as *const libc::c_char,
+                                    b"c final options:\nc\n\0" as *const u8 as *const libc::c_char,
                                 );
                             }
                             lglopts(
@@ -1254,8 +1239,8 @@ unsafe fn main_0(
                         if simplevel > 0 as libc::c_int {
                             if verbose >= 1 as libc::c_int {
                                 printf(
-                                    b"c simplifying with simplification level %d\n\0"
-                                        as *const u8 as *const libc::c_char,
+                                    b"c simplifying with simplification level %d\n\0" as *const u8
+                                        as *const libc::c_char,
                                     simplevel,
                                 );
                                 fflush(stdout);
@@ -1263,8 +1248,8 @@ unsafe fn main_0(
                             res = lglsimp(lgl, simplevel);
                             if verbose >= 1 as libc::c_int {
                                 printf(
-                                    b"c simplifying result %d after %.2f seconds\n\0"
-                                        as *const u8 as *const libc::c_char,
+                                    b"c simplifying result %d after %.2f seconds\n\0" as *const u8
+                                        as *const libc::c_char,
                                     res,
                                     lglsec(lgl),
                                 );
@@ -1279,9 +1264,7 @@ unsafe fn main_0(
                         if !oname.is_null() {
                             let mut start: libc::c_double = lglsec(lgl);
                             let mut delta: libc::c_double = 0.;
-                            if strcmp(oname, b"-\0" as *const u8 as *const libc::c_char)
-                                == 0
-                            {
+                            if strcmp(oname, b"-\0" as *const u8 as *const libc::c_char) == 0 {
                                 out = stdout;
                                 oname = b"<stdout>\0" as *const u8 as *const libc::c_char;
                                 clout = 0 as libc::c_int;
@@ -1308,7 +1291,8 @@ unsafe fn main_0(
                                                     as unsafe extern "C" fn(
                                                         *mut libc::c_void,
                                                         libc::c_int,
-                                                    ) -> (),
+                                                    )
+                                                        -> (),
                                             ),
                                         );
                                         printf(
@@ -1351,12 +1335,14 @@ unsafe fn main_0(
                                     }
                                     if res == 10 as libc::c_int {
                                         fputs(
-                                            b"s SATISFIABLE\n\0" as *const u8 as *const libc::c_char,
+                                            b"s SATISFIABLE\n\0" as *const u8
+                                                as *const libc::c_char,
                                             stdout,
                                         );
                                     } else if res == 20 as libc::c_int {
                                         fputs(
-                                            b"s UNSATISFIABLE\n\0" as *const u8 as *const libc::c_char,
+                                            b"s UNSATISFIABLE\n\0" as *const u8
+                                                as *const libc::c_char,
                                             stdout,
                                         );
                                     } else {
@@ -1421,7 +1407,7 @@ unsafe fn main_0(
     return res;
 }
 pub fn main() {
-    let mut args: Vec::<*mut libc::c_char> = Vec::new();
+    let mut args: Vec<*mut libc::c_char> = Vec::new();
     for arg in ::std::env::args() {
         args.push(
             (::std::ffi::CString::new(arg))
@@ -1431,12 +1417,10 @@ pub fn main() {
     }
     args.push(::core::ptr::null_mut());
     unsafe {
-        ::std::process::exit(
-            main_0(
-                (args.len() - 1) as libc::c_int,
-                args.as_mut_ptr() as *mut *mut libc::c_char,
-            ) as i32,
-        )
+        ::std::process::exit(main_0(
+            (args.len() - 1) as libc::c_int,
+            args.as_mut_ptr() as *mut *mut libc::c_char,
+        ) as i32)
     }
 }
 unsafe extern "C" fn run_static_initializers() {

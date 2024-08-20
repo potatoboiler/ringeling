@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 extern "C" {
     pub type _IO_wide_data;
     pub type _IO_codecvt;
@@ -13,11 +21,7 @@ extern "C" {
     fn realloc(_: *mut libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
     fn free(_: *mut libc::c_void);
     fn __ctype_b_loc() -> *mut *const libc::c_ushort;
-    fn memset(
-        _: *mut libc::c_void,
-        _: libc::c_int,
-        _: libc::c_ulong,
-    ) -> *mut libc::c_void;
+    fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
     fn strcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
     fn strlen(_: *const libc::c_char) -> libc::c_ulong;
@@ -96,25 +100,23 @@ pub struct C2RustUnnamed {
     pub state: *mut libc::c_void,
     pub fun: ldradd,
 }
-pub type ldradd = Option::<unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> ()>;
+pub type ldradd = Option<unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> ()>;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct C2RustUnnamed_0 {
     pub state: *mut libc::c_void,
     pub fun: ldrheader,
 }
-pub type ldrheader = Option::<
-    unsafe extern "C" fn(*mut libc::c_void, libc::c_int, libc::c_int) -> (),
->;
+pub type ldrheader =
+    Option<unsafe extern "C" fn(*mut libc::c_void, libc::c_int, libc::c_int) -> ()>;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct C2RustUnnamed_1 {
     pub state: *mut libc::c_void,
     pub fun: ldropt,
 }
-pub type ldropt = Option::<
-    unsafe extern "C" fn(*mut libc::c_void, *const libc::c_char, libc::c_int) -> (),
->;
+pub type ldropt =
+    Option<unsafe extern "C" fn(*mut libc::c_void, *const libc::c_char, libc::c_int) -> ()>;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct C2RustUnnamed_2 {
@@ -122,19 +124,11 @@ pub struct C2RustUnnamed_2 {
     pub alloc: ldralloc,
     pub dealloc: ldrdealloc,
 }
-pub type ldrdealloc = Option::<
-    unsafe extern "C" fn(*mut libc::c_void, *mut libc::c_void, size_t) -> (),
->;
-pub type ldralloc = Option::<
-    unsafe extern "C" fn(*mut libc::c_void, size_t) -> *mut libc::c_void,
->;
-pub type ldrealloc = Option::<
-    unsafe extern "C" fn(
-        *mut libc::c_void,
-        *mut libc::c_void,
-        size_t,
-        size_t,
-    ) -> *mut libc::c_void,
+pub type ldrdealloc =
+    Option<unsafe extern "C" fn(*mut libc::c_void, *mut libc::c_void, size_t) -> ()>;
+pub type ldralloc = Option<unsafe extern "C" fn(*mut libc::c_void, size_t) -> *mut libc::c_void>;
+pub type ldrealloc = Option<
+    unsafe extern "C" fn(*mut libc::c_void, *mut libc::c_void, size_t, size_t) -> *mut libc::c_void,
 >;
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -199,10 +193,7 @@ unsafe extern "C" fn ldrstdrealloc(
 pub unsafe extern "C" fn ldrinit() -> *mut LDR {
     return ldrminit(
         0 as *mut libc::c_void,
-        Some(
-            ldrstdalloc
-                as unsafe extern "C" fn(*mut libc::c_void, size_t) -> *mut libc::c_void,
-        ),
+        Some(ldrstdalloc as unsafe extern "C" fn(*mut libc::c_void, size_t) -> *mut libc::c_void),
         Some(
             ldrstdrealloc
                 as unsafe extern "C" fn(
@@ -214,11 +205,7 @@ pub unsafe extern "C" fn ldrinit() -> *mut LDR {
         ),
         Some(
             ldrstdealloc
-                as unsafe extern "C" fn(
-                    *mut libc::c_void,
-                    *mut libc::c_void,
-                    size_t,
-                ) -> (),
+                as unsafe extern "C" fn(*mut libc::c_void, *mut libc::c_void, size_t) -> (),
         ),
     );
 }
@@ -229,10 +216,10 @@ pub unsafe extern "C" fn ldrminit(
     mut realloc_0: ldrealloc,
     mut dealloc: ldrdealloc,
 ) -> *mut LDR {
-    let mut res: *mut LDR = alloc
-        .expect(
-            "non-null function pointer",
-        )(state, ::core::mem::size_of::<LDR>() as libc::c_ulong) as *mut LDR;
+    let mut res: *mut LDR = alloc.expect("non-null function pointer")(
+        state,
+        ::core::mem::size_of::<LDR>() as libc::c_ulong,
+    ) as *mut LDR;
     if res.is_null() {
         return res;
     }
@@ -248,10 +235,7 @@ pub unsafe extern "C" fn ldrminit(
 }
 unsafe extern "C" fn ldrdelstr(mut ldr: *mut LDR, mut str: *mut libc::c_char) {
     if !str.is_null() {
-        ((*ldr).mem.dealloc)
-            .expect(
-                "non-null function pointer",
-            )(
+        ((*ldr).mem.dealloc).expect("non-null function pointer")(
             (*ldr).mem.state,
             str as *mut libc::c_void,
             (strlen(str)).wrapping_add(1 as libc::c_int as libc::c_ulong),
@@ -262,11 +246,10 @@ unsafe extern "C" fn ldrstrdup(
     mut ldr: *mut LDR,
     mut str: *const libc::c_char,
 ) -> *mut libc::c_char {
-    let mut bytes: size_t = (strlen(str))
-        .wrapping_add(1 as libc::c_int as libc::c_ulong);
-    let mut res: *mut libc::c_char = ((*ldr).mem.alloc)
-        .expect("non-null function pointer")((*ldr).mem.state, bytes)
-        as *mut libc::c_char;
+    let mut bytes: size_t = (strlen(str)).wrapping_add(1 as libc::c_int as libc::c_ulong);
+    let mut res: *mut libc::c_char =
+        ((*ldr).mem.alloc).expect("non-null function pointer")((*ldr).mem.state, bytes)
+            as *mut libc::c_char;
     return strcpy(res, str);
 }
 #[no_mangle]
@@ -281,10 +264,7 @@ pub unsafe extern "C" fn ldrelease(mut ldr: *mut LDR) {
     }
     ldrdelstr(ldr, (*ldr).errmsg);
     ldrdelstr(ldr, (*ldr).path);
-    ((*ldr).mem.dealloc)
-        .expect(
-            "non-null function pointer",
-        )(
+    ((*ldr).mem.dealloc).expect("non-null function pointer")(
         (*ldr).mem.state,
         ldr as *mut libc::c_void,
         ::core::mem::size_of::<LDR>() as libc::c_ulong,
@@ -330,17 +310,23 @@ unsafe extern "C" fn ldrfilexists(mut path: *const libc::c_char) -> libc::c_int 
         st_size: 0,
         st_blksize: 0,
         st_blocks: 0,
-        st_atim: timespec { tv_sec: 0, tv_nsec: 0 },
-        st_mtim: timespec { tv_sec: 0, tv_nsec: 0 },
-        st_ctim: timespec { tv_sec: 0, tv_nsec: 0 },
+        st_atim: timespec {
+            tv_sec: 0,
+            tv_nsec: 0,
+        },
+        st_mtim: timespec {
+            tv_sec: 0,
+            tv_nsec: 0,
+        },
+        st_ctim: timespec {
+            tv_sec: 0,
+            tv_nsec: 0,
+        },
         __glibc_reserved: [0; 3],
     };
     return (stat(path, &mut buf) == 0) as libc::c_int;
 }
-unsafe extern "C" fn ldrperr(
-    mut ldr: *mut LDR,
-    mut msg: *const libc::c_char,
-) -> libc::c_int {
+unsafe extern "C" fn ldrperr(mut ldr: *mut LDR, mut msg: *const libc::c_char) -> libc::c_int {
     let mut bytes: size_t = 0;
     let mut len: size_t = 0;
     let mut str: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -357,16 +343,16 @@ unsafe extern "C" fn ldrperr(
         msg,
     );
     len = (strlen(str)).wrapping_add(1 as libc::c_int as libc::c_ulong);
-    (*ldr)
-        .errmsg = strcpy(
+    (*ldr).errmsg = strcpy(
         ((*ldr).mem.alloc).expect("non-null function pointer")((*ldr).mem.state, len)
             as *mut libc::c_char,
         str,
     );
-    ((*ldr).mem.dealloc)
-        .expect(
-            "non-null function pointer",
-        )((*ldr).mem.state, str as *mut libc::c_void, bytes);
+    ((*ldr).mem.dealloc).expect("non-null function pointer")(
+        (*ldr).mem.state,
+        str as *mut libc::c_void,
+        bytes,
+    );
     return 0 as libc::c_int;
 }
 unsafe extern "C" fn ldrhas(
@@ -378,8 +364,7 @@ unsafe extern "C" fn ldrhas(
     if l < k {
         return 0 as libc::c_int;
     }
-    return (strcmp(str.offset(l as isize).offset(-(k as isize)), suffix) == 0)
-        as libc::c_int;
+    return (strcmp(str.offset(l as isize).offset(-(k as isize)), suffix) == 0) as libc::c_int;
 }
 unsafe extern "C" fn ldrcmd(
     mut ldr: *mut LDR,
@@ -389,16 +374,18 @@ unsafe extern "C" fn ldrcmd(
     let mut res: *mut FILE = 0 as *mut FILE;
     let mut len: libc::c_int = (strlen(fmt))
         .wrapping_add(strlen(name))
-        .wrapping_add(1 as libc::c_int as libc::c_ulong) as libc::c_int;
-    let mut s: *mut libc::c_char = ((*ldr).mem.alloc)
-        .expect("non-null function pointer")((*ldr).mem.state, len as size_t)
-        as *mut libc::c_char;
+        .wrapping_add(1 as libc::c_int as libc::c_ulong)
+        as libc::c_int;
+    let mut s: *mut libc::c_char =
+        ((*ldr).mem.alloc).expect("non-null function pointer")((*ldr).mem.state, len as size_t)
+            as *mut libc::c_char;
     sprintf(s, fmt, name);
     res = popen(s, b"r\0" as *const u8 as *const libc::c_char);
-    ((*ldr).mem.dealloc)
-        .expect(
-            "non-null function pointer",
-        )((*ldr).mem.state, s as *mut libc::c_void, len as size_t);
+    ((*ldr).mem.dealloc).expect("non-null function pointer")(
+        (*ldr).mem.state,
+        s as *mut libc::c_void,
+        len as size_t,
+    );
     return res;
 }
 #[no_mangle]
@@ -412,40 +399,38 @@ pub unsafe extern "C" fn ldrsetpath(mut ldr: *mut LDR, mut path: *const libc::c_
     }
     (*ldr).closefile = 2 as libc::c_int;
     if ldrhas(path, b".gz\0" as *const u8 as *const libc::c_char) != 0 {
-        (*ldr)
-            .file = ldrcmd(
+        (*ldr).file = ldrcmd(
             ldr,
             b"gunzip -c %s\0" as *const u8 as *const libc::c_char,
             path,
         );
     } else if ldrhas(path, b".bz2\0" as *const u8 as *const libc::c_char) != 0 {
-        (*ldr)
-            .file = ldrcmd(ldr, b"bzcat %s\0" as *const u8 as *const libc::c_char, path);
+        (*ldr).file = ldrcmd(ldr, b"bzcat %s\0" as *const u8 as *const libc::c_char, path);
     } else if ldrhas(path, b".7z\0" as *const u8 as *const libc::c_char) != 0 {
-        (*ldr)
-            .file = ldrcmd(
+        (*ldr).file = ldrcmd(
             ldr,
             b"7z x -so %s 2>/dev/null\0" as *const u8 as *const libc::c_char,
             path,
         );
     } else if ldrhas(path, b".lzma\0" as *const u8 as *const libc::c_char) != 0 {
-        (*ldr)
-            .file = ldrcmd(ldr, b"lzcat %s\0" as *const u8 as *const libc::c_char, path);
+        (*ldr).file = ldrcmd(ldr, b"lzcat %s\0" as *const u8 as *const libc::c_char, path);
     } else {
         (*ldr).file = fopen(path, b"r\0" as *const u8 as *const libc::c_char);
         (*ldr).closefile = 1 as libc::c_int;
     }
     if ((*ldr).file).is_null() {
-        return ldrperr(ldr, b"can not open file\0" as *const u8 as *const libc::c_char);
+        return ldrperr(
+            ldr,
+            b"can not open file\0" as *const u8 as *const libc::c_char,
+        );
     } else {
-        return 0
+        return 0;
     }
 }
 #[no_mangle]
 pub unsafe extern "C" fn ldrsetfile(mut ldr: *mut LDR, mut file: *mut FILE) {
     (*ldr).file = file;
-    (*ldr)
-        .path = ldrstrdup(
+    (*ldr).path = ldrstrdup(
         ldr,
         b"<unspecified-path>\0" as *const u8 as *const libc::c_char,
     );
@@ -503,8 +488,7 @@ pub unsafe extern "C" fn ldrparse(mut ldr: *mut LDR) -> libc::c_int {
             if ch == -(1 as libc::c_int) {
                 return ldrperr(
                     ldr,
-                    b"end-of-file in comment before header\0" as *const u8
-                        as *const libc::c_char,
+                    b"end-of-file in comment before header\0" as *const u8 as *const libc::c_char,
                 );
             }
         }
@@ -547,7 +531,8 @@ pub unsafe extern "C" fn ldrparse(mut ldr: *mut LDR) -> libc::c_int {
     }
     ch = ldrnext(ldr);
     if *(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-        & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int == 0
+        & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+        == 0
     {
         return ldrperr(
             ldr,
@@ -558,7 +543,8 @@ pub unsafe extern "C" fn ldrparse(mut ldr: *mut LDR) -> libc::c_int {
     loop {
         ch = ldrnext(ldr);
         if *(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int != 0
+            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+            != 0
         {
             if (2147483647 as libc::c_int / 10 as libc::c_int) < vars.specified {
                 current_block = 14777158775944759451;
@@ -581,7 +567,8 @@ pub unsafe extern "C" fn ldrparse(mut ldr: *mut LDR) -> libc::c_int {
             }
             ch = ldrnext(ldr);
             if *(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-                & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int == 0
+                & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+                == 0
             {
                 return ldrperr(
                     ldr,
@@ -605,11 +592,10 @@ pub unsafe extern "C" fn ldrparse(mut ldr: *mut LDR) -> libc::c_int {
             _ => {
                 ch = ldrnext(ldr);
                 if *(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-                    & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int != 0
+                    & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+                    != 0
                 {
-                    if (2147483647 as libc::c_int / 10 as libc::c_int)
-                        < clauses.specified
-                    {
+                    if (2147483647 as libc::c_int / 10 as libc::c_int) < clauses.specified {
                         current_block = 14777158775944759451;
                         continue;
                     }
@@ -628,22 +614,24 @@ pub unsafe extern "C" fn ldrparse(mut ldr: *mut LDR) -> libc::c_int {
                     if ch != '\n' as i32 {
                         return ldrperr(
                             ldr,
-                            b"expected new line after header\0" as *const u8
-                                as *const libc::c_char,
+                            b"expected new line after header\0" as *const u8 as *const libc::c_char,
                         );
                     }
                     if ((*ldr).header.fun).is_some() {
-                        ((*ldr).header.fun)
-                            .expect(
-                                "non-null function pointer",
-                            )((*ldr).header.state, vars.specified, clauses.specified);
+                        ((*ldr).header.fun).expect("non-null function pointer")(
+                            (*ldr).header.state,
+                            vars.specified,
+                            clauses.specified,
+                        );
                     }
                     clauses.parsed = 0 as libc::c_int;
                     vars.parsed = clauses.parsed;
                     lit = 0 as libc::c_int;
                     's_198: loop {
                         ch = ldrnext(ldr);
-                        if ch == ' ' as i32 || ch == '\t' as i32 || ch == '\r' as i32
+                        if ch == ' ' as i32
+                            || ch == '\t' as i32
+                            || ch == '\r' as i32
                             || ch == '\n' as i32
                         {
                             continue;
@@ -679,16 +667,14 @@ pub unsafe extern "C" fn ldrparse(mut ldr: *mut LDR) -> libc::c_int {
                                     );
                                 }
                                 sign = -(1 as libc::c_int);
-                            } else if *(*__ctype_b_loc()).offset(ch as isize)
-                                as libc::c_int
+                            } else if *(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
                                 & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
                                 == 0
                             {
                                 return ldrperr(
                                     ldr,
-                                    b"expected digit or '-'\0" as *const u8
-                                        as *const libc::c_char,
-                                )
+                                    b"expected digit or '-'\0" as *const u8 as *const libc::c_char,
+                                );
                             } else {
                                 sign = 1 as libc::c_int;
                             }
@@ -728,8 +714,10 @@ pub unsafe extern "C" fn ldrparse(mut ldr: *mut LDR) -> libc::c_int {
                             }
                             lit *= sign;
                             if ((*ldr).add.fun).is_some() {
-                                ((*ldr).add.fun)
-                                    .expect("non-null function pointer")((*ldr).add.state, lit);
+                                ((*ldr).add.fun).expect("non-null function pointer")(
+                                    (*ldr).add.state,
+                                    lit,
+                                );
                             }
                             if lit != 0 {
                                 continue;

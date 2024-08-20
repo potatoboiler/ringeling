@@ -1,0 +1,12 @@
+[package]
+name = "libgeling"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+libc.workspace = true
+c2rust-bitfields.workspace = true
+c2rust-bitfields-derive.workspace = true

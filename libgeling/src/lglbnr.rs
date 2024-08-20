@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 #![feature(extern_types)]
 extern "C" {
     pub type _IO_wide_data;
@@ -58,9 +66,14 @@ pub unsafe extern "C" fn lglbnr(
         as *const u8 as *const libc::c_char;
     let mut q: *const libc::c_char = 0 as *const libc::c_char;
     let mut n: *const libc::c_char = 0 as *const libc::c_char;
-    let mut len: libc::c_int = (78 as libc::c_int as libc::c_ulong)
-        .wrapping_sub(strlen(prefix)) as libc::c_int;
-    fprintf(file, b"%s%s\n\0" as *const u8 as *const libc::c_char, prefix, name);
+    let mut len: libc::c_int =
+        (78 as libc::c_int as libc::c_ulong).wrapping_sub(strlen(prefix)) as libc::c_int;
+    fprintf(
+        file,
+        b"%s%s\n\0" as *const u8 as *const libc::c_char,
+        prefix,
+        name,
+    );
     fprintf(file, b"%s\n\0" as *const u8 as *const libc::c_char, prefix);
     fprintf(
         file,
@@ -108,9 +121,7 @@ pub unsafe extern "C" fn lglbnr(
             q = q.offset(1);
             q;
         }
-        if *q as libc::c_int != 0
-            && (q.offset_from(p) as libc::c_long) < len as libc::c_long
-        {
+        if *q as libc::c_int != 0 && (q.offset_from(p) as libc::c_long) < len as libc::c_long {
             loop {
                 n = q.offset(1 as libc::c_int as isize);
                 while *n as libc::c_int != 0 && *n as libc::c_int != ' ' as i32 {
@@ -150,6 +161,5 @@ pub unsafe extern "C" fn lglbnr(
 }
 #[no_mangle]
 pub unsafe extern "C" fn lglversion() -> *const libc::c_char {
-    return b"1.0.0 89a167d0d2efe98d983c87b5b84175b40ea55842\0" as *const u8
-        as *const libc::c_char;
+    return b"1.0.0 89a167d0d2efe98d983c87b5b84175b40ea55842\0" as *const u8 as *const libc::c_char;
 }

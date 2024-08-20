@@ -1,15 +1,19 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 #![feature(c_variadic, extern_types)]
 extern "C" {
     pub type _IO_wide_data;
     pub type _IO_codecvt;
     pub type _IO_marker;
     pub type LGL;
-    fn strtol(
-        _: *const libc::c_char,
-        _: *mut *mut libc::c_char,
-        _: libc::c_int,
-    ) -> libc::c_long;
+    fn strtol(_: *const libc::c_char, _: *mut *mut libc::c_char, _: libc::c_int) -> libc::c_long;
     fn strtoll(
         _: *const libc::c_char,
         _: *mut *mut libc::c_char,
@@ -21,19 +25,10 @@ extern "C" {
     fn exit(_: libc::c_int) -> !;
     fn getenv(__name: *const libc::c_char) -> *mut libc::c_char;
     fn system(__command: *const libc::c_char) -> libc::c_int;
-    fn qsort(
-        __base: *mut libc::c_void,
-        __nmemb: size_t,
-        __size: size_t,
-        __compar: __compar_fn_t,
-    );
+    fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
     fn abs(_: libc::c_int) -> libc::c_int;
     fn sprintf(_: *mut libc::c_char, _: *const libc::c_char, _: ...) -> libc::c_int;
-    fn vfprintf(
-        _: *mut FILE,
-        _: *const libc::c_char,
-        _: ::core::ffi::VaList,
-    ) -> libc::c_int;
+    fn vfprintf(_: *mut FILE, _: *const libc::c_char, _: ::core::ffi::VaList) -> libc::c_int;
     fn fscanf(_: *mut FILE, _: *const libc::c_char, _: ...) -> libc::c_int;
     fn getc(__stream: *mut FILE) -> libc::c_int;
     fn fputc(__c: libc::c_int, __stream: *mut FILE) -> libc::c_int;
@@ -50,19 +45,10 @@ extern "C" {
     static mut stdout: *mut FILE;
     static mut stdin: *mut FILE;
     fn lglrelease(_: *mut LGL);
-    fn lglminit(
-        mem_0: *mut libc::c_void,
-        _: lglalloc,
-        _: lglrealloc,
-        _: lgldealloc,
-    ) -> *mut LGL;
+    fn lglminit(mem_0: *mut libc::c_void, _: lglalloc, _: lglrealloc, _: lgldealloc) -> *mut LGL;
     fn lglclone(_: *mut LGL) -> *mut LGL;
     fn lglversion() -> *const libc::c_char;
-    fn lglbnr(
-        name_0: *const libc::c_char,
-        prefix: *const libc::c_char,
-        file_0: *mut FILE,
-    );
+    fn lglbnr(name_0: *const libc::c_char, prefix: *const libc::c_char, file_0: *mut FILE);
     fn lglopts(_: *mut LGL, prefix: *const libc::c_char, _: libc::c_int);
     fn lglsetopt(_: *mut LGL, _: *const libc::c_char, _: libc::c_int);
     fn lglgetopt(_: *mut LGL, _: *const libc::c_char) -> libc::c_int;
@@ -70,7 +56,7 @@ extern "C" {
     fn lglsetid(_: *mut LGL, tid: libc::c_int, tids: libc::c_int);
     fn lglsetconsumedunits(
         _: *mut LGL,
-        consumed: Option::<unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> ()>,
+        consumed: Option<unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> ()>,
         _: *mut libc::c_void,
     );
     fn lglsat(_: *mut LGL) -> libc::c_int;
@@ -85,17 +71,17 @@ extern "C" {
     fn lglprocesstime() -> libc::c_double;
     fn lglseterm(
         _: *mut LGL,
-        term_0: Option::<unsafe extern "C" fn(*mut libc::c_void) -> libc::c_int>,
+        term_0: Option<unsafe extern "C" fn(*mut libc::c_void) -> libc::c_int>,
         _: *mut libc::c_void,
     );
     fn lglsetproduceunit(
         _: *mut LGL,
-        produce: Option::<unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> ()>,
+        produce: Option<unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> ()>,
         _: *mut libc::c_void,
     );
     fn lglsetconsumeunits(
         _: *mut LGL,
-        consume: Option::<
+        consume: Option<
             unsafe extern "C" fn(
                 *mut libc::c_void,
                 *mut *mut libc::c_int,
@@ -107,71 +93,52 @@ extern "C" {
     fn lgladd(_: *mut LGL, lit: libc::c_int);
     fn lglsetproducecls(
         _: *mut LGL,
-        produce: Option::<
+        produce: Option<
             unsafe extern "C" fn(*mut libc::c_void, *mut libc::c_int, libc::c_int) -> (),
         >,
         _: *mut libc::c_void,
     );
     fn lglsetconsumecls(
         _: *mut LGL,
-        consume: Option::<
-            unsafe extern "C" fn(
-                *mut libc::c_void,
-                *mut *mut libc::c_int,
-                *mut libc::c_int,
-            ) -> (),
+        consume: Option<
+            unsafe extern "C" fn(*mut libc::c_void, *mut *mut libc::c_int, *mut libc::c_int) -> (),
         >,
         _: *mut libc::c_void,
     );
     fn lglsetconsumedcls(
         _: *mut LGL,
-        consumed: Option::<unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> ()>,
+        consumed: Option<unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> ()>,
         _: *mut libc::c_void,
     );
     fn lglsetlockeq(
         _: *mut LGL,
-        lock: Option::<unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_int>,
+        lock: Option<unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_int>,
         _: *mut libc::c_void,
     );
     fn lglsetunlockeq(
         _: *mut LGL,
-        unlock: Option::<
-            unsafe extern "C" fn(*mut libc::c_void, libc::c_int, libc::c_int) -> (),
-        >,
+        unlock: Option<unsafe extern "C" fn(*mut libc::c_void, libc::c_int, libc::c_int) -> ()>,
         _: *mut libc::c_void,
     );
     fn lglsetmsglock(
         _: *mut LGL,
-        lock: Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
-        unlock: Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+        lock: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+        unlock: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
         _: *mut libc::c_void,
     );
-    fn lglsetime(_: *mut LGL, time: Option::<unsafe extern "C" fn() -> libc::c_double>);
+    fn lglsetime(_: *mut LGL, time: Option<unsafe extern "C" fn() -> libc::c_double>);
     fn __ctype_b_loc() -> *mut *const libc::c_ushort;
     fn pthread_create(
         __newthread: *mut pthread_t,
         __attr: *const pthread_attr_t,
-        __start_routine: Option::<
-            unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void,
-        >,
+        __start_routine: Option<unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void>,
         __arg: *mut libc::c_void,
     ) -> libc::c_int;
-    fn pthread_join(
-        __th: pthread_t,
-        __thread_return: *mut *mut libc::c_void,
-    ) -> libc::c_int;
+    fn pthread_join(__th: pthread_t, __thread_return: *mut *mut libc::c_void) -> libc::c_int;
     fn pthread_mutex_lock(__mutex: *mut pthread_mutex_t) -> libc::c_int;
     fn pthread_mutex_unlock(__mutex: *mut pthread_mutex_t) -> libc::c_int;
-    fn memcpy(
-        _: *mut libc::c_void,
-        _: *const libc::c_void,
-        _: libc::c_ulong,
-    ) -> *mut libc::c_void;
-    fn memset(
-        _: *mut libc::c_void,
-        _: libc::c_int,
-        _: libc::c_ulong,
-    ) -> *mut libc::c_void;
+    fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
+    fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
     fn strlen(_: *const libc::c_char) -> libc::c_ulong;
     fn gettimeofday(__tv: *mut timeval, __tz: *mut libc::c_void) -> libc::c_int;
@@ -275,22 +242,13 @@ pub union pthread_mutex_t {
     pub __size: [libc::c_char; 40],
     pub __align: libc::c_long,
 }
-pub type __compar_fn_t = Option::<
-    unsafe extern "C" fn(*const libc::c_void, *const libc::c_void) -> libc::c_int,
->;
-pub type lglalloc = Option::<
-    unsafe extern "C" fn(*mut libc::c_void, size_t) -> *mut libc::c_void,
->;
-pub type lgldealloc = Option::<
-    unsafe extern "C" fn(*mut libc::c_void, *mut libc::c_void, size_t) -> (),
->;
-pub type lglrealloc = Option::<
-    unsafe extern "C" fn(
-        *mut libc::c_void,
-        *mut libc::c_void,
-        size_t,
-        size_t,
-    ) -> *mut libc::c_void,
+pub type __compar_fn_t =
+    Option<unsafe extern "C" fn(*const libc::c_void, *const libc::c_void) -> libc::c_int>;
+pub type lglalloc = Option<unsafe extern "C" fn(*mut libc::c_void, size_t) -> *mut libc::c_void>;
+pub type lgldealloc =
+    Option<unsafe extern "C" fn(*mut libc::c_void, *mut libc::c_void, size_t) -> ()>;
+pub type lglrealloc = Option<
+    unsafe extern "C" fn(*mut libc::c_void, *mut libc::c_void, size_t, size_t) -> *mut libc::c_void,
 >;
 pub type C2RustUnnamed = libc::c_uint;
 pub const _ISalnum: C2RustUnnamed = 8;
@@ -314,7 +272,7 @@ pub const PTHREAD_MUTEX_ADAPTIVE_NP: C2RustUnnamed_0 = 3;
 pub const PTHREAD_MUTEX_ERRORCHECK_NP: C2RustUnnamed_0 = 2;
 pub const PTHREAD_MUTEX_RECURSIVE_NP: C2RustUnnamed_0 = 1;
 pub const PTHREAD_MUTEX_TIMED_NP: C2RustUnnamed_0 = 0;
-pub type __sighandler_t = Option::<unsafe extern "C" fn(libc::c_int) -> ()>;
+pub type __sighandler_t = Option<unsafe extern "C" fn(libc::c_int) -> ()>;
 pub type C2RustUnnamed_1 = libc::c_uint;
 pub const _SC_SIGSTKSZ: C2RustUnnamed_1 = 250;
 pub const _SC_MINSIGSTKSZ: C2RustUnnamed_1 = 249;
@@ -651,10 +609,7 @@ static mut gcs: libc::c_int = 0;
 static mut name: *const libc::c_char = 0 as *const libc::c_char;
 static mut nworkers2: libc::c_int = 0;
 #[no_mangle]
-pub static mut mem: C2RustUnnamed_6 = C2RustUnnamed_6 {
-    max: 0,
-    current: 0,
-};
+pub static mut mem: C2RustUnnamed_6 = C2RustUnnamed_6 { max: 0, current: 0 };
 static mut catchedsig: libc::c_int = 0;
 static mut start: libc::c_double = 0.;
 static mut file: *mut FILE = 0 as *const FILE as *mut FILE;
@@ -681,10 +636,8 @@ static mut donemutex: pthread_mutex_t = pthread_mutex_t {
             __elision: 0 as libc::c_int as libc::c_short,
             __list: {
                 let mut init = __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 };
                 init
             },
@@ -704,10 +657,8 @@ static mut msgmutex: pthread_mutex_t = pthread_mutex_t {
             __elision: 0 as libc::c_int as libc::c_short,
             __list: {
                 let mut init = __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 };
                 init
             },
@@ -727,10 +678,8 @@ static mut fixedmutex: pthread_mutex_t = pthread_mutex_t {
             __elision: 0 as libc::c_int as libc::c_short,
             __list: {
                 let mut init = __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 };
                 init
             },
@@ -750,10 +699,8 @@ static mut reprmutex: pthread_mutex_t = pthread_mutex_t {
             __elision: 0 as libc::c_int as libc::c_short,
             __list: {
                 let mut init = __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 };
                 init
             },
@@ -773,10 +720,8 @@ static mut memutex: pthread_mutex_t = pthread_mutex_t {
             __elision: 0 as libc::c_int as libc::c_short,
             __list: {
                 let mut init = __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 };
                 init
             },
@@ -796,10 +741,8 @@ static mut clsmutex: pthread_mutex_t = pthread_mutex_t {
             __elision: 0 as libc::c_int as libc::c_short,
             __list: {
                 let mut init = __pthread_internal_list {
-                    __prev: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
-                    __next: 0 as *const __pthread_internal_list
-                        as *mut __pthread_internal_list,
+                    __prev: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
+                    __next: 0 as *const __pthread_internal_list as *mut __pthread_internal_list,
                 };
                 init
             },
@@ -809,7 +752,10 @@ static mut clsmutex: pthread_mutex_t = pthread_mutex_t {
 };
 unsafe extern "C" fn currentime() -> libc::c_double {
     let mut res: libc::c_double = 0 as libc::c_int as libc::c_double;
-    let mut tv: timeval = timeval { tv_sec: 0, tv_usec: 0 };
+    let mut tv: timeval = timeval {
+        tv_sec: 0,
+        tv_usec: 0,
+    };
     if gettimeofday(&mut tv, 0 as *mut libc::c_void) == 0 {
         res = 1e-6f64 * tv.tv_usec as libc::c_double;
         res += tv.tv_sec as libc::c_double;
@@ -846,7 +792,10 @@ unsafe extern "C" fn msg(
 unsafe extern "C" fn die(mut fmt: *const libc::c_char, mut args: ...) {
     let mut ap: ::core::ffi::VaListImpl;
     fflush(stdout);
-    fputs(b"c *** plingeling error: \0" as *const u8 as *const libc::c_char, stderr);
+    fputs(
+        b"c *** plingeling error: \0" as *const u8 as *const libc::c_char,
+        stderr,
+    );
     ap = args.clone();
     vfprintf(stderr, fmt, ap.as_va_list());
     fputc('\n' as i32, stderr);
@@ -856,16 +805,16 @@ unsafe extern "C" fn die(mut fmt: *const libc::c_char, mut args: ...) {
 unsafe extern "C" fn warn(mut fmt: *const libc::c_char, mut args: ...) {
     let mut ap: ::core::ffi::VaListImpl;
     fflush(stdout);
-    fputs(b"c *** plingeling warning: \0" as *const u8 as *const libc::c_char, stderr);
+    fputs(
+        b"c *** plingeling warning: \0" as *const u8 as *const libc::c_char,
+        stderr,
+    );
     ap = args.clone();
     vfprintf(stderr, fmt, ap.as_va_list());
     fputc('\n' as i32, stderr);
     fflush(stderr);
 }
-unsafe extern "C" fn percent(
-    mut a: libc::c_double,
-    mut b: libc::c_double,
-) -> libc::c_double {
+unsafe extern "C" fn percent(mut a: libc::c_double, mut b: libc::c_double) -> libc::c_double {
     return if b != 0. {
         100 as libc::c_int as libc::c_double * a / b
     } else {
@@ -888,8 +837,7 @@ unsafe extern "C" fn stats() {
     decs = confs;
     unitcalls = decs as libc::c_int;
     props = 0 as libc::c_int as int64_t;
-    mb = mem.max as libc::c_double
-        / ((1 as libc::c_int) << 20 as libc::c_int) as libc::c_double;
+    mb = mem.max as libc::c_double / ((1 as libc::c_int) << 20 as libc::c_int) as libc::c_double;
     i = 0 as libc::c_int;
     while i < nworkers {
         w = workers.offset(i as isize);
@@ -915,7 +863,10 @@ unsafe extern "C" fn stats() {
     } else {
         0 as libc::c_int as libc::c_double
     };
-    printf(b"c %d termination checks\n\0" as *const u8 as *const libc::c_char, termchks);
+    printf(
+        b"c %d termination checks\n\0" as *const u8 as *const libc::c_char,
+        termchks,
+    );
     printf(b"c\n\0" as *const u8 as *const libc::c_char);
     printf(
         b"c units: %d found, %d publications, %d syncs, %d flushed\n\0" as *const u8
@@ -930,7 +881,10 @@ unsafe extern "C" fn stats() {
             as *const libc::c_char,
         clauses.added,
         clauses.collected,
-        percent(clauses.collected as libc::c_double, clauses.added as libc::c_double),
+        percent(
+            clauses.collected as libc::c_double,
+            clauses.added as libc::c_double,
+        ),
         gcs,
     );
     printf(
@@ -947,14 +901,12 @@ unsafe extern "C" fn stats() {
         cps,
     );
     printf(
-        b"c %lld0 propagations, %.1f megaprops/sec\n\0" as *const u8
-            as *const libc::c_char,
+        b"c %lld0 propagations, %.1f megaprops/sec\n\0" as *const u8 as *const libc::c_char,
         props as libc::c_longlong,
         mpps,
     );
     printf(
-        b"c %.1f process time, %.0f%% utilization\n\0" as *const u8
-            as *const libc::c_char,
+        b"c %.1f process time, %.0f%% utilization\n\0" as *const u8 as *const libc::c_char,
         process,
         if real > 0 as libc::c_int as libc::c_double {
             100.0f64 * process / real / nworkers as libc::c_double
@@ -963,49 +915,38 @@ unsafe extern "C" fn stats() {
         },
     );
     printf(b"c\n\0" as *const u8 as *const libc::c_char);
-    printf(b"c %.1f seconds, %.1f MB\n\0" as *const u8 as *const libc::c_char, real, mb);
+    printf(
+        b"c %.1f seconds, %.1f MB\n\0" as *const u8 as *const libc::c_char,
+        real,
+        mb,
+    );
     fflush(stdout);
 }
 unsafe extern "C" fn incmem(mut bytes: size_t) {
     if pthread_mutex_lock(&mut memutex) != 0 {
-        warn(
-            b"failed to lock 'mem' mutex in 'incmem'\0" as *const u8
-                as *const libc::c_char,
-        );
+        warn(b"failed to lock 'mem' mutex in 'incmem'\0" as *const u8 as *const libc::c_char);
     }
     mem.current = (mem.current).wrapping_add(bytes);
     if mem.current > mem.max {
         mem.max = mem.current;
     }
     if pthread_mutex_unlock(&mut memutex) != 0 {
-        warn(
-            b"failed to unlock 'mem' mutex in 'incmem'\0" as *const u8
-                as *const libc::c_char,
-        );
+        warn(b"failed to unlock 'mem' mutex in 'incmem'\0" as *const u8 as *const libc::c_char);
     }
 }
 unsafe extern "C" fn decmem(mut bytes: size_t) {
     if pthread_mutex_lock(&mut memutex) != 0 {
-        warn(
-            b"failed to lock 'mem' mutex in 'decmem'\0" as *const u8
-                as *const libc::c_char,
-        );
+        warn(b"failed to lock 'mem' mutex in 'decmem'\0" as *const u8 as *const libc::c_char);
     }
     mem.current = (mem.current).wrapping_sub(bytes);
     if pthread_mutex_unlock(&mut memutex) != 0 {
-        warn(
-            b"failed to unlock 'mem' mutex in 'decmem'\0" as *const u8
-                as *const libc::c_char,
-        );
+        warn(b"failed to unlock 'mem' mutex in 'decmem'\0" as *const u8 as *const libc::c_char);
     }
 }
-unsafe extern "C" fn alloc(
-    mut dummy: *mut libc::c_void,
-    mut bytes: size_t,
-) -> *mut libc::c_void {
+unsafe extern "C" fn alloc(mut dummy: *mut libc::c_void, mut bytes: size_t) -> *mut libc::c_void {
     let mut res: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut BYTES: size_t = bytes
-        .wrapping_mul(::core::mem::size_of::<libc::c_char>() as libc::c_ulong);
+    let mut BYTES: size_t =
+        bytes.wrapping_mul(::core::mem::size_of::<libc::c_char>() as libc::c_ulong);
     res = malloc(BYTES) as *mut libc::c_char;
     if res.is_null() {
         die(b"out of memory\0" as *const u8 as *const libc::c_char);
@@ -1021,8 +962,8 @@ unsafe extern "C" fn dealloc(
     mut bytes: size_t,
 ) {
     let mut char_ptr: *mut libc::c_char = void_ptr as *mut libc::c_char;
-    let mut BYTES: size_t = bytes
-        .wrapping_mul(::core::mem::size_of::<libc::c_char>() as libc::c_ulong);
+    let mut BYTES: size_t =
+        bytes.wrapping_mul(::core::mem::size_of::<libc::c_char>() as libc::c_ulong);
     decmem(BYTES);
     free(char_ptr as *mut libc::c_void);
 }
@@ -1034,10 +975,7 @@ unsafe extern "C" fn resize(
 ) -> *mut libc::c_void {
     let mut res: *mut libc::c_void = 0 as *mut libc::c_void;
     if pthread_mutex_lock(&mut memutex) != 0 {
-        warn(
-            b"failed to lock 'mem' mutex in 'resize'\0" as *const u8
-                as *const libc::c_char,
-        );
+        warn(b"failed to lock 'mem' mutex in 'resize'\0" as *const u8 as *const libc::c_char);
     }
     mem.current = (mem.current).wrapping_sub(old_bytes);
     mem.current = (mem.current).wrapping_add(new_bytes);
@@ -1045,18 +983,15 @@ unsafe extern "C" fn resize(
         mem.max = mem.current;
     }
     if pthread_mutex_unlock(&mut memutex) != 0 {
-        warn(
-            b"failed to unlock 'mem' mutex in 'resize'\0" as *const u8
-                as *const libc::c_char,
-        );
+        warn(b"failed to unlock 'mem' mutex in 'resize'\0" as *const u8 as *const libc::c_char);
     }
     res = realloc(ptr, new_bytes);
     return res;
 }
-static mut sig_int_handler: Option::<unsafe extern "C" fn(libc::c_int) -> ()> = None;
-static mut sig_segv_handler: Option::<unsafe extern "C" fn(libc::c_int) -> ()> = None;
-static mut sig_abrt_handler: Option::<unsafe extern "C" fn(libc::c_int) -> ()> = None;
-static mut sig_term_handler: Option::<unsafe extern "C" fn(libc::c_int) -> ()> = None;
+static mut sig_int_handler: Option<unsafe extern "C" fn(libc::c_int) -> ()> = None;
+static mut sig_segv_handler: Option<unsafe extern "C" fn(libc::c_int) -> ()> = None;
+static mut sig_abrt_handler: Option<unsafe extern "C" fn(libc::c_int) -> ()> = None;
+static mut sig_term_handler: Option<unsafe extern "C" fn(libc::c_int) -> ()> = None;
 unsafe extern "C" fn resetsighandlers() {
     signal(2 as libc::c_int, sig_int_handler);
     signal(11 as libc::c_int, sig_segv_handler);
@@ -1067,12 +1002,18 @@ unsafe extern "C" fn caughtsigmsg(mut sig: libc::c_int) {
     if verbose == 0 {
         return;
     }
-    printf(b"c\nc CAUGHT SIGNAL %d\nc\n\0" as *const u8 as *const libc::c_char, sig);
+    printf(
+        b"c\nc CAUGHT SIGNAL %d\nc\n\0" as *const u8 as *const libc::c_char,
+        sig,
+    );
     fflush(stdout);
 }
 unsafe extern "C" fn catchsig(mut sig: libc::c_int) {
     if catchedsig == 0 {
-        fputs(b"c s UNKNOWN\n\0" as *const u8 as *const libc::c_char, stdout);
+        fputs(
+            b"c s UNKNOWN\n\0" as *const u8 as *const libc::c_char,
+            stdout,
+        );
         fflush(stdout);
         catchedsig = 1 as libc::c_int;
         caughtsigmsg(sig);
@@ -1084,8 +1025,8 @@ unsafe extern "C" fn catchsig(mut sig: libc::c_int) {
         let sec: libc::c_int = 1000 as libc::c_int;
         fprintf(
             stderr,
-            b"plingeling: plingeling.c:%d: process %ld sleeping for %d seconds\n\0"
-                as *const u8 as *const libc::c_char,
+            b"plingeling: plingeling.c:%d: process %ld sleeping for %d seconds\n\0" as *const u8
+                as *const libc::c_char,
             292 as libc::c_int,
             getpid() as libc::c_long,
             sec,
@@ -1174,8 +1115,7 @@ unsafe extern "C" fn parse() -> *const libc::c_char {
     }
     memset(vals as *mut libc::c_void, 0 as libc::c_int, BYTES_0);
     incmem(BYTES_0);
-    let mut BYTES_1: size_t = ((2 as libc::c_int * nvars + 1 as libc::c_int)
-        as libc::c_ulong)
+    let mut BYTES_1: size_t = ((2 as libc::c_int * nvars + 1 as libc::c_int) as libc::c_ulong)
         .wrapping_mul(::core::mem::size_of::<libc::c_int>() as libc::c_ulong);
     occs = malloc(BYTES_1) as *mut libc::c_int;
     if occs.is_null() {
@@ -1212,9 +1152,7 @@ unsafe extern "C" fn parse() -> *const libc::c_char {
                 }
             }
         } else {
-            if ch == ' ' as i32 || ch == '\n' as i32 || ch == '\r' as i32
-                || ch == '\t' as i32
-            {
+            if ch == ' ' as i32 || ch == '\n' as i32 || ch == '\r' as i32 || ch == '\t' as i32 {
                 continue;
             }
             if ch == -(1 as libc::c_int) {
@@ -1227,16 +1165,14 @@ unsafe extern "C" fn parse() -> *const libc::c_char {
                     msg(
                         -(1 as libc::c_int),
                         0 as libc::c_int,
-                        b"uniform clause length %d\0" as *const u8
-                            as *const libc::c_char,
+                        b"uniform clause length %d\0" as *const u8 as *const libc::c_char,
                         minlen,
                     );
                 } else {
                     msg(
                         -(1 as libc::c_int),
                         0 as libc::c_int,
-                        b"clause length between %d and %d\0" as *const u8
-                            as *const libc::c_char,
+                        b"clause length between %d and %d\0" as *const u8 as *const libc::c_char,
                         minlen,
                         maxlen,
                     );
@@ -1255,16 +1191,15 @@ unsafe extern "C" fn parse() -> *const libc::c_char {
                     msg(
                         -(1 as libc::c_int),
                         0 as libc::c_int,
-                        b"average literal occurrence %.2f\0" as *const u8
-                            as *const libc::c_char,
+                        b"average literal occurrence %.2f\0" as *const u8 as *const libc::c_char,
                         avg,
                     );
                     std = 0 as libc::c_int as libc::c_double;
                     lit = -nvars;
                     while lit <= nvars {
                         if lit != 0 {
-                            let mut diff: libc::c_double = avg
-                                - *occs.offset(lit as isize) as libc::c_double;
+                            let mut diff: libc::c_double =
+                                avg - *occs.offset(lit as isize) as libc::c_double;
                             std += diff * diff;
                         }
                         lit += 1;
@@ -1282,8 +1217,8 @@ unsafe extern "C" fn parse() -> *const libc::c_char {
                         msg(
                             -(1 as libc::c_int),
                             0 as libc::c_int,
-                            b"relative literal occurrence standard deviation %.2f%%\0"
-                                as *const u8 as *const libc::c_char,
+                            b"relative literal occurrence standard deviation %.2f%%\0" as *const u8
+                                as *const libc::c_char,
                             100.0f64 * std / avg,
                         );
                     }
@@ -1294,9 +1229,7 @@ unsafe extern "C" fn parse() -> *const libc::c_char {
                 occs = occs.offset(-(nvars as isize));
                 let mut BYTES_3: size_t = ((2 as libc::c_int * nvars + 1 as libc::c_int)
                     as libc::c_ulong)
-                    .wrapping_mul(
-                        ::core::mem::size_of::<libc::c_int>() as libc::c_ulong,
-                    );
+                    .wrapping_mul(::core::mem::size_of::<libc::c_int>() as libc::c_ulong);
                 decmem(BYTES_3);
                 free(occs as *mut libc::c_void);
                 if avg > 5 as libc::c_int as libc::c_double && std / avg < 0.5f64 {
@@ -1329,8 +1262,7 @@ unsafe extern "C" fn parse() -> *const libc::c_char {
                 msg(
                     -(1 as libc::c_int),
                     1 as libc::c_int,
-                    b"finished parsing in %.1f seconds\0" as *const u8
-                        as *const libc::c_char,
+                    b"finished parsing in %.1f seconds\0" as *const u8 as *const libc::c_char,
                     getime(),
                 );
                 return 0 as *const libc::c_char;
@@ -1342,7 +1274,8 @@ unsafe extern "C" fn parse() -> *const libc::c_char {
                 sign = 1 as libc::c_int;
             }
             if *(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-                & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int == 0
+                & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+                == 0
             {
                 return b"expected digit\0" as *const u8 as *const libc::c_char;
             }
@@ -1353,7 +1286,8 @@ unsafe extern "C" fn parse() -> *const libc::c_char {
             loop {
                 ch = getc(file);
                 if !(*(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-                    & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int != 0)
+                    & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+                    != 0)
                 {
                     break;
                 }
@@ -1382,7 +1316,7 @@ unsafe extern "C" fn parse() -> *const libc::c_char {
                 *fresh0;
             }
         }
-    };
+    }
 }
 unsafe extern "C" fn isposnum(mut str: *const libc::c_char) -> libc::c_int {
     let mut ch: libc::c_int = 0;
@@ -1391,7 +1325,8 @@ unsafe extern "C" fn isposnum(mut str: *const libc::c_char) -> libc::c_int {
     ch = *fresh1 as libc::c_int;
     if ch == 0
         || *(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int == 0
+            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+            == 0
     {
         return 0 as libc::c_int;
     }
@@ -1400,7 +1335,8 @@ unsafe extern "C" fn isposnum(mut str: *const libc::c_char) -> libc::c_int {
         str = str.offset(1);
         ch = *fresh2 as libc::c_int;
         if !(*(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int != 0)
+            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
+            != 0)
         {
             break;
         }
@@ -1409,8 +1345,7 @@ unsafe extern "C" fn isposnum(mut str: *const libc::c_char) -> libc::c_int {
 }
 unsafe extern "C" fn term(mut voidptr: *mut libc::c_void) -> libc::c_int {
     let mut worker: *mut Worker = voidptr as *mut Worker;
-    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long
-        as libc::c_int;
+    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long as libc::c_int;
     let mut res: libc::c_int = 0;
     msg(
         wid,
@@ -1445,8 +1380,7 @@ unsafe extern "C" fn term(mut voidptr: *mut libc::c_void) -> libc::c_int {
     return res;
 }
 unsafe extern "C" fn flush(mut worker: *mut Worker, mut keep_locked: libc::c_int) {
-    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long
-        as libc::c_int;
+    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long as libc::c_int;
     let mut lit: libc::c_int = 0;
     let mut idx: libc::c_int = 0;
     let mut val: libc::c_int = 0;
@@ -1459,10 +1393,7 @@ unsafe extern "C" fn flush(mut worker: *mut Worker, mut keep_locked: libc::c_int
         (*worker).nunits,
     );
     if pthread_mutex_lock(&mut fixedmutex) != 0 {
-        warn(
-            b"failed to lock 'fixed' mutex in flush\0" as *const u8
-                as *const libc::c_char,
-        );
+        warn(b"failed to lock 'fixed' mutex in flush\0" as *const u8 as *const libc::c_char);
     }
     flushed += 1;
     flushed;
@@ -1521,16 +1452,12 @@ unsafe extern "C" fn flush(mut worker: *mut Worker, mut keep_locked: libc::c_int
         return;
     }
     if pthread_mutex_unlock(&mut fixedmutex) != 0 {
-        warn(
-            b"failed to unlock 'fixed' mutex in flush\0" as *const u8
-                as *const libc::c_char,
-        );
+        warn(b"failed to unlock 'fixed' mutex in flush\0" as *const u8 as *const libc::c_char);
     }
 }
 unsafe extern "C" fn produceunit(mut voidptr: *mut libc::c_void, mut lit: libc::c_int) {
     let mut worker: *mut Worker = voidptr as *mut Worker;
-    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long
-        as libc::c_int;
+    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long as libc::c_int;
     let fresh4 = (*worker).nunits;
     (*worker).nunits = (*worker).nunits + 1;
     (*worker).units[fresh4 as usize] = lit;
@@ -1550,15 +1477,11 @@ unsafe extern "C" fn consumeunits(
     mut toptr: *mut *mut libc::c_int,
 ) {
     let mut worker: *mut Worker = voidptr as *mut Worker;
-    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long
-        as libc::c_int;
+    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long as libc::c_int;
     if (*worker).nunits != 0 {
         flush(worker, 1 as libc::c_int);
     } else if pthread_mutex_lock(&mut fixedmutex) != 0 {
-        warn(
-            b"failed to lock 'fixed' mutex in consume\0" as *const u8
-                as *const libc::c_char,
-        );
+        warn(b"failed to lock 'fixed' mutex in consume\0" as *const u8 as *const libc::c_char);
     }
     msg(
         wid,
@@ -1570,19 +1493,12 @@ unsafe extern "C" fn consumeunits(
     *fromptr = fixed.offset((*worker).fixed as isize);
     *toptr = fixed.offset(nfixed as isize);
     if pthread_mutex_unlock(&mut fixedmutex) != 0 {
-        warn(
-            b"failed to unlock 'fixed' in 'consumeunits'\0" as *const u8
-                as *const libc::c_char,
-        );
+        warn(b"failed to unlock 'fixed' in 'consumeunits'\0" as *const u8 as *const libc::c_char);
     }
 }
-unsafe extern "C" fn consumedunits(
-    mut voidptr: *mut libc::c_void,
-    mut consumed: libc::c_int,
-) {
+unsafe extern "C" fn consumedunits(mut voidptr: *mut libc::c_void, mut consumed: libc::c_int) {
     let mut worker: *mut Worker = voidptr as *mut Worker;
-    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long
-        as libc::c_int;
+    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long as libc::c_int;
     (*worker).stats.units.consumed += consumed;
     (*worker).stats.consumed += consumed;
     msg(
@@ -1593,11 +1509,9 @@ unsafe extern "C" fn consumedunits(
     );
 }
 unsafe extern "C" fn sizecls(mut len: libc::c_int) -> size_t {
-    return (::core::mem::size_of::<Cls>() as libc::c_ulong)
-        .wrapping_add(
-            (len as libc::c_ulong)
-                .wrapping_mul(::core::mem::size_of::<libc::c_int>() as libc::c_ulong),
-        );
+    return (::core::mem::size_of::<Cls>() as libc::c_ulong).wrapping_add(
+        (len as libc::c_ulong).wrapping_mul(::core::mem::size_of::<libc::c_int>() as libc::c_ulong),
+    );
 }
 unsafe extern "C" fn lencls(mut c: *mut libc::c_int) -> libc::c_int {
     let mut res: libc::c_int = 0 as libc::c_int;
@@ -1618,8 +1532,7 @@ unsafe extern "C" fn producecls(
     mut glue: libc::c_int,
 ) {
     let mut worker: *mut Worker = voidptr as *mut Worker;
-    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long
-        as libc::c_int;
+    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long as libc::c_int;
     let mut len: libc::c_int = 0;
     let mut q: *mut libc::c_int = 0 as *mut libc::c_int;
     let mut lit: libc::c_int = 0;
@@ -1654,10 +1567,7 @@ unsafe extern "C" fn producecls(
     q = q.offset(1);
     *fresh8 = 0 as libc::c_int;
     if pthread_mutex_lock(&mut clsmutex) != 0 {
-        warn(
-            b"failed to lock 'cls' mutex in 'producecls'\0" as *const u8
-                as *const libc::c_char,
-        );
+        warn(b"failed to lock 'cls' mutex in 'producecls'\0" as *const u8 as *const libc::c_char);
     }
     msg(
         wid,
@@ -1677,8 +1587,7 @@ unsafe extern "C" fn producecls(
             .wrapping_mul(::core::mem::size_of::<*mut Cls>() as libc::c_ulong);
         let mut new_bytes: size_t = (newsize as libc::c_ulong)
             .wrapping_mul(::core::mem::size_of::<*mut Cls>() as libc::c_ulong);
-        clauses
-            .start = resize(
+        clauses.start = resize(
             0 as *mut libc::c_void,
             clauses.start as *mut libc::c_void,
             old_bytes,
@@ -1693,10 +1602,7 @@ unsafe extern "C" fn producecls(
     clauses.added += 1;
     clauses.added;
     if pthread_mutex_unlock(&mut clsmutex) != 0 {
-        warn(
-            b"failed to unlock 'cls' mutex in 'producecls'\0" as *const u8
-                as *const libc::c_char,
-        );
+        warn(b"failed to unlock 'cls' mutex in 'producecls'\0" as *const u8 as *const libc::c_char);
     }
     (*worker).stats.cls.produced += 1;
     (*worker).stats.cls.produced;
@@ -1790,17 +1696,13 @@ unsafe extern "C" fn consumecls(
     mut glueptr: *mut libc::c_int,
 ) {
     let mut worker: *mut Worker = voidptr as *mut Worker;
-    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long
-        as libc::c_int;
+    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long as libc::c_int;
     let mut res: libc::c_int = 0;
     let mut len: libc::c_int = 0;
     let mut newsize: libc::c_int = 0;
     let mut cls: *mut Cls = 0 as *mut Cls;
     if pthread_mutex_lock(&mut clsmutex) != 0 {
-        warn(
-            b"failed to lock 'cls' mutex in 'consumecls'\0" as *const u8
-                as *const libc::c_char,
-        );
+        warn(b"failed to lock 'cls' mutex in 'consumecls'\0" as *const u8 as *const libc::c_char);
     }
     loop {
         if !((*worker).dead).is_null() {
@@ -1833,8 +1735,7 @@ unsafe extern "C" fn consumecls(
                 clauses.first += 1;
                 clauses.first;
                 if clauses.num > 10000 as libc::c_int as libc::c_long
-                    && clauses.first
-                        > clauses.num / (nconsumers + 1 as libc::c_int) as libc::c_long
+                    && clauses.first > clauses.num / (nconsumers + 1 as libc::c_int) as libc::c_long
                 {
                     gcls();
                 }
@@ -1845,18 +1746,13 @@ unsafe extern "C" fn consumecls(
             len = lencls(((*cls).lits).as_mut_ptr());
             if len + 1 as libc::c_int >= (*worker).szcls {
                 newsize = 2 as libc::c_int * (len + 1 as libc::c_int);
-                (*worker)
-                    .cls = resize(
+                (*worker).cls = resize(
                     0 as *mut libc::c_void,
                     (*worker).cls as *mut libc::c_void,
                     ((*worker).szcls as libc::c_ulong)
-                        .wrapping_mul(
-                            ::core::mem::size_of::<libc::c_int>() as libc::c_ulong,
-                        ),
+                        .wrapping_mul(::core::mem::size_of::<libc::c_int>() as libc::c_ulong),
                     (newsize as libc::c_ulong)
-                        .wrapping_mul(
-                            ::core::mem::size_of::<libc::c_int>() as libc::c_ulong,
-                        ),
+                        .wrapping_mul(::core::mem::size_of::<libc::c_int>() as libc::c_ulong),
                 ) as *mut libc::c_int;
                 (*worker).szcls = newsize;
             }
@@ -1871,8 +1767,7 @@ unsafe extern "C" fn consumecls(
             msg(
                 wid,
                 3 as libc::c_int,
-                b"consuming glue %d length %d clause %d\0" as *const u8
-                    as *const libc::c_char,
+                b"consuming glue %d length %d clause %d\0" as *const u8 as *const libc::c_char,
                 *glueptr,
                 len,
                 res,
@@ -1881,19 +1776,12 @@ unsafe extern "C" fn consumecls(
         }
     }
     if pthread_mutex_unlock(&mut clsmutex) != 0 {
-        warn(
-            b"failed to unlock 'cls' mutex in 'consumecls'\0" as *const u8
-                as *const libc::c_char,
-        );
+        warn(b"failed to unlock 'cls' mutex in 'consumecls'\0" as *const u8 as *const libc::c_char);
     }
 }
-unsafe extern "C" fn consumedcls(
-    mut voidptr: *mut libc::c_void,
-    mut consumed: libc::c_int,
-) {
+unsafe extern "C" fn consumedcls(mut voidptr: *mut libc::c_void, mut consumed: libc::c_int) {
     let mut worker: *mut Worker = voidptr as *mut Worker;
-    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long
-        as libc::c_int;
+    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long as libc::c_int;
     (*worker).stats.cls.consumed += consumed;
     (*worker).stats.consumed += consumed;
     msg(
@@ -1905,8 +1793,7 @@ unsafe extern "C" fn consumedcls(
 }
 unsafe extern "C" fn lockrepr(mut voidptr: *mut libc::c_void) -> *mut libc::c_int {
     let mut worker: *mut Worker = voidptr as *mut Worker;
-    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long
-        as libc::c_int;
+    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long as libc::c_int;
     if pthread_mutex_lock(&mut reprmutex) != 0 {
         warn(b"failed to lock 'repr' mutex\0" as *const u8 as *const libc::c_char);
     }
@@ -1925,8 +1812,7 @@ unsafe extern "C" fn unlockrepr(
     mut produced: libc::c_int,
 ) {
     let mut worker: *mut Worker = voidptr as *mut Worker;
-    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long
-        as libc::c_int;
+    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long as libc::c_int;
     msg(
         wid,
         3 as libc::c_int,
@@ -1952,10 +1838,13 @@ unsafe extern "C" fn msgunlock(mut voidptr: *mut libc::c_void) {
 }
 unsafe extern "C" fn work(mut voidptr: *mut libc::c_void) -> *mut libc::c_void {
     let mut worker: *mut Worker = voidptr as *mut Worker;
-    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long
-        as libc::c_int;
+    let mut wid: libc::c_int = worker.offset_from(workers) as libc::c_long as libc::c_int;
     let mut lgl: *mut LGL = (*worker).lgl;
-    msg(wid, 1 as libc::c_int, b"running\0" as *const u8 as *const libc::c_char);
+    msg(
+        wid,
+        1 as libc::c_int,
+        b"running\0" as *const u8 as *const libc::c_char,
+    );
     (*worker).res = lglsat(lgl);
     msg(
         wid,
@@ -1967,23 +1856,16 @@ unsafe extern "C" fn work(mut voidptr: *mut libc::c_void) -> *mut libc::c_void {
         return 0 as *mut libc::c_void;
     }
     if pthread_mutex_lock(&mut donemutex) != 0 {
-        warn(
-            b"failed to lock 'done' mutex in worker\0" as *const u8
-                as *const libc::c_char,
-        );
+        warn(b"failed to lock 'done' mutex in worker\0" as *const u8 as *const libc::c_char);
     }
     done = 1 as libc::c_int;
     if pthread_mutex_unlock(&mut donemutex) != 0 {
-        warn(
-            b"failed to unlock 'done' mutex in worker\0" as *const u8
-                as *const libc::c_char,
-        );
+        warn(b"failed to unlock 'done' mutex in worker\0" as *const u8 as *const libc::c_char);
     }
     msg(
         wid,
         2 as libc::c_int,
-        b"%d decisions, %d conflicts, %.0f props, %.1f MB\0" as *const u8
-            as *const libc::c_char,
+        b"%d decisions, %d conflicts, %.0f props, %.1f MB\0" as *const u8 as *const libc::c_char,
         lglgetdecs(lgl),
         lglgetconfs(lgl),
         lglgetprops(lgl),
@@ -1991,9 +1873,7 @@ unsafe extern "C" fn work(mut voidptr: *mut libc::c_void) -> *mut libc::c_void {
     );
     if verbose >= 2 as libc::c_int {
         if pthread_mutex_lock(&mut fixedmutex) != 0 {
-            warn(
-                b"failed to lock 'fixed' in work\0" as *const u8 as *const libc::c_char,
-            );
+            warn(b"failed to lock 'fixed' in work\0" as *const u8 as *const libc::c_char);
         }
         msg(
             wid,
@@ -2012,9 +1892,7 @@ unsafe extern "C" fn work(mut voidptr: *mut libc::c_void) -> *mut libc::c_void {
             ),
         );
         if pthread_mutex_unlock(&mut fixedmutex) != 0 {
-            warn(
-                b"failed to unlock 'fixed' in work\0" as *const u8 as *const libc::c_char,
-            );
+            warn(b"failed to unlock 'fixed' in work\0" as *const u8 as *const libc::c_char);
         }
     }
     return worker as *mut libc::c_void;
@@ -2048,8 +1926,7 @@ unsafe extern "C" fn getsystemtotalmem(mut explain: libc::c_int) -> int64_t {
             msg(
                 -(1 as libc::c_int),
                 0 as libc::c_int,
-                b"assuming compiled in memory size of %d GB\0" as *const u8
-                    as *const libc::c_char,
+                b"assuming compiled in memory size of %d GB\0" as *const u8 as *const libc::c_char,
                 12 as libc::c_int,
             );
         }
@@ -2076,16 +1953,15 @@ unsafe extern "C" fn getsystemcores(mut explain: libc::c_int) -> libc::c_int {
             msg(
                 -(1 as libc::c_int),
                 1 as libc::c_int,
-                b"'sysconf' reports %d processors online\0" as *const u8
-                    as *const libc::c_char,
+                b"'sysconf' reports %d processors online\0" as *const u8 as *const libc::c_char,
                 syscores,
             );
         } else {
             msg(
                 -(1 as libc::c_int),
                 1 as libc::c_int,
-                b"'sysconf' fails to determine number of online processors\0"
-                    as *const u8 as *const libc::c_char,
+                b"'sysconf' fails to determine number of online processors\0" as *const u8
+                    as *const libc::c_char,
             );
         }
     }
@@ -2161,18 +2037,16 @@ unsafe extern "C" fn getsystemcores(mut explain: libc::c_int) -> libc::c_int {
     } else {
         physids = 0 as libc::c_int;
     }
-    if coreids > 0 as libc::c_int && physids > 0 as libc::c_int
-        && {
-            procpuinfocores = coreids * physids;
-            procpuinfocores > 0 as libc::c_int
-        }
-    {
+    if coreids > 0 as libc::c_int && physids > 0 as libc::c_int && {
+        procpuinfocores = coreids * physids;
+        procpuinfocores > 0 as libc::c_int
+    } {
         if explain != 0 {
             msg(
                 -(1 as libc::c_int),
                 1 as libc::c_int,
-                b"%d cores = %d core times %d physical ids in '/proc/cpuinfo'\0"
-                    as *const u8 as *const libc::c_char,
+                b"%d cores = %d core times %d physical ids in '/proc/cpuinfo'\0" as *const u8
+                    as *const libc::c_char,
                 procpuinfocores,
                 coreids,
                 physids,
@@ -2198,8 +2072,7 @@ unsafe extern "C" fn getsystemcores(mut explain: libc::c_int) -> libc::c_int {
             msg(
                 -(1 as libc::c_int),
                 1 as libc::c_int,
-                b"only '/proc/cpuinfo' result valid\0" as *const u8
-                    as *const libc::c_char,
+                b"only '/proc/cpuinfo' result valid\0" as *const u8 as *const libc::c_char,
             );
         }
         useprocpuinfo = 1 as libc::c_int;
@@ -2221,8 +2094,7 @@ unsafe extern "C" fn getsystemcores(mut explain: libc::c_int) -> libc::c_int {
             msg(
                 -(1 as libc::c_int),
                 1 as libc::c_int,
-                b"found Intel as vendor in '/proc/cpuinfo'\0" as *const u8
-                    as *const libc::c_char,
+                b"found Intel as vendor in '/proc/cpuinfo'\0" as *const u8 as *const libc::c_char,
             );
         }
         amd = (system(
@@ -2233,8 +2105,7 @@ unsafe extern "C" fn getsystemcores(mut explain: libc::c_int) -> libc::c_int {
             msg(
                 -(1 as libc::c_int),
                 1 as libc::c_int,
-                b"found AMD as vendor in '/proc/cpuinfo'\0" as *const u8
-                    as *const libc::c_char,
+                b"found AMD as vendor in '/proc/cpuinfo'\0" as *const u8 as *const libc::c_char,
             );
         }
         if amd != 0 {
@@ -2258,8 +2129,7 @@ unsafe extern "C" fn getsystemcores(mut explain: libc::c_int) -> libc::c_int {
                 msg(
                     -(1 as libc::c_int),
                     1 as libc::c_int,
-                    b"trusting '/proc/cpuinfo' on Intel\0" as *const u8
-                        as *const libc::c_char,
+                    b"trusting '/proc/cpuinfo' on Intel\0" as *const u8 as *const libc::c_char,
                 );
             }
             useprocpuinfo = 1 as libc::c_int;
@@ -2280,8 +2150,8 @@ unsafe extern "C" fn getsystemcores(mut explain: libc::c_int) -> libc::c_int {
             msg(
                 -(1 as libc::c_int),
                 0 as libc::c_int,
-                b"assuming cores = core * physical ids in '/proc/cpuinfo' = %d\0"
-                    as *const u8 as *const libc::c_char,
+                b"assuming cores = core * physical ids in '/proc/cpuinfo' = %d\0" as *const u8
+                    as *const libc::c_char,
                 procpuinfocores,
             );
         }
@@ -2291,8 +2161,8 @@ unsafe extern "C" fn getsystemcores(mut explain: libc::c_int) -> libc::c_int {
             msg(
                 -(1 as libc::c_int),
                 0 as libc::c_int,
-                b"assuming cores = number of processors reported by 'sysconf' = %d\0"
-                    as *const u8 as *const libc::c_char,
+                b"assuming cores = number of processors reported by 'sysconf' = %d\0" as *const u8
+                    as *const libc::c_char,
                 syscores,
             );
         }
@@ -2336,9 +2206,7 @@ unsafe extern "C" fn cmpconsumed(
     return u.offset_from(v) as libc::c_long as libc::c_int;
 }
 unsafe extern "C" fn parsenbcoreenv() -> libc::c_int {
-    let mut str: *const libc::c_char = getenv(
-        b"NBCORE\0" as *const u8 as *const libc::c_char,
-    );
+    let mut str: *const libc::c_char = getenv(b"NBCORE\0" as *const u8 as *const libc::c_char);
     if str.is_null() {
         return 0 as libc::c_int;
     }
@@ -2409,20 +2277,26 @@ unsafe extern "C" fn setopts(mut lgl: *mut LGL, mut i: libc::c_int) {
     lglsetime(
         lgl,
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn() -> libc::c_double>,
-            Option::<unsafe extern "C" fn() -> libc::c_double>,
-        >(
-            Some(
-                ::core::mem::transmute::<
-                    unsafe extern "C" fn() -> libc::c_double,
-                    unsafe extern "C" fn() -> libc::c_double,
-                >(getime),
-            ),
-        ),
+            Option<unsafe extern "C" fn() -> libc::c_double>,
+            Option<unsafe extern "C" fn() -> libc::c_double>,
+        >(Some(::core::mem::transmute::<
+            unsafe extern "C" fn() -> libc::c_double,
+            unsafe extern "C" fn() -> libc::c_double,
+        >(getime))),
     );
-    setopt(i, lgl, b"verbose\0" as *const u8 as *const libc::c_char, verbose);
+    setopt(
+        i,
+        lgl,
+        b"verbose\0" as *const u8 as *const libc::c_char,
+        verbose,
+    );
     setopt(i, lgl, b"seed\0" as *const u8 as *const libc::c_char, i);
-    setopt(i, lgl, b"classify\0" as *const u8 as *const libc::c_char, 0 as libc::c_int);
+    setopt(
+        i,
+        lgl,
+        b"classify\0" as *const u8 as *const libc::c_char,
+        0 as libc::c_int,
+    );
     if i != 0
         && (locs >= 2 as libc::c_int
             || locs != 0 && (i > 7 as libc::c_int || i & 1 as libc::c_int != 0))
@@ -2431,8 +2305,7 @@ unsafe extern "C" fn setopts(mut lgl: *mut LGL, mut i: libc::c_int) {
             i,
             lgl,
             b"plain\0" as *const u8 as *const libc::c_char,
-            (locs == 2 as libc::c_int || i & 3 as libc::c_int == 1 as libc::c_int)
-                as libc::c_int,
+            (locs == 2 as libc::c_int || i & 3 as libc::c_int == 1 as libc::c_int) as libc::c_int,
         );
         setopt(
             i,
@@ -2592,9 +2465,7 @@ unsafe extern "C" fn setopts(mut lgl: *mut LGL, mut i: libc::c_int) {
     if nounits == 0 {
         lglsetproduceunit(
             lgl,
-            Some(
-                produceunit as unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> (),
-            ),
+            Some(produceunit as unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> ()),
             w as *mut libc::c_void,
         );
         lglsetconsumeunits(
@@ -2611,10 +2482,7 @@ unsafe extern "C" fn setopts(mut lgl: *mut LGL, mut i: libc::c_int) {
         );
         lglsetconsumedunits(
             lgl,
-            Some(
-                consumedunits
-                    as unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> (),
-            ),
+            Some(consumedunits as unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> ()),
             w as *mut libc::c_void,
         );
     }
@@ -2623,11 +2491,7 @@ unsafe extern "C" fn setopts(mut lgl: *mut LGL, mut i: libc::c_int) {
             lgl,
             Some(
                 producecls
-                    as unsafe extern "C" fn(
-                        *mut libc::c_void,
-                        *mut libc::c_int,
-                        libc::c_int,
-                    ) -> (),
+                    as unsafe extern "C" fn(*mut libc::c_void, *mut libc::c_int, libc::c_int) -> (),
             ),
             w as *mut libc::c_void,
         );
@@ -2645,42 +2509,40 @@ unsafe extern "C" fn setopts(mut lgl: *mut LGL, mut i: libc::c_int) {
         );
         lglsetconsumedcls(
             lgl,
-            Some(
-                consumedcls as unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> (),
-            ),
+            Some(consumedcls as unsafe extern "C" fn(*mut libc::c_void, libc::c_int) -> ()),
             w as *mut libc::c_void,
         );
     }
     if noeqs == 0 {
         lglsetlockeq(
             lgl,
-            Some(
-                lockrepr as unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_int,
-            ),
+            Some(lockrepr as unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_int),
             w as *mut libc::c_void,
         );
         lglsetunlockeq(
             lgl,
             Some(
                 unlockrepr
-                    as unsafe extern "C" fn(
-                        *mut libc::c_void,
-                        libc::c_int,
-                        libc::c_int,
-                    ) -> (),
+                    as unsafe extern "C" fn(*mut libc::c_void, libc::c_int, libc::c_int) -> (),
             ),
             w as *mut libc::c_void,
         );
     }
-    msg(i, 2 as libc::c_int, b"initialized\0" as *const u8 as *const libc::c_char);
+    msg(
+        i,
+        2 as libc::c_int,
+        b"initialized\0" as *const u8 as *const libc::c_char,
+    );
 }
 unsafe extern "C" fn bytes2mbll(mut bytes: int64_t) -> libc::c_longlong {
     return bytes as libc::c_longlong + ((1 as libc::c_longlong) << 20 as libc::c_int)
-        - 1 as libc::c_int as libc::c_longlong >> 20 as libc::c_int;
+        - 1 as libc::c_int as libc::c_longlong
+        >> 20 as libc::c_int;
 }
 unsafe extern "C" fn bytes2gbll(mut bytes: int64_t) -> libc::c_longlong {
     return bytes as libc::c_longlong + ((1 as libc::c_longlong) << 30 as libc::c_int)
-        - 1 as libc::c_int as libc::c_longlong >> 30 as libc::c_int;
+        - 1 as libc::c_int as libc::c_longlong
+        >> 30 as libc::c_int;
 }
 unsafe extern "C" fn cloneworker(mut i: libc::c_int) -> libc::c_int {
     msg(
@@ -2694,23 +2556,21 @@ unsafe extern "C" fn cloneworker(mut i: libc::c_int) -> libc::c_int {
         0 as libc::c_int,
         b"prediction: %lld MB to be cloned + allocated %lld MB = %lld MB\0" as *const u8
             as *const libc::c_char,
-        bytes2mbll(
-            lglbytes((*workers.offset(0 as libc::c_int as isize)).lgl) as int64_t,
-        ),
+        bytes2mbll(lglbytes((*workers.offset(0 as libc::c_int as isize)).lgl) as int64_t),
         bytes2mbll(mem.current as int64_t),
         bytes2mbll(
-            (lglbytes((*workers.offset(0 as libc::c_int as isize)).lgl))
-                .wrapping_add(mem.current) as int64_t,
+            (lglbytes((*workers.offset(0 as libc::c_int as isize)).lgl)).wrapping_add(mem.current)
+                as int64_t,
         ),
     );
-    if (lglbytes((*workers.offset(0 as libc::c_int as isize)).lgl))
-        .wrapping_add(mem.current) >= softmemlimit as size_t
+    if (lglbytes((*workers.offset(0 as libc::c_int as isize)).lgl)).wrapping_add(mem.current)
+        >= softmemlimit as size_t
     {
         msg(
             -(1 as libc::c_int),
             0 as libc::c_int,
-            b"will not clone worker %d since soft memory limit %lld MB would be hit\0"
-                as *const u8 as *const libc::c_char,
+            b"will not clone worker %d since soft memory limit %lld MB would be hit\0" as *const u8
+                as *const libc::c_char,
             i,
             bytes2mbll(softmemlimit),
         );
@@ -2722,8 +2582,8 @@ unsafe extern "C" fn cloneworker(mut i: libc::c_int) -> libc::c_int {
     msg(
         -(1 as libc::c_int),
         0 as libc::c_int,
-        b"%lld MB total allocated memory after cloning worker %d from worker 0\0"
-            as *const u8 as *const libc::c_char,
+        b"%lld MB total allocated memory after cloning worker %d from worker 0\0" as *const u8
+            as *const libc::c_char,
         bytes2mbll(mem.current as int64_t),
         i,
     );
@@ -2733,10 +2593,7 @@ unsafe extern "C" fn version() {
     printf(b"%s\n\0" as *const u8 as *const libc::c_char, lglversion());
     exit(0 as libc::c_int);
 }
-unsafe fn main_0(
-    mut argc: libc::c_int,
-    mut argv: *mut *mut libc::c_char,
-) -> libc::c_int {
+unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> libc::c_int {
     let mut i: libc::c_int = 0;
     let mut res: libc::c_int = 0;
     let mut clin: libc::c_int = 0;
@@ -2766,8 +2623,10 @@ unsafe fn main_0(
     i = 1 as libc::c_int;
     while i < argc {
         let mut totalmem: size_t = getsystemtotalmem(0 as libc::c_int) as size_t;
-        if strcmp(*argv.offset(i as isize), b"-h\0" as *const u8 as *const libc::c_char)
-            == 0
+        if strcmp(
+            *argv.offset(i as isize),
+            b"-h\0" as *const u8 as *const libc::c_char,
+        ) == 0
         {
             printf(
                 b"usage: plingeling [ <option> ... ] [ <dimacs>[.gz|.bz2|.7z|.zip|.lzma] [<threads>] ]\n\nwhere <option> is one of the following:\n\n  -h         print this command line option summary\n  --version  print version and exit\n  -v         increase verbose level\n  -n         do not print solution / witness\n\n  -t <num>   number of worker threads (default %d on this machine)\n  -m <num>   maximal memory in MB (default %lld MB on this machine)\n  -g <num>   maximal memory in GB (default %lld GB on this machine)\n  -l <num>   limit on number of workers before collecting shared clause\n\n  -p         plain portfolio, no sharing, e.g. implies the following:\n\n                --do-not-share-units\n                --do-not-share-clauses\n                --do-not-share-equivalences\n\0"
@@ -2829,25 +2688,20 @@ unsafe fn main_0(
                 die(b"multiple '-t' options\0" as *const u8 as *const libc::c_char);
             }
             if nworkers2 != 0 {
-                die(
-                    b"number of threads and '-t' option given\0" as *const u8
-                        as *const libc::c_char,
-                );
+                die(b"number of threads and '-t' option given\0" as *const u8
+                    as *const libc::c_char);
             }
             if i + 1 as libc::c_int == argc {
                 die(b"argument to '-t' missing\0" as *const u8 as *const libc::c_char);
             }
             i += 1;
             arg = *argv.offset(i as isize);
-            if isposnum(arg) == 0
-                || {
-                    nworkers = atoi(arg);
-                    nworkers <= 0 as libc::c_int
-                }
-            {
+            if isposnum(arg) == 0 || {
+                nworkers = atoi(arg);
+                nworkers <= 0 as libc::c_int
+            } {
                 die(
-                    b"invalid argument '%s' to '-t'\0" as *const u8
-                        as *const libc::c_char,
+                    b"invalid argument '%s' to '-t'\0" as *const u8 as *const libc::c_char,
                     arg,
                 );
             }
@@ -2857,25 +2711,19 @@ unsafe fn main_0(
         ) == 0
         {
             if memlimit != 0 {
-                die(
-                    b"multiple '-m' or '-g' options\0" as *const u8
-                        as *const libc::c_char,
-                );
+                die(b"multiple '-m' or '-g' options\0" as *const u8 as *const libc::c_char);
             }
             if i + 1 as libc::c_int == argc {
                 die(b"argument to '-m' missing\0" as *const u8 as *const libc::c_char);
             }
             i += 1;
             arg = *argv.offset(i as isize);
-            if isposnum(arg) == 0
-                || {
-                    memlimit = (atoll(arg) << 20 as libc::c_int) as int64_t;
-                    memlimit <= 0 as libc::c_int as int64_t
-                }
-            {
+            if isposnum(arg) == 0 || {
+                memlimit = (atoll(arg) << 20 as libc::c_int) as int64_t;
+                memlimit <= 0 as libc::c_int as int64_t
+            } {
                 die(
-                    b"invalid argument '%s' to '-m'\0" as *const u8
-                        as *const libc::c_char,
+                    b"invalid argument '%s' to '-m'\0" as *const u8 as *const libc::c_char,
                     arg,
                 );
             }
@@ -2885,25 +2733,19 @@ unsafe fn main_0(
         ) == 0
         {
             if memlimit != 0 {
-                die(
-                    b"multiple '-g' or '-m' options\0" as *const u8
-                        as *const libc::c_char,
-                );
+                die(b"multiple '-g' or '-m' options\0" as *const u8 as *const libc::c_char);
             }
             if i + 1 as libc::c_int == argc {
                 die(b"argument to '-g' missing\0" as *const u8 as *const libc::c_char);
             }
             i += 1;
             arg = *argv.offset(i as isize);
-            if isposnum(arg) == 0
-                || {
-                    memlimit = (atoll(arg) << 30 as libc::c_int) as int64_t;
-                    memlimit <= 0 as libc::c_int as int64_t
-                }
-            {
+            if isposnum(arg) == 0 || {
+                memlimit = (atoll(arg) << 30 as libc::c_int) as int64_t;
+                memlimit <= 0 as libc::c_int as int64_t
+            } {
                 die(
-                    b"invalid argument '%s' to '-g'\0" as *const u8
-                        as *const libc::c_char,
+                    b"invalid argument '%s' to '-g'\0" as *const u8 as *const libc::c_char,
                     arg,
                 );
             }
@@ -2921,15 +2763,14 @@ unsafe fn main_0(
             i += 1;
             if isposnum(*argv.offset(i as isize)) == 0 {
                 die(
-                    b"invalid argument '%s' to '-l'\0" as *const u8
-                        as *const libc::c_char,
+                    b"invalid argument '%s' to '-l'\0" as *const u8 as *const libc::c_char,
                     *argv.offset(i as isize),
                 );
             }
             gclim = atoi(*argv.offset(i as isize));
             gclimset = 1 as libc::c_int;
-        } else if *(*argv.offset(i as isize)).offset(0 as libc::c_int as isize)
-            as libc::c_int == '-' as i32
+        } else if *(*argv.offset(i as isize)).offset(0 as libc::c_int as isize) as libc::c_int
+            == '-' as i32
         {
             die(
                 b"invalid option '%s' (try '-h')\0" as *const u8 as *const libc::c_char,
@@ -2956,8 +2797,7 @@ unsafe fn main_0(
             nworkers2 = atoi(*argv.offset(i as isize));
             if nworkers2 <= 0 as libc::c_int {
                 die(
-                    b"invalid number of threads '%s'\0" as *const u8
-                        as *const libc::c_char,
+                    b"invalid number of threads '%s'\0" as *const u8 as *const libc::c_char,
                     *argv.offset(i as isize),
                 );
             }
@@ -3012,8 +2852,7 @@ unsafe fn main_0(
         msg(
             -(1 as libc::c_int),
             1 as libc::c_int,
-            b"no explicit specification of number of workers\0" as *const u8
-                as *const libc::c_char,
+            b"no explicit specification of number of workers\0" as *const u8 as *const libc::c_char,
         );
         nworkers = getsystemcores(1 as libc::c_int);
     }
@@ -3027,8 +2866,8 @@ unsafe fn main_0(
         msg(
             -(1 as libc::c_int),
             1 as libc::c_int,
-            b"memory limit %lld MB ('-g %lld') overwrites system default %lld MB\0"
-                as *const u8 as *const libc::c_char,
+            b"memory limit %lld MB ('-g %lld') overwrites system default %lld MB\0" as *const u8
+                as *const libc::c_char,
             bytes2mbll(memlimit),
             bytes2gbll(memlimit),
             bytes2mbll(getsystemtotalmem(0 as libc::c_int)),
@@ -3043,8 +2882,7 @@ unsafe fn main_0(
             bytes2mbll(memlimit),
         );
     }
-    softmemlimit = (memlimit + 2 as libc::c_int as int64_t)
-        / 3 as libc::c_int as int64_t;
+    softmemlimit = (memlimit + 2 as libc::c_int as int64_t) / 3 as libc::c_int as int64_t;
     msg(
         -(1 as libc::c_int),
         0 as libc::c_int,
@@ -3055,8 +2893,7 @@ unsafe fn main_0(
         msg(
             -(1 as libc::c_int),
             0 as libc::c_int,
-            b"garbage collection limit %d ('-l %d')\0" as *const u8
-                as *const libc::c_char,
+            b"garbage collection limit %d ('-l %d')\0" as *const u8 as *const libc::c_char,
             gclim,
             gclim,
         );
@@ -3083,8 +2920,7 @@ unsafe fn main_0(
             msg(
                 -(1 as libc::c_int),
                 0 as libc::c_int,
-                b"not sharing units ('--do-not-share-units')\0" as *const u8
-                    as *const libc::c_char,
+                b"not sharing units ('--do-not-share-units')\0" as *const u8 as *const libc::c_char,
             );
         } else {
             msg(
@@ -3111,8 +2947,8 @@ unsafe fn main_0(
             msg(
                 -(1 as libc::c_int),
                 0 as libc::c_int,
-                b"not sharing equivalences ('--do-not-share-equivalences')\0"
-                    as *const u8 as *const libc::c_char,
+                b"not sharing equivalences ('--do-not-share-equivalences')\0" as *const u8
+                    as *const libc::c_char,
             );
         } else {
             msg(
@@ -3122,8 +2958,8 @@ unsafe fn main_0(
             );
         }
     }
-    let mut BYTES: size_t = (nworkers as libc::c_ulong)
-        .wrapping_mul(::core::mem::size_of::<Worker>() as libc::c_ulong);
+    let mut BYTES: size_t =
+        (nworkers as libc::c_ulong).wrapping_mul(::core::mem::size_of::<Worker>() as libc::c_ulong);
     workers = malloc(BYTES) as *mut Worker;
     if workers.is_null() {
         die(b"out of memory\0" as *const u8 as *const libc::c_char);
@@ -3134,9 +2970,7 @@ unsafe fn main_0(
     let ref mut fresh18 = (*workers.offset(0 as libc::c_int as isize)).lgl;
     *fresh18 = lglminit(
         0 as *mut libc::c_void,
-        Some(
-            alloc as unsafe extern "C" fn(*mut libc::c_void, size_t) -> *mut libc::c_void,
-        ),
+        Some(alloc as unsafe extern "C" fn(*mut libc::c_void, size_t) -> *mut libc::c_void),
         Some(
             resize
                 as unsafe extern "C" fn(
@@ -3146,14 +2980,7 @@ unsafe fn main_0(
                     size_t,
                 ) -> *mut libc::c_void,
         ),
-        Some(
-            dealloc
-                as unsafe extern "C" fn(
-                    *mut libc::c_void,
-                    *mut libc::c_void,
-                    size_t,
-                ) -> (),
-        ),
+        Some(dealloc as unsafe extern "C" fn(*mut libc::c_void, *mut libc::c_void, size_t) -> ()),
     );
     lglsetopt(
         (*workers.offset(0 as libc::c_int as isize)).lgl,
@@ -3193,31 +3020,42 @@ unsafe fn main_0(
     if !name.is_null() {
         if strlen(name) >= 3 as libc::c_int as libc::c_ulong
             && strcmp(
-                name.offset(strlen(name) as isize).offset(-(3 as libc::c_int as isize)),
+                name.offset(strlen(name) as isize)
+                    .offset(-(3 as libc::c_int as isize)),
                 b".gz\0" as *const u8 as *const libc::c_char,
             ) == 0
         {
             bytes = (strlen(name)).wrapping_add(30 as libc::c_int as libc::c_ulong);
             cmd = alloc(0 as *mut libc::c_void, bytes) as *mut libc::c_char;
-            sprintf(cmd, b"gunzip -c %s\0" as *const u8 as *const libc::c_char, name);
+            sprintf(
+                cmd,
+                b"gunzip -c %s\0" as *const u8 as *const libc::c_char,
+                name,
+            );
             file = popen(cmd, b"r\0" as *const u8 as *const libc::c_char);
             dealloc(0 as *mut libc::c_void, cmd as *mut libc::c_void, bytes);
             clin = 4 as libc::c_int;
         } else if strlen(name) >= 4 as libc::c_int as libc::c_ulong
             && strcmp(
-                name.offset(strlen(name) as isize).offset(-(4 as libc::c_int as isize)),
+                name.offset(strlen(name) as isize)
+                    .offset(-(4 as libc::c_int as isize)),
                 b".zip\0" as *const u8 as *const libc::c_char,
             ) == 0
         {
             bytes = (strlen(name)).wrapping_add(30 as libc::c_int as libc::c_ulong);
             cmd = alloc(0 as *mut libc::c_void, bytes) as *mut libc::c_char;
-            sprintf(cmd, b"unzip -p %s\0" as *const u8 as *const libc::c_char, name);
+            sprintf(
+                cmd,
+                b"unzip -p %s\0" as *const u8 as *const libc::c_char,
+                name,
+            );
             file = popen(cmd, b"r\0" as *const u8 as *const libc::c_char);
             dealloc(0 as *mut libc::c_void, cmd as *mut libc::c_void, bytes);
             clin = 4 as libc::c_int;
         } else if strlen(name) >= 5 as libc::c_int as libc::c_ulong
             && strcmp(
-                name.offset(strlen(name) as isize).offset(-(5 as libc::c_int as isize)),
+                name.offset(strlen(name) as isize)
+                    .offset(-(5 as libc::c_int as isize)),
                 b".lzma\0" as *const u8 as *const libc::c_char,
             ) == 0
         {
@@ -3229,7 +3067,8 @@ unsafe fn main_0(
             clin = 4 as libc::c_int;
         } else if strlen(name) >= 4 as libc::c_int as libc::c_ulong
             && strcmp(
-                name.offset(strlen(name) as isize).offset(-(4 as libc::c_int as isize)),
+                name.offset(strlen(name) as isize)
+                    .offset(-(4 as libc::c_int as isize)),
                 b".bz2\0" as *const u8 as *const libc::c_char,
             ) == 0
         {
@@ -3241,7 +3080,8 @@ unsafe fn main_0(
             clin = 4 as libc::c_int;
         } else if strlen(name) >= 3 as libc::c_int as libc::c_ulong
             && strcmp(
-                name.offset(strlen(name) as isize).offset(-(3 as libc::c_int as isize)),
+                name.offset(strlen(name) as isize)
+                    .offset(-(3 as libc::c_int as isize)),
                 b".7z\0" as *const u8 as *const libc::c_char,
             ) == 0
         {
@@ -3260,7 +3100,10 @@ unsafe fn main_0(
             clin = 1 as libc::c_int;
         }
         if file.is_null() {
-            die(b"can not read %s\0" as *const u8 as *const libc::c_char, name);
+            die(
+                b"can not read %s\0" as *const u8 as *const libc::c_char,
+                name,
+            );
         }
     } else {
         file = stdin;
@@ -3274,7 +3117,10 @@ unsafe fn main_0(
     );
     errstr = parse();
     if !errstr.is_null() {
-        die(b"parse error: %s\0" as *const u8 as *const libc::c_char, errstr);
+        die(
+            b"parse error: %s\0" as *const u8 as *const libc::c_char,
+            errstr,
+        );
     }
     if clin == 1 as libc::c_int {
         fclose(file);
@@ -3283,7 +3129,10 @@ unsafe fn main_0(
         pclose(file);
     }
     locs = 0 as libc::c_int;
-    setopts((*workers.offset(0 as libc::c_int as isize)).lgl, 0 as libc::c_int);
+    setopts(
+        (*workers.offset(0 as libc::c_int as isize)).lgl,
+        0 as libc::c_int,
+    );
     if locs >= 2 as libc::c_int {
         nconsumers = 1 as libc::c_int;
     } else if locs == 1 as libc::c_int {
@@ -3311,8 +3160,7 @@ unsafe fn main_0(
     msg(
         -(1 as libc::c_int),
         1 as libc::c_int,
-        b"will leave behind %d consumers out of %d\0" as *const u8
-            as *const libc::c_char,
+        b"will leave behind %d consumers out of %d\0" as *const u8 as *const libc::c_char,
         leavebehind,
         nconsumers,
     );
@@ -3344,8 +3192,7 @@ unsafe fn main_0(
         msg(
             -(1 as libc::c_int),
             0 as libc::c_int,
-            b"simplifying original formula with worker 0\0" as *const u8
-                as *const libc::c_char,
+            b"simplifying original formula with worker 0\0" as *const u8 as *const libc::c_char,
         );
         lglsetopt(
             (*workers.offset(0 as libc::c_int as isize)).lgl,
@@ -3364,16 +3211,12 @@ unsafe fn main_0(
         msg(
             -(1 as libc::c_int),
             1 as libc::c_int,
-            b"simplification of first worker 0 produced %d\0" as *const u8
-                as *const libc::c_char,
+            b"simplification of first worker 0 produced %d\0" as *const u8 as *const libc::c_char,
             res,
         );
         if !earlyworker.is_null() {
             if pthread_join((*earlyworker).thread, 0 as *mut *mut libc::c_void) != 0 {
-                die(
-                    b"failed to join early worker thread 1\0" as *const u8
-                        as *const libc::c_char,
-                );
+                die(b"failed to join early worker thread 1\0" as *const u8 as *const libc::c_char);
             }
             msg(
                 -(1 as libc::c_int),
@@ -3423,12 +3266,7 @@ unsafe fn main_0(
                     if pthread_create(
                         &mut (*w).thread,
                         0 as *const pthread_attr_t,
-                        Some(
-                            work
-                                as unsafe extern "C" fn(
-                                    *mut libc::c_void,
-                                ) -> *mut libc::c_void,
-                        ),
+                        Some(work as unsafe extern "C" fn(*mut libc::c_void) -> *mut libc::c_void),
                         w as *mut libc::c_void,
                     ) != 0
                     {
@@ -3461,8 +3299,7 @@ unsafe fn main_0(
             if !((*w).lgl).is_null() {
                 if pthread_join((*w).thread, 0 as *mut *mut libc::c_void) != 0 {
                     die(
-                        b"failed to join worker thread %d\0" as *const u8
-                            as *const libc::c_char,
+                        b"failed to join worker thread %d\0" as *const u8 as *const libc::c_char,
                         i,
                     );
                 }
@@ -3500,14 +3337,10 @@ unsafe fn main_0(
                     die(b"result discrepancy\0" as *const u8 as *const libc::c_char);
                 }
             }
-            if maxconsumer.is_null()
-                || (*w).stats.consumed > (*maxconsumer).stats.consumed
-            {
+            if maxconsumer.is_null() || (*w).stats.consumed > (*maxconsumer).stats.consumed {
                 maxconsumer = w;
             }
-            if maxproducer.is_null()
-                || (*w).stats.produced > (*maxproducer).stats.produced
-            {
+            if maxproducer.is_null() || (*w).stats.produced > (*maxproducer).stats.produced {
                 maxproducer = w;
             }
         }
@@ -3537,10 +3370,7 @@ unsafe fn main_0(
         ::core::mem::size_of::<*mut Worker>() as libc::c_ulong,
         Some(
             cmproduced
-                as unsafe extern "C" fn(
-                    *const libc::c_void,
-                    *const libc::c_void,
-                ) -> libc::c_int,
+                as unsafe extern "C" fn(*const libc::c_void, *const libc::c_void) -> libc::c_int,
         ),
     );
     i = 0 as libc::c_int;
@@ -3573,7 +3403,10 @@ unsafe fn main_0(
                     clauses.added as libc::c_double,
                 ),
                 (*w).stats.eqs.produced,
-                percent((*w).stats.eqs.produced as libc::c_double, eqs as libc::c_double),
+                percent(
+                    (*w).stats.eqs.produced as libc::c_double,
+                    eqs as libc::c_double,
+                ),
             );
         }
         i += 1;
@@ -3590,8 +3423,7 @@ unsafe fn main_0(
     printf(
         b"c    prod %7lld 100%% = %7d units 100%% + %7lld cls 100%% + %7d eqs 100%%\n\0"
             as *const u8 as *const libc::c_char,
-        units as libc::c_longlong + eqs as libc::c_longlong
-            + clauses.added as libc::c_longlong,
+        units as libc::c_longlong + eqs as libc::c_longlong + clauses.added as libc::c_longlong,
         units,
         clauses.added as libc::c_longlong,
         eqs,
@@ -3603,10 +3435,7 @@ unsafe fn main_0(
         ::core::mem::size_of::<*mut Worker>() as libc::c_ulong,
         Some(
             cmpconsumed
-                as unsafe extern "C" fn(
-                    *const libc::c_void,
-                    *const libc::c_void,
-                ) -> libc::c_int,
+                as unsafe extern "C" fn(*const libc::c_void, *const libc::c_void) -> libc::c_int,
         ),
     );
     sumconsumedeqs = 0 as libc::c_int;
@@ -3647,7 +3476,10 @@ unsafe fn main_0(
                     clauses.added as libc::c_double,
                 ),
                 (*w).stats.eqs.consumed,
-                percent((*w).stats.eqs.consumed as libc::c_double, eqs as libc::c_double),
+                percent(
+                    (*w).stats.eqs.consumed as libc::c_double,
+                    eqs as libc::c_double,
+                ),
             );
         }
         i += 1;
@@ -3672,7 +3504,10 @@ unsafe fn main_0(
         sumconsumedunits,
         percent(sumconsumedunits as libc::c_double, units as libc::c_double),
         sumconsumedcls,
-        percent(sumconsumedcls as libc::c_double, clauses.added as libc::c_double),
+        percent(
+            sumconsumedcls as libc::c_double,
+            clauses.added as libc::c_double,
+        ),
         sumconsumedeqs,
         percent(sumconsumedeqs as libc::c_double, eqs as libc::c_double),
     );
@@ -3738,8 +3573,8 @@ unsafe fn main_0(
         while i < nworkers {
             if !((*workers.offset(i as isize)).lgl).is_null() {
                 printf(
-                    b"c\nc ------------[worker %d statistics]------------ \nc\n\0"
-                        as *const u8 as *const libc::c_char,
+                    b"c\nc ------------[worker %d statistics]------------ \nc\n\0" as *const u8
+                        as *const libc::c_char,
                     i,
                 );
                 lglstats((*workers.offset(i as isize)).lgl);
@@ -3787,8 +3622,8 @@ unsafe fn main_0(
         i += 1;
         i;
     }
-    let mut BYTES_3: size_t = (nworkers as libc::c_ulong)
-        .wrapping_mul(::core::mem::size_of::<Worker>() as libc::c_ulong);
+    let mut BYTES_3: size_t =
+        (nworkers as libc::c_ulong).wrapping_mul(::core::mem::size_of::<Worker>() as libc::c_ulong);
     decmem(BYTES_3);
     free(workers as *mut libc::c_void);
     let mut BYTES_4: size_t = ((nvars + 1 as libc::c_int) as libc::c_ulong)
@@ -3809,7 +3644,7 @@ unsafe fn main_0(
     return res;
 }
 pub fn main() {
-    let mut args: Vec::<*mut libc::c_char> = Vec::new();
+    let mut args: Vec<*mut libc::c_char> = Vec::new();
     for arg in ::std::env::args() {
         args.push(
             (::std::ffi::CString::new(arg))
@@ -3819,11 +3654,9 @@ pub fn main() {
     }
     args.push(::core::ptr::null_mut());
     unsafe {
-        ::std::process::exit(
-            main_0(
-                (args.len() - 1) as libc::c_int,
-                args.as_mut_ptr() as *mut *mut libc::c_char,
-            ) as i32,
-        )
+        ::std::process::exit(main_0(
+            (args.len() - 1) as libc::c_int,
+            args.as_mut_ptr() as *mut *mut libc::c_char,
+        ) as i32)
     }
 }
