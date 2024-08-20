@@ -23,6 +23,21 @@ name = "treengeling"
 test = false
 bench = false
 
+[[bin]]
+name = "lglddtrace"
+test = false
+bench = false
+
+[[bin]]
+name = "lglmbt"
+test = false
+bench = false
+
+[[bin]]
+name = "lgluntrace"
+test = false
+bench = false
+
 [lib]
 crate-type = ["staticlib"]
 

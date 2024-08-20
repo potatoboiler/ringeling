@@ -1,5 +1,4 @@
 #![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
-#![feature(extern_types)]
 extern "C" {
     pub type _IO_wide_data;
     pub type _IO_codecvt;
@@ -403,7 +402,7 @@ unsafe extern "C" fn ldrcmd(
     return res;
 }
 #[no_mangle]
-pub unsafe extern "C" fn ldrsetpath(mut ldr: *mut LDR, mut path: *const libc::c_char) {
+pub unsafe extern "C" fn ldrsetpath(mut ldr: *mut LDR, mut path: *const libc::c_char) -> i32 {
     (*ldr).path = ldrstrdup(ldr, path);
     if ldrfilexists(path) == 0 {
         return ldrperr(
@@ -438,6 +437,8 @@ pub unsafe extern "C" fn ldrsetpath(mut ldr: *mut LDR, mut path: *const libc::c_
     }
     if ((*ldr).file).is_null() {
         return ldrperr(ldr, b"can not open file\0" as *const u8 as *const libc::c_char);
+    } else {
+        return 0
     }
 }
 #[no_mangle]

@@ -355,11 +355,11 @@ unsafe extern "C" fn lgltravcounter(
 }
 unsafe extern "C" fn lglpushtarget(mut target: libc::c_int) {
     if ntargets == sztargets {
-        sztargets = (if sztargets != 0 {
+        sztargets = if sztargets != 0 {
             2 as libc::c_int * sztargets
         } else {
             1 as libc::c_int
-        });
+        };
         targets = realloc(
             targets as *mut libc::c_void,
             (::core::mem::size_of::<libc::c_int>() as libc::c_ulong)
