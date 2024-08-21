@@ -237,17 +237,17 @@ pub struct Env {
 }
 #[inline]
 unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
-    return strtol(
+    strtol(
         __nptr,
-        0 as *mut libc::c_void as *mut *mut libc::c_char,
+        std::ptr::null_mut::<libc::c_void>() as *mut *mut libc::c_char,
         10 as libc::c_int,
-    ) as libc::c_int;
+    ) as libc::c_int
 }
 unsafe extern "C" fn initrng(mut seed: libc::c_uint) -> RNG {
     let mut res: RNG = RNG { z: 0, w: 0 };
     res.z = seed.wrapping_mul(1000632769 as libc::c_uint);
     res.w = seed.wrapping_mul(2019164533 as libc::c_uint);
-    return res;
+    res
 }
 unsafe extern "C" fn nextrand(mut rng: *mut RNG) -> libc::c_uint {
     (*rng).z = (36969 as libc::c_int as libc::c_uint)
@@ -256,7 +256,7 @@ unsafe extern "C" fn nextrand(mut rng: *mut RNG) -> libc::c_uint {
     (*rng).w = (18000 as libc::c_int as libc::c_uint)
         .wrapping_mul((*rng).w & 65535 as libc::c_int as libc::c_uint)
         .wrapping_add((*rng).w >> 16 as libc::c_int);
-    return ((*rng).z << 16 as libc::c_int).wrapping_add((*rng).w);
+    ((*rng).z << 16 as libc::c_int).wrapping_add((*rng).w)
 }
 unsafe extern "C" fn pick(
     mut rng_ptr: *mut RNG,
@@ -297,7 +297,7 @@ unsafe extern "C" fn pick(
     );
     tmp = tmp.wrapping_add(from);
     res = tmp as libc::c_int;
-    return res;
+    res
 }
 unsafe extern "C" fn onabort(mut dummy: *mut libc::c_void) {
     exit(42 as libc::c_int);
@@ -328,7 +328,7 @@ unsafe extern "C" fn init(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc
     (*data).lgl = lglinit();
     lglonabort(
         (*data).lgl,
-        0 as *mut libc::c_void,
+        std::ptr::null_mut::<libc::c_void>(),
         Some(onabort as unsafe extern "C" fn(*mut libc::c_void) -> ()),
     );
     if !((*data).trace).is_null() {
@@ -353,7 +353,7 @@ unsafe extern "C" fn init(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc
             cnf as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
         ));
     }
-    return ::core::mem::transmute::<
+    ::core::mem::transmute::<
         Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
     >(
@@ -367,7 +367,7 @@ unsafe extern "C" fn init(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc
         } else {
             Some(cnf as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void)
         },
-    );
+    )
 }
 unsafe extern "C" fn inc(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     let mut i: libc::c_int = 0;
@@ -443,12 +443,12 @@ unsafe extern "C" fn inc(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
         }
         (*data).m += newvars;
     }
-    return ::core::mem::transmute::<
+    ::core::mem::transmute::<
         Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
     >(Some(
         cnf as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-    ));
+    ))
 }
 unsafe extern "C" fn opts(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     let mut n: libc::c_int = 0 as libc::c_int;
@@ -456,9 +456,9 @@ unsafe extern "C" fn opts(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc
     let mut val: libc::c_int = 0;
     let mut max: libc::c_int = 0;
     let mut m: libc::c_int = 0;
-    let mut it: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut it: *mut libc::c_void = std::ptr::null_mut::<libc::c_void>();
     let mut rng: RNG = initrng(r);
-    let mut name: *const libc::c_char = 0 as *const libc::c_char;
+    let mut name: *const libc::c_char = std::ptr::null::<libc::c_char>();
     if pick(
         &mut rng,
         0 as libc::c_int as libc::c_uint,
@@ -610,22 +610,22 @@ unsafe extern "C" fn opts(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc
             lglsetopt((*data).lgl, name, val);
         }
     }
-    return ::core::mem::transmute::<
+    ::core::mem::transmute::<
         Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
     >(Some(
         cnf as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-    ));
+    ))
 }
 unsafe extern "C" fn cnf(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
-    return ::core::mem::transmute::<
+    ::core::mem::transmute::<
         Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
     >(if (*data).c < (*data).n {
         Some(unit as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void)
     } else {
         Some(lkhd as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void)
-    });
+    })
 }
 unsafe extern "C" fn lit(mut data: *mut Data, mut r: *mut RNG) -> libc::c_int {
     let mut pos: libc::c_int = pick(
@@ -668,7 +668,7 @@ unsafe extern "C" fn lit(mut data: *mut Data, mut r: *mut RNG) -> libc::c_int {
     {
         res = -res;
     }
-    return res;
+    res
 }
 unsafe extern "C" fn unit(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     let mut rng: RNG = initrng(r);
@@ -686,12 +686,12 @@ unsafe extern "C" fn unit(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc
             clause as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
         ));
     }
-    return ::core::mem::transmute::<
+    ::core::mem::transmute::<
         Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
     >(Some(
         binary as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-    ));
+    ))
 }
 unsafe extern "C" fn binary(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     let mut rng: RNG = initrng(r);
@@ -709,12 +709,12 @@ unsafe extern "C" fn binary(mut data: *mut Data, mut r: libc::c_uint) -> *mut li
             clause as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
         ));
     }
-    return ::core::mem::transmute::<
+    ::core::mem::transmute::<
         Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
     >(Some(
         ternary as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-    ));
+    ))
 }
 unsafe extern "C" fn ternary(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     let mut rng: RNG = initrng(r);
@@ -732,12 +732,12 @@ unsafe extern "C" fn ternary(mut data: *mut Data, mut r: libc::c_uint) -> *mut l
             clause as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
         ));
     }
-    return ::core::mem::transmute::<
+    ::core::mem::transmute::<
         Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
     >(Some(
         rest as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-    ));
+    ))
 }
 unsafe extern "C" fn rest(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     let mut rng: RNG = initrng(r);
@@ -755,22 +755,22 @@ unsafe extern "C" fn rest(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc
             clause as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
         ));
     }
-    return ::core::mem::transmute::<
+    ::core::mem::transmute::<
         Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
     >(Some(
         rest as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-    ));
+    ))
 }
 unsafe extern "C" fn clause(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     lgladd((*data).lgl, 0 as libc::c_int);
     (*data).c += 1 as libc::c_int;
-    return ::core::mem::transmute::<
+    ::core::mem::transmute::<
         Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
     >(Some(
         cnf as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-    ));
+    ))
 }
 unsafe extern "C" fn gcd(mut a: libc::c_int, mut b: libc::c_int) -> libc::c_int {
     let mut r: libc::c_int = 0;
@@ -801,7 +801,7 @@ unsafe extern "C" fn gcd(mut a: libc::c_int, mut b: libc::c_int) -> libc::c_int 
         a = b;
         b = r;
     }
-    return a;
+    a
 }
 unsafe extern "C" fn lkhd(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     let mut rng: RNG = initrng(r);
@@ -813,12 +813,12 @@ unsafe extern "C" fn lkhd(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc
     {
         lglookahead((*data).lgl);
     }
-    return ::core::mem::transmute::<
+    ::core::mem::transmute::<
         Option<unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void>,
         *mut libc::c_void,
     >(Some(
         sat as unsafe extern "C" fn(*mut Data, libc::c_uint) -> *mut libc::c_void,
-    ));
+    ))
 }
 unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     let mut res: libc::c_int = 0;
@@ -827,7 +827,7 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
     let mut pos: libc::c_int = 0;
     let mut delta: libc::c_int = 0;
     let mut lit_0: libc::c_int = 0;
-    let mut assumed: *mut libc::c_int = 0 as *mut libc::c_int;
+    let mut assumed: *mut libc::c_int = std::ptr::null_mut::<libc::c_int>();
     let mut nassumed: libc::c_int = 0;
     let mut szassumed: libc::c_int = 0;
     let mut lgl: *mut LGL = (*data).lgl;
@@ -928,7 +928,7 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
                 *((*data).available).offset(0 as libc::c_int as isize);
         } else {
             (*data).nfrozen = 0 as libc::c_int;
-            (*data).frozen = 0 as *mut libc::c_int;
+            (*data).frozen = std::ptr::null_mut::<libc::c_int>();
         }
     }
     if (*data).navailable != 0
@@ -995,19 +995,19 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
                 }
             };
             let fresh0 = nassumed;
-            nassumed = nassumed + 1;
+            nassumed += 1;
             *assumed.offset(fresh0 as isize) = lit_0;
-            if !(pick(
+            if pick(
                 &mut rng,
                 0 as libc::c_int as libc::c_uint,
                 10 as libc::c_int as libc::c_uint,
-            ) == 0)
+            ) != 0
             {
                 break;
             }
         }
     } else {
-        assumed = 0 as *mut libc::c_int;
+        assumed = std::ptr::null_mut::<libc::c_int>();
         szassumed = 0 as libc::c_int;
         nassumed = szassumed;
     }
@@ -1136,8 +1136,8 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
         );
         loop {
             let fresh1 = i;
-            i = i - 1;
-            if !(fresh1 != 0) {
+            i -= 1;
+            if fresh1 == 0 {
                 break;
             }
             lit_0 = pick(
@@ -1218,13 +1218,10 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
                         current_block_94 = 17485376261910781866;
                     }
                 }
-                match current_block_94 {
-                    11046353700707405348 => {
-                        *((*data).available).offset((*data).navailable as isize) = lit_0;
-                        (*data).navailable += 1;
-                        (*data).navailable;
-                    }
-                    _ => {}
+                if current_block_94 == 11046353700707405348 {
+                    *((*data).available).offset((*data).navailable as isize) = lit_0;
+                    (*data).navailable += 1;
+                    (*data).navailable;
                 }
                 i += 1;
                 i;
@@ -1287,8 +1284,8 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
             );
             loop {
                 let fresh2 = i;
-                i = i - 1;
-                if !(fresh2 > 0 as libc::c_int) {
+                i -= 1;
+                if fresh2 <= 0 as libc::c_int {
                     break;
                 }
                 lglfailed(
@@ -1339,22 +1336,22 @@ unsafe extern "C" fn sat(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc:
         lglchkclone(lgl);
     }
     free(assumed as *mut libc::c_void);
-    return ::core::mem::transmute::<State, *mut libc::c_void>(next);
+    ::core::mem::transmute::<State, *mut libc::c_void>(next)
 }
 unsafe extern "C" fn release(mut data: *mut Data, mut r: libc::c_uint) -> *mut libc::c_void {
     lglrelease((*data).lgl);
-    return 0 as *mut libc::c_void;
+    std::ptr::null_mut::<libc::c_void>()
 }
 unsafe extern "C" fn rantrav(mut env_0: *mut Env) {
     let mut state: State = None;
     let mut next: State = None;
     let mut rand: libc::c_uint = 0;
     let mut data: Data = Data {
-        lgl: 0 as *mut LGL,
-        trace: 0 as *mut FILE,
-        available: 0 as *mut libc::c_int,
+        lgl: std::ptr::null_mut::<LGL>(),
+        trace: std::ptr::null_mut::<FILE>(),
+        available: std::ptr::null_mut::<libc::c_int>(),
         navailable: 0,
-        frozen: 0 as *mut libc::c_int,
+        frozen: std::ptr::null_mut::<libc::c_int>(),
         nfrozen: 0,
         m: 0,
         n: 0,
@@ -1401,7 +1398,7 @@ unsafe extern "C" fn erase() {
     fputc('\r' as i32, stdout);
 }
 unsafe extern "C" fn isnumstr(mut str: *const libc::c_char) -> libc::c_int {
-    let mut p: *const libc::c_char = 0 as *const libc::c_char;
+    let mut p: *const libc::c_char = std::ptr::null::<libc::c_char>();
     p = str;
     while *p != 0 {
         if *(*__ctype_b_loc()).offset(*p as libc::c_int as isize) as libc::c_int
@@ -1413,7 +1410,7 @@ unsafe extern "C" fn isnumstr(mut str: *const libc::c_char) -> libc::c_int {
         p = p.offset(1);
         p;
     }
-    return 1 as libc::c_int;
+    1 as libc::c_int
 }
 unsafe extern "C" fn die(mut msg: *const libc::c_char, mut args: ...) {
     let mut ap: ::core::ffi::VaListImpl;
@@ -1619,16 +1616,16 @@ unsafe extern "C" fn run(
         }
         res = 1 as libc::c_int;
     }
-    return res;
+    res
 }
 unsafe extern "C" fn printrace(mut env_0: *mut Env) {
-    let mut name: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut name: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
     let mut data: Data = Data {
-        lgl: 0 as *mut LGL,
-        trace: 0 as *mut FILE,
-        available: 0 as *mut libc::c_int,
+        lgl: std::ptr::null_mut::<LGL>(),
+        trace: std::ptr::null_mut::<FILE>(),
+        available: std::ptr::null_mut::<libc::c_int>(),
         navailable: 0,
-        frozen: 0 as *mut libc::c_int,
+        frozen: std::ptr::null_mut::<libc::c_int>(),
         nfrozen: 0,
         m: 0,
         n: 0,
@@ -1636,7 +1633,7 @@ unsafe extern "C" fn printrace(mut env_0: *mut Env) {
         print: 0,
         noptsfuzz: 0,
     };
-    let mut e: *mut Event = 0 as *mut Event;
+    let mut e: *mut Event = std::ptr::null_mut::<Event>();
     let mut i: libc::c_int = 0;
     memset(
         &mut data as *mut Data as *mut libc::c_void,
@@ -1729,7 +1726,7 @@ unsafe extern "C" fn printrace(mut env_0: *mut Env) {
     i = 0 as libc::c_int;
     while i < (*env_0).nevents {
         e = ((*env_0).events).offset(i as isize);
-        if !((*e).remove != 0) {
+        if (*e).remove == 0 {
             ((*e).state).expect("non-null function pointer")(&mut data, (*e).rand);
         }
         i += 1;
@@ -1744,7 +1741,7 @@ unsafe extern "C" fn prwc(mut env_0: *mut Env, mut prefix: *const libc::c_char) 
             as *mut libc::c_char;
     let mut ch: libc::c_int = 0;
     let mut res: libc::c_int = 0 as libc::c_int;
-    let mut file: *mut FILE = 0 as *mut FILE;
+    let mut file: *mut FILE = std::ptr::null_mut::<FILE>();
     sprintf(
         name,
         b"%s-%u.trace\0" as *const u8 as *const libc::c_char,
@@ -1780,7 +1777,7 @@ unsafe extern "C" fn prwc(mut env_0: *mut Env, mut prefix: *const libc::c_char) 
     };
     loop {
         ch = getc(file);
-        if !(ch != -(1 as libc::c_int)) {
+        if ch == -(1 as libc::c_int) {
             break;
         }
         if ch == '\n' as i32 {
@@ -1803,8 +1800,8 @@ unsafe extern "C" fn dd(
 ) {
     let mut rand: libc::c_uint = 0;
     let mut state: State = None;
-    let mut file: *mut FILE = 0 as *mut FILE;
-    let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut file: *mut FILE = std::ptr::null_mut::<FILE>();
+    let mut cmd: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
     let mut i: libc::c_int = 0;
     file = fopen(filename, b"r\0" as *const u8 as *const libc::c_char);
     if !file.is_null() {
@@ -1909,7 +1906,7 @@ unsafe extern "C" fn dd(
                 );
             }
         };
-        let ref mut fresh3 = (*((*env_0).events).offset(i as isize)).state;
+        let fresh3 = &mut (*((*env_0).events).offset(i as isize)).state;
         *fresh3 = state;
         (*((*env_0).events).offset(i as isize)).rand = rand;
         (*((*env_0).events).offset(i as isize)).remove = 0 as libc::c_int;
@@ -2004,7 +2001,7 @@ unsafe extern "C" fn hashmac() -> libc::c_uint {
         res ^= mac[0 as libc::c_int as usize] << 24 as libc::c_int;
     }
     fclose(file);
-    return res;
+    res
 }
 static mut usage: *const libc::c_char = b"usage: lglmbt [ <option> ... ] [ <seed> ]\n\nwhere <option> is one of the following:\n\n  -k | --keep-lines\n  -q | --quiet\n  -f | --first-bug-only\n  -n | --no-delta-debugging\n  -a | --always-fork\n  -O | --optimize-by-delta-debugging-options\n\n  -m <maxruns>\n\0"
     as *const u8 as *const libc::c_char;
@@ -2035,21 +2032,21 @@ unsafe extern "C" fn currentime() -> libc::c_double {
         tv_sec: 0,
         tv_usec: 0,
     };
-    if gettimeofday(&mut tv, 0 as *mut libc::c_void) == 0 {
+    if gettimeofday(&mut tv, std::ptr::null_mut::<libc::c_void>()) == 0 {
         res = 1e-6f64 * tv.tv_usec as libc::c_double;
         res += tv.tv_sec as libc::c_double;
     }
-    return res;
+    res
 }
 unsafe extern "C" fn getime() -> libc::c_double {
-    return currentime() - start;
+    currentime() - start
 }
 unsafe extern "C" fn average(mut a: libc::c_double, mut b: libc::c_double) -> libc::c_double {
-    return if b != 0. {
+    if b != 0. {
         a / b
     } else {
         0 as libc::c_int as libc::c_double
-    };
+    }
 }
 unsafe extern "C" fn stats() {
     let mut t: libc::c_double = getime();
@@ -2276,13 +2273,13 @@ unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> lib
             }
             env.seed = mac as libc::c_uint;
             env.seed = (env.seed).wrapping_mul(123301093 as libc::c_int as libc::c_uint);
-            env.seed = (env.seed as clock_t + times(0 as *mut tms)) as libc::c_uint;
+            env.seed = (env.seed as clock_t + times(std::ptr::null_mut::<tms>())) as libc::c_uint;
             env.seed = (env.seed).wrapping_mul(223531513 as libc::c_int as libc::c_uint);
             env.seed = (env.seed).wrapping_add(pid as libc::c_uint);
             env.seed = (env.seed).wrapping_mul(31752023 as libc::c_int as libc::c_uint);
             env.seed = (env.seed).wrapping_add(prev as libc::c_uint);
             env.seed = (env.seed).wrapping_mul(43376579 as libc::c_int as libc::c_uint);
-            env.seed = env.seed >> 1 as libc::c_int;
+            env.seed >>= 1 as libc::c_int;
             prev = env.seed as libc::c_int;
             if env.quiet == 0 {
                 if env.terminal != 0 {
@@ -2344,7 +2341,7 @@ unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> lib
                     }
                 };
                 fclose(env.file);
-                env.file = 0 as *mut FILE;
+                env.file = std::ptr::null_mut::<FILE>();
                 dd(&mut env, name.as_mut_ptr(), res, opt);
                 unlink(name.as_mut_ptr());
                 env.print = (env.quiet == 0) as libc::c_int;
@@ -2372,7 +2369,7 @@ unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> lib
         );
     }
     stats();
-    return 0 as libc::c_int;
+    0 as libc::c_int
 }
 pub fn main() {
     let mut args: Vec<*mut libc::c_char> = Vec::new();

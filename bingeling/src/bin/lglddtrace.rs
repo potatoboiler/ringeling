@@ -264,11 +264,11 @@ unsafe extern "C" fn vprintf(
 }
 #[inline]
 unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
-    return strtol(
+    strtol(
         __nptr,
-        0 as *mut libc::c_void as *mut *mut libc::c_char,
+        std::ptr::null_mut::<libc::c_void>() as *mut *mut libc::c_char,
         10 as libc::c_int,
-    ) as libc::c_int;
+    ) as libc::c_int
 }
 static mut runs: libc::c_int = 0;
 static mut golden: libc::c_int = 0;
@@ -291,7 +291,7 @@ static mut nopts: libc::c_int = 0;
 static mut szopts: libc::c_int = 0;
 static mut sumoptvals: libc::c_longlong = 0;
 unsafe extern "C" fn event(mut type_0: Type, mut arg: libc::c_int, mut opt: *const libc::c_char) {
-    let mut e: *mut Event = 0 as *mut Event;
+    let mut e: *mut Event = std::ptr::null_mut::<Event>();
     let mut idx: libc::c_int = 0;
     if nevents == szevents {
         szevents = if szevents != 0 {
@@ -306,14 +306,14 @@ unsafe extern "C" fn event(mut type_0: Type, mut arg: libc::c_int, mut opt: *con
         ) as *mut Event;
     }
     let fresh0 = nevents;
-    nevents = nevents + 1;
+    nevents += 1;
     e = events.offset(fresh0 as isize);
     (*e).type_0 = type_0;
     (*e).arg = arg;
     (*e).opt = if !opt.is_null() {
         strdup(opt)
     } else {
-        0 as *mut libc::c_char
+        std::ptr::null_mut::<libc::c_char>()
     };
     (*e).removed = 2147483647 as libc::c_int;
     match type_0 as libc::c_uint {
@@ -327,7 +327,7 @@ unsafe extern "C" fn event(mut type_0: Type, mut arg: libc::c_int, mut opt: *con
                         } else {
                             2 as libc::c_int
                         };
-                        if !(szmap <= idx) {
+                        if szmap > idx {
                             break;
                         }
                     }
@@ -402,7 +402,7 @@ unsafe extern "C" fn msg(mut fmt: *const libc::c_char, mut args: ...) {
     fflush(stdout);
 }
 unsafe extern "C" fn isnumstr(mut str: *const libc::c_char) -> libc::c_int {
-    let mut p: *const libc::c_char = 0 as *const libc::c_char;
+    let mut p: *const libc::c_char = std::ptr::null::<libc::c_char>();
     let mut ch: libc::c_int = 0;
     p = str;
     if *p as libc::c_int == '-' as i32 {
@@ -419,27 +419,26 @@ unsafe extern "C" fn isnumstr(mut str: *const libc::c_char) -> libc::c_int {
     }
     loop {
         ch = *p as libc::c_int;
-        if !(*(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
-            != 0)
+        if *(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
+            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int == 0
         {
             break;
         }
         p = p.offset(1);
         p;
     }
-    return (ch == 0) as libc::c_int;
+    (ch == 0) as libc::c_int
 }
 unsafe extern "C" fn intarg(mut op: *mut libc::c_char) -> libc::c_int {
-    let mut tok: *const libc::c_char = 0 as *const libc::c_char;
+    let mut tok: *const libc::c_char = std::ptr::null::<libc::c_char>();
     tok = strtok(
-        0 as *mut libc::c_char,
+        std::ptr::null_mut::<libc::c_char>(),
         b" \0" as *const u8 as *const libc::c_char,
     );
     if tok.is_null()
         || isnumstr(tok) == 0
         || !(strtok(
-            0 as *mut libc::c_char,
+            std::ptr::null_mut::<libc::c_char>(),
             b" \0" as *const u8 as *const libc::c_char,
         ))
         .is_null()
@@ -473,13 +472,13 @@ unsafe extern "C" fn intarg(mut op: *mut libc::c_char) -> libc::c_int {
             );
         }
     };
-    return atoi(tok);
+    atoi(tok)
 }
 unsafe extern "C" fn remr(mut r: *mut Range) -> libc::c_int {
-    return ((*r).removed <= runs) as libc::c_int;
+    ((*r).removed <= runs) as libc::c_int
 }
 unsafe extern "C" fn reme(mut e: *mut Event) -> libc::c_int {
-    return ((*e).removed <= runs) as libc::c_int;
+    ((*e).removed <= runs) as libc::c_int
 }
 unsafe extern "C" fn onabort(mut d: *mut libc::c_void) {
     exit(0 as libc::c_int);
@@ -494,9 +493,9 @@ unsafe extern "C" fn process() {
         rlim_cur: 0,
         rlim_max: 0,
     };
-    let mut lgl: *mut LGL = 0 as *mut LGL;
-    let mut e: *mut Event = 0 as *mut Event;
-    let mut o: *mut Opt = 0 as *mut Opt;
+    let mut lgl: *mut LGL = std::ptr::null_mut::<LGL>();
+    let mut e: *mut Event = std::ptr::null_mut::<Event>();
+    let mut o: *mut Opt = std::ptr::null_mut::<Opt>();
     rlim.rlim_cur = timelimit as rlim_t;
     rlim.rlim_max = (rlim.rlim_cur).wrapping_add(10 as libc::c_int as rlim_t);
     setrlimit(RLIMIT_CPU as libc::c_int, &mut rlim);
@@ -558,11 +557,11 @@ unsafe extern "C" fn process() {
             );
         }
     };
-    lgl = 0 as *mut LGL;
+    lgl = std::ptr::null_mut::<LGL>();
     res = 0 as libc::c_int;
     e = events;
     while e < events.offset(nevents as isize) {
-        if !(reme(e) != 0) {
+        if reme(e) == 0 {
             match (*e).type_0 as libc::c_uint {
                 0 => {
                     lgladd(lgl, (*e).arg);
@@ -637,7 +636,7 @@ unsafe extern "C" fn process() {
                     lgl = lglinit();
                     lglonabort(
                         lgl,
-                        0 as *mut libc::c_void,
+                        std::ptr::null_mut::<libc::c_void>(),
                         Some(onabort as unsafe extern "C" fn(*mut libc::c_void) -> ()),
                     );
                     if !opts.is_null() {
@@ -829,7 +828,7 @@ unsafe extern "C" fn run() -> libc::c_int {
     }
     runs += 1;
     runs;
-    return status;
+    status
 }
 unsafe extern "C" fn lit(mut lit_0: libc::c_int) -> libc::c_int {
     let mut idx: libc::c_int = 0;
@@ -863,10 +862,10 @@ unsafe extern "C" fn lit(mut lit_0: libc::c_int) -> libc::c_int {
     if lit_0 < 0 as libc::c_int {
         res = -res;
     }
-    return res;
+    res
 }
 unsafe extern "C" fn print(mut e: *mut Event, mut file: *mut FILE) {
-    let mut o: *mut Opt = 0 as *mut Opt;
+    let mut o: *mut Opt = std::ptr::null_mut::<Opt>();
     match (*e).type_0 as libc::c_uint {
         0 => {
             fprintf(
@@ -1113,37 +1112,37 @@ unsafe extern "C" fn print(mut e: *mut Event, mut file: *mut FILE) {
 }
 unsafe extern "C" fn type2str(mut type_0: Type) -> *const libc::c_char {
     match type_0 as libc::c_uint {
-        0 => return b"add\0" as *const u8 as *const libc::c_char,
-        1 => return b"assume\0" as *const u8 as *const libc::c_char,
-        29 => return b"changed\0" as *const u8 as *const libc::c_char,
-        28 => return b"chkclone\0" as *const u8 as *const libc::c_char,
-        2 => return b"deref\0" as *const u8 as *const libc::c_char,
-        3 => return b"failed\0" as *const u8 as *const libc::c_char,
-        26 => return b"fixed\0" as *const u8 as *const libc::c_char,
-        21 => return b"frozen\0" as *const u8 as *const libc::c_char,
-        23 => return b"reusable\0" as *const u8 as *const libc::c_char,
-        22 => return b"usable\0" as *const u8 as *const libc::c_char,
-        14 => return b"repr\0" as *const u8 as *const libc::c_char,
-        27 => return b"fixate\0" as *const u8 as *const libc::c_char,
-        20 => return b"reduce\0" as *const u8 as *const libc::c_char,
-        19 => return b"flush\0" as *const u8 as *const libc::c_char,
-        4 => return b"freeze\0" as *const u8 as *const libc::c_char,
-        15 => return b"setimportant\0" as *const u8 as *const libc::c_char,
-        18 => return b"setphases\0" as *const u8 as *const libc::c_char,
-        16 => return b"setphase\0" as *const u8 as *const libc::c_char,
-        17 => return b"resetphase\0" as *const u8 as *const libc::c_char,
-        25 => return b"incvar\0" as *const u8 as *const libc::c_char,
-        30 => return b"inconsistent\0" as *const u8 as *const libc::c_char,
-        31 => return b"lkhd\0" as *const u8 as *const libc::c_char,
-        5 => return b"init\0" as *const u8 as *const libc::c_char,
-        24 => return b"maxvar\0" as *const u8 as *const libc::c_char,
-        6 => return b"melt\0" as *const u8 as *const libc::c_char,
-        7 => return b"REUSE\0" as *const u8 as *const libc::c_char,
-        8 => return b"option\0" as *const u8 as *const libc::c_char,
-        9 => return b"phase\0" as *const u8 as *const libc::c_char,
-        10 => return b"release\0" as *const u8 as *const libc::c_char,
-        11 => return b"return\0" as *const u8 as *const libc::c_char,
-        13 => return b"simp\0" as *const u8 as *const libc::c_char,
+        0 => b"add\0" as *const u8 as *const libc::c_char,
+        1 => b"assume\0" as *const u8 as *const libc::c_char,
+        29 => b"changed\0" as *const u8 as *const libc::c_char,
+        28 => b"chkclone\0" as *const u8 as *const libc::c_char,
+        2 => b"deref\0" as *const u8 as *const libc::c_char,
+        3 => b"failed\0" as *const u8 as *const libc::c_char,
+        26 => b"fixed\0" as *const u8 as *const libc::c_char,
+        21 => b"frozen\0" as *const u8 as *const libc::c_char,
+        23 => b"reusable\0" as *const u8 as *const libc::c_char,
+        22 => b"usable\0" as *const u8 as *const libc::c_char,
+        14 => b"repr\0" as *const u8 as *const libc::c_char,
+        27 => b"fixate\0" as *const u8 as *const libc::c_char,
+        20 => b"reduce\0" as *const u8 as *const libc::c_char,
+        19 => b"flush\0" as *const u8 as *const libc::c_char,
+        4 => b"freeze\0" as *const u8 as *const libc::c_char,
+        15 => b"setimportant\0" as *const u8 as *const libc::c_char,
+        18 => b"setphases\0" as *const u8 as *const libc::c_char,
+        16 => b"setphase\0" as *const u8 as *const libc::c_char,
+        17 => b"resetphase\0" as *const u8 as *const libc::c_char,
+        25 => b"incvar\0" as *const u8 as *const libc::c_char,
+        30 => b"inconsistent\0" as *const u8 as *const libc::c_char,
+        31 => b"lkhd\0" as *const u8 as *const libc::c_char,
+        5 => b"init\0" as *const u8 as *const libc::c_char,
+        24 => b"maxvar\0" as *const u8 as *const libc::c_char,
+        6 => b"melt\0" as *const u8 as *const libc::c_char,
+        7 => b"REUSE\0" as *const u8 as *const libc::c_char,
+        8 => b"option\0" as *const u8 as *const libc::c_char,
+        9 => b"phase\0" as *const u8 as *const libc::c_char,
+        10 => b"release\0" as *const u8 as *const libc::c_char,
+        11 => b"return\0" as *const u8 as *const libc::c_char,
+        13 => b"simp\0" as *const u8 as *const libc::c_char,
         12 | _ => {
             if type_0 as libc::c_uint == SAT as libc::c_int as libc::c_uint {
             } else {
@@ -1171,13 +1170,13 @@ unsafe extern "C" fn type2str(mut type_0: Type) -> *const libc::c_char {
                     );
                 }
             };
-            return b"sat\0" as *const u8 as *const libc::c_char;
+            b"sat\0" as *const u8 as *const libc::c_char
         }
-    };
+    }
 }
 unsafe extern "C" fn noarg(mut op: Type) {
     if !(strtok(
-        0 as *mut libc::c_char,
+        std::ptr::null_mut::<libc::c_char>(),
         b" \0" as *const u8 as *const libc::c_char,
     ))
     .is_null()
@@ -1187,7 +1186,7 @@ unsafe extern "C" fn noarg(mut op: Type) {
             type2str(op),
         );
     }
-    event(op, 0 as libc::c_int, 0 as *const libc::c_char);
+    event(op, 0 as libc::c_int, std::ptr::null::<libc::c_char>());
 }
 unsafe extern "C" fn newline() {
     let mut i: libc::c_int = 0;
@@ -1211,8 +1210,8 @@ unsafe extern "C" fn prt(mut final_0: libc::c_int) {
     let mut close_0: libc::c_int = 0 as libc::c_int;
     let mut i: libc::c_int = 0;
     let mut len: libc::c_int = 0;
-    let mut file: *mut FILE = 0 as *mut FILE;
-    let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut file: *mut FILE = std::ptr::null_mut::<FILE>();
+    let mut cmd: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
     unlink(oname);
     len = strlen(oname) as libc::c_int;
     if len >= 3 as libc::c_int
@@ -1249,7 +1248,7 @@ unsafe extern "C" fn prt(mut final_0: libc::c_int) {
     prevents = 0 as libc::c_int;
     i = 0 as libc::c_int;
     while i < nevents {
-        if !(reme(events.offset(i as isize)) != 0) {
+        if reme(events.offset(i as isize)) == 0 {
             print(events.offset(i as isize), file);
             prevents += 1;
             prevents;
@@ -1295,15 +1294,15 @@ unsafe extern "C" fn dd() {
         nevents as libc::c_ulong,
         ::core::mem::size_of::<Range>() as libc::c_ulong,
     ) as *mut Range;
-    let mut r: *mut Range = 0 as *mut Range;
-    let mut smap: *mut libc::c_int = 0 as *mut libc::c_int;
+    let mut r: *mut Range = std::ptr::null_mut::<Range>();
+    let mut smap: *mut libc::c_int = std::ptr::null_mut::<libc::c_int>();
     let mut idx: libc::c_int = 0;
     let mut moved: libc::c_int = 0;
     let mut mapto: libc::c_int = 0;
     let mut nused: libc::c_int = 0;
     let mut cluster: Type = ADD;
-    let mut used: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut e: *mut Event = 0 as *mut Event;
+    let mut used: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
+    let mut e: *mut Event = std::ptr::null_mut::<Event>();
     loop {
         prt(0 as libc::c_int);
         changed = 0 as libc::c_int;
@@ -1316,7 +1315,7 @@ unsafe extern "C" fn dd() {
         );
         e = events;
         while e < events.offset(nevents as isize) {
-            if !(reme(e) != 0) {
+            if reme(e) == 0 {
                 idx = 0 as libc::c_int;
                 match (*e).type_0 as libc::c_uint {
                     0 | 1 | 2 | 3 | 26 | 21 | 23 | 22 | 14 | 15 | 16 | 17 | 4 | 6 | 7 | 9 => {
@@ -1325,9 +1324,9 @@ unsafe extern "C" fn dd() {
                     5 | 8 | 10 | 11 | 12 | 13 | 29 | 24 | 25 | 30 | 31 | 27 | 19 | 20 | 28 | 18
                     | _ => {}
                 }
-                if !(idx == 0) {
+                if idx != 0 {
                     idx = abs(idx);
-                    if !(*used.offset(idx as isize) != 0) {
+                    if *used.offset(idx as isize) == 0 {
                         *used.offset(idx as isize) = 1 as libc::c_int as libc::c_char;
                         nused += 1;
                         nused;
@@ -1380,7 +1379,7 @@ unsafe extern "C" fn dd() {
                         moved;
                     }
                     let fresh2 = mapto;
-                    mapto = mapto + 1;
+                    mapto += 1;
                     *map.offset(idx as isize) = fresh2;
                 } else {
                     *map.offset(idx as isize) = 0 as libc::c_int;
@@ -1407,12 +1406,9 @@ unsafe extern "C" fn dd() {
                     current_block_37 = 3333766589073626915;
                 }
             }
-            match current_block_37 {
-                3333766589073626915 => {
-                    free(map as *mut libc::c_void);
-                    map = smap;
-                }
-                _ => {}
+            if current_block_37 == 3333766589073626915 {
+                free(map as *mut libc::c_void);
+                map = smap;
             }
         }
         free(used as *mut libc::c_void);
@@ -1594,13 +1590,13 @@ unsafe extern "C" fn dd() {
                     i = pos;
                     while i < nranges && i < pos + width {
                         r = ranges.offset(i as isize);
-                        if !(remr(r) != 0) {
+                        if remr(r) == 0 {
                             (*r).removed = runs;
                             found = 0 as libc::c_int;
                             j = (*r).from;
                             while j <= (*r).to {
                                 e = events.offset(j as isize);
-                                if !(reme(e) != 0) {
+                                if reme(e) == 0 {
                                     found += 1;
                                     found;
                                     (*e).removed = runs;
@@ -1652,7 +1648,7 @@ unsafe extern "C" fn dd() {
                         i = pos;
                         while i < nranges && i < pos + width {
                             r = ranges.offset(i as isize);
-                            if !((*r).removed < runs - 1 as libc::c_int) {
+                            if (*r).removed >= runs - 1 as libc::c_int {
                                 if (*r).removed == runs - 1 as libc::c_int {
                                 } else {
                                     __assert_fail(
@@ -1735,7 +1731,7 @@ unsafe extern "C" fn dd() {
                         }
                     }
                     pos += width;
-                    if !(pos < nranges) {
+                    if pos >= nranges {
                         break;
                     }
                 }
@@ -1753,12 +1749,12 @@ unsafe extern "C" fn dd() {
         }
         if ddopts != 0 {
             let mut reported: libc::c_int = 0 as libc::c_int;
-            let mut o: *mut Opt = 0 as *mut Opt;
+            let mut o: *mut Opt = std::ptr::null_mut::<Opt>();
             if opts.is_null() {
-                let mut it: *mut libc::c_void = 0 as *mut libc::c_void;
-                let mut name: *const libc::c_char = 0 as *const libc::c_char;
+                let mut it: *mut libc::c_void = std::ptr::null_mut::<libc::c_void>();
+                let mut name: *const libc::c_char = std::ptr::null::<libc::c_char>();
                 let mut opt: Opt = Opt {
-                    name: 0 as *mut libc::c_char,
+                    name: std::ptr::null_mut::<libc::c_char>(),
                     val: 0,
                     min: 0,
                     max: 0,
@@ -1802,12 +1798,12 @@ unsafe extern "C" fn dd() {
                     }
                     opt.name = strdup(name);
                     let fresh3 = nopts;
-                    nopts = nopts + 1;
+                    nopts += 1;
                     *opts.offset(fresh3 as isize) = opt;
                 }
                 e = events;
                 while e < events.offset(nevents as isize) {
-                    if !((*e).type_0 as libc::c_uint != OPTION as libc::c_int as libc::c_uint) {
+                    if (*e).type_0 as libc::c_uint == OPTION as libc::c_int as libc::c_uint {
                         o = opts;
                         while o < opts.offset(nopts as isize) {
                             if strcmp((*e).opt, (*o).name) == 0 {
@@ -2102,7 +2098,7 @@ unsafe extern "C" fn dd() {
                 newline();
             }
         }
-        if !(changed != 0) {
+        if changed == 0 {
             break;
         }
     }
@@ -2117,11 +2113,11 @@ unsafe extern "C" fn getime() -> libc::c_double {
         tv_sec: 0,
         tv_usec: 0,
     };
-    if gettimeofday(&mut tv, 0 as *mut libc::c_void) == 0 {
+    if gettimeofday(&mut tv, std::ptr::null_mut::<libc::c_void>()) == 0 {
         res = 1e-6f64 * tv.tv_usec as libc::c_double;
         res += tv.tv_sec as libc::c_double;
     }
-    return res;
+    res
 }
 unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> libc::c_int {
     let mut i: libc::c_int = 0;
@@ -2130,13 +2126,13 @@ unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> lib
     let mut close_0: libc::c_int = 0 as libc::c_int;
     let mut count: libc::c_int = 0;
     let mut buffer: [libc::c_char; 80] = [0; 80];
-    let mut tok: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut opt: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut tok: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
+    let mut opt: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
     let mut start: libc::c_double = 0.;
     let mut delta: libc::c_double = 0.;
-    let mut file: *mut FILE = 0 as *mut FILE;
+    let mut file: *mut FILE = std::ptr::null_mut::<FILE>();
     start = getime();
-    let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut cmd: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
     i = 1 as libc::c_int;
     while i < argc {
         if strcmp(
@@ -2246,7 +2242,7 @@ unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> lib
                 perr(b"line buffer exceeded\0" as *const u8 as *const libc::c_char);
             }
             let fresh4 = len;
-            len = len + 1;
+            len += 1;
             buffer[fresh4 as usize] = ch as libc::c_char;
             buffer[len as usize] = 0 as libc::c_int as libc::c_char;
         } else {
@@ -2267,67 +2263,67 @@ unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> lib
                 event(
                     ADD,
                     intarg(b"add\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"return\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     RETURN,
                     intarg(b"return\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"deref\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     DEREF,
                     intarg(b"deref\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"fixed\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     FIXED,
                     intarg(b"fixed\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"frozen\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     FROZEN,
                     intarg(b"frozen\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"reusable\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     REUSABLE,
                     intarg(b"reusable\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"usable\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     USABLE,
                     intarg(b"usable\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"repr\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     REPR,
                     intarg(b"repr\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"failed\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     FAILED,
                     intarg(b"failed\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"assume\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     ASSUME,
                     intarg(b"assume\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"phase\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     PHASE,
                     intarg(b"phase\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"init\0" as *const u8 as *const libc::c_char) == 0 {
                 noarg(INIT);
@@ -2337,7 +2333,7 @@ unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> lib
                 event(
                     SIMP,
                     intarg(b"simp\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"setphases\0" as *const u8 as *const libc::c_char) == 0 {
                 noarg(SETPHASES);
@@ -2345,7 +2341,7 @@ unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> lib
                 event(
                     FREEZE,
                     intarg(b"freeze\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"setimportant\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
@@ -2353,13 +2349,13 @@ unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> lib
                     intarg(
                         b"setimportant\0" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     ),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"setphase\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     SETPHASE,
                     intarg(b"setphase\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"resetphase\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
@@ -2367,23 +2363,23 @@ unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> lib
                     intarg(
                         b"resetphase\0" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     ),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"melt\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     MELT,
                     intarg(b"melt\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"reuse\0" as *const u8 as *const libc::c_char) == 0 {
                 event(
                     REUSE,
                     intarg(b"reuse\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
-                    0 as *const libc::c_char,
+                    std::ptr::null::<libc::c_char>(),
                 );
             } else if strcmp(tok, b"option\0" as *const u8 as *const libc::c_char) == 0 {
                 opt = strtok(
-                    0 as *mut libc::c_char,
+                    std::ptr::null_mut::<libc::c_char>(),
                     b" \0" as *const u8 as *const libc::c_char,
                 );
                 if opt.is_null() {
@@ -2479,7 +2475,7 @@ unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> lib
         runs,
         getime() - start,
     );
-    return 0 as libc::c_int;
+    0 as libc::c_int
 }
 pub fn main() {
     let mut args: Vec<*mut libc::c_char> = Vec::new();

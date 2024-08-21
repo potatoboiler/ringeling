@@ -135,11 +135,11 @@ pub const _ISupper: C2RustUnnamed = 256;
 pub type __sighandler_t = Option<unsafe extern "C" fn(libc::c_int) -> ()>;
 #[inline]
 unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
-    return strtol(
+    strtol(
         __nptr,
-        0 as *mut libc::c_void as *mut *mut libc::c_char,
+        std::ptr::null_mut::<libc::c_void>() as *mut *mut libc::c_char,
         10 as libc::c_int,
-    ) as libc::c_int;
+    ) as libc::c_int
 }
 #[inline]
 unsafe extern "C" fn vprintf(
@@ -193,7 +193,7 @@ unsafe extern "C" fn msg(mut fmt: *const libc::c_char, mut args: ...) {
     fflush(stdout);
 }
 unsafe extern "C" fn isnumstr(mut str: *const libc::c_char) -> libc::c_int {
-    let mut p: *const libc::c_char = 0 as *const libc::c_char;
+    let mut p: *const libc::c_char = std::ptr::null::<libc::c_char>();
     let mut ch: libc::c_int = 0;
     p = str;
     if *p as libc::c_int == '-' as i32 {
@@ -210,27 +210,26 @@ unsafe extern "C" fn isnumstr(mut str: *const libc::c_char) -> libc::c_int {
     }
     loop {
         ch = *p as libc::c_int;
-        if !(*(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
-            != 0)
+        if *(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
+            & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int == 0
         {
             break;
         }
         p = p.offset(1);
         p;
     }
-    return (ch == 0) as libc::c_int;
+    (ch == 0) as libc::c_int
 }
 unsafe extern "C" fn intarg(mut op: *mut libc::c_char) -> libc::c_int {
-    let mut tok: *const libc::c_char = 0 as *const libc::c_char;
+    let mut tok: *const libc::c_char = std::ptr::null::<libc::c_char>();
     tok = strtok(
-        0 as *mut libc::c_char,
+        std::ptr::null_mut::<libc::c_char>(),
         b" \0" as *const u8 as *const libc::c_char,
     );
     if tok.is_null()
         || isnumstr(tok) == 0
         || !(strtok(
-            0 as *mut libc::c_char,
+            std::ptr::null_mut::<libc::c_char>(),
             b" \0" as *const u8 as *const libc::c_char,
         ))
         .is_null()
@@ -241,14 +240,14 @@ unsafe extern "C" fn intarg(mut op: *mut libc::c_char) -> libc::c_int {
         );
         exit(1 as libc::c_int);
     }
-    return atoi(tok);
+    atoi(tok)
 }
 unsafe extern "C" fn noarg(mut str: *const libc::c_char, mut op: *mut libc::c_char) -> libc::c_int {
     if strcmp(str, op) != 0 {
         return 0 as libc::c_int;
     }
     if !(strtok(
-        0 as *mut libc::c_char,
+        std::ptr::null_mut::<libc::c_char>(),
         b" \0" as *const u8 as *const libc::c_char,
     ))
     .is_null()
@@ -258,7 +257,7 @@ unsafe extern "C" fn noarg(mut str: *const libc::c_char, mut op: *mut libc::c_ch
             op,
         );
     }
-    return 1 as libc::c_int;
+    1 as libc::c_int
 }
 unsafe extern "C" fn exitonsig(mut sig: libc::c_int) {
     msg(
@@ -276,11 +275,11 @@ unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> lib
     let mut res: libc::c_int = 0;
     let mut arg: libc::c_int = 0;
     let mut buffer: [libc::c_char; 80] = [0; 80];
-    let mut tok: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut opt: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut file: *mut FILE = 0 as *mut FILE;
-    let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut lgl: *mut LGL = 0 as *mut LGL;
+    let mut tok: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
+    let mut opt: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
+    let mut file: *mut FILE = std::ptr::null_mut::<FILE>();
+    let mut cmd: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
+    let mut lgl: *mut LGL = std::ptr::null_mut::<LGL>();
     i = 1 as libc::c_int;
     while i < argc {
         if strcmp(
@@ -386,7 +385,7 @@ unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> lib
     buffer[len as usize] = 0 as libc::c_int as libc::c_char;
     lineno = 1 as libc::c_int;
     res = 0 as libc::c_int;
-    lgl = 0 as *mut LGL;
+    lgl = std::ptr::null_mut::<LGL>();
     loop {
         ch = getc(file);
         if ch == -(1 as libc::c_int) {
@@ -402,7 +401,7 @@ unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> lib
                 perr(b"line buffer exceeded\0" as *const u8 as *const libc::c_char);
             }
             let fresh1 = len;
-            len = len + 1;
+            len += 1;
             buffer[fresh1 as usize] = ch as libc::c_char;
             buffer[len as usize] = 0 as libc::c_int as libc::c_char;
         } else {
@@ -591,7 +590,7 @@ unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> lib
                 );
             } else if strcmp(tok, b"option\0" as *const u8 as *const libc::c_char) == 0 {
                 opt = strtok(
-                    0 as *mut libc::c_char,
+                    std::ptr::null_mut::<libc::c_char>(),
                     b" \0" as *const u8 as *const libc::c_char,
                 );
                 if opt.is_null() {
@@ -626,7 +625,7 @@ unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> lib
         pclose(file);
     }
     msg(b"done %s\0" as *const u8 as *const libc::c_char, name);
-    return 0 as libc::c_int;
+    0 as libc::c_int
 }
 pub fn main() {
     let mut args: Vec<*mut libc::c_char> = Vec::new();

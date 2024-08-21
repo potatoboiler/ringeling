@@ -64,8 +64,8 @@ pub unsafe extern "C" fn lglbnr(
 ) {
     let mut p: *const libc::c_char = b"-W -Wall -O3 -DNLGLOG -DNDEBUG -DNCHKSOL -DNLGLDRUPLIG -DNLGLYALSAT -DNLGLFILES -DNLGLDEMA\0"
         as *const u8 as *const libc::c_char;
-    let mut q: *const libc::c_char = 0 as *const libc::c_char;
-    let mut n: *const libc::c_char = 0 as *const libc::c_char;
+    let mut q: *const libc::c_char = std::ptr::null::<libc::c_char>();
+    let mut n: *const libc::c_char = std::ptr::null::<libc::c_char>();
     let mut len: libc::c_int =
         (78 as libc::c_int as libc::c_ulong).wrapping_sub(strlen(prefix)) as libc::c_int;
     fprintf(
@@ -161,5 +161,5 @@ pub unsafe extern "C" fn lglbnr(
 }
 #[no_mangle]
 pub unsafe extern "C" fn lglversion() -> *const libc::c_char {
-    return b"1.0.0 89a167d0d2efe98d983c87b5b84175b40ea55842\0" as *const u8 as *const libc::c_char;
+    b"1.0.0 89a167d0d2efe98d983c87b5b84175b40ea55842\0" as *const u8 as *const libc::c_char
 }

@@ -172,7 +172,7 @@ unsafe extern "C" fn ldrstdalloc(
     mut mem: *mut libc::c_void,
     mut bytes: size_t,
 ) -> *mut libc::c_void {
-    return malloc(bytes);
+    malloc(bytes)
 }
 unsafe extern "C" fn ldrstdealloc(
     mut mem: *mut libc::c_void,
@@ -187,12 +187,12 @@ unsafe extern "C" fn ldrstdrealloc(
     mut ob: size_t,
     mut nb: size_t,
 ) -> *mut libc::c_void {
-    return realloc(ptr, nb);
+    realloc(ptr, nb)
 }
 #[no_mangle]
 pub unsafe extern "C" fn ldrinit() -> *mut LDR {
-    return ldrminit(
-        0 as *mut libc::c_void,
+    ldrminit(
+        std::ptr::null_mut::<libc::c_void>(),
         Some(ldrstdalloc as unsafe extern "C" fn(*mut libc::c_void, size_t) -> *mut libc::c_void),
         Some(
             ldrstdrealloc
@@ -207,7 +207,7 @@ pub unsafe extern "C" fn ldrinit() -> *mut LDR {
             ldrstdealloc
                 as unsafe extern "C" fn(*mut libc::c_void, *mut libc::c_void, size_t) -> (),
         ),
-    );
+    )
 }
 #[no_mangle]
 pub unsafe extern "C" fn ldrminit(
@@ -231,7 +231,7 @@ pub unsafe extern "C" fn ldrminit(
     (*res).mem.state = state;
     (*res).mem.alloc = alloc;
     (*res).mem.dealloc = dealloc;
-    return res;
+    res
 }
 unsafe extern "C" fn ldrdelstr(mut ldr: *mut LDR, mut str: *mut libc::c_char) {
     if !str.is_null() {
@@ -250,7 +250,7 @@ unsafe extern "C" fn ldrstrdup(
     let mut res: *mut libc::c_char =
         ((*ldr).mem.alloc).expect("non-null function pointer")((*ldr).mem.state, bytes)
             as *mut libc::c_char;
-    return strcpy(res, str);
+    strcpy(res, str)
 }
 #[no_mangle]
 pub unsafe extern "C" fn ldrelease(mut ldr: *mut LDR) {
@@ -324,12 +324,12 @@ unsafe extern "C" fn ldrfilexists(mut path: *const libc::c_char) -> libc::c_int 
         },
         __glibc_reserved: [0; 3],
     };
-    return (stat(path, &mut buf) == 0) as libc::c_int;
+    (stat(path, &mut buf) == 0) as libc::c_int
 }
 unsafe extern "C" fn ldrperr(mut ldr: *mut LDR, mut msg: *const libc::c_char) -> libc::c_int {
     let mut bytes: size_t = 0;
     let mut len: size_t = 0;
-    let mut str: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut str: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
     bytes = (strlen(msg))
         .wrapping_add(strlen((*ldr).path))
         .wrapping_add(20 as libc::c_int as libc::c_ulong);
@@ -353,7 +353,7 @@ unsafe extern "C" fn ldrperr(mut ldr: *mut LDR, mut msg: *const libc::c_char) ->
         str as *mut libc::c_void,
         bytes,
     );
-    return 0 as libc::c_int;
+    0 as libc::c_int
 }
 unsafe extern "C" fn ldrhas(
     mut str: *const libc::c_char,
@@ -364,14 +364,14 @@ unsafe extern "C" fn ldrhas(
     if l < k {
         return 0 as libc::c_int;
     }
-    return (strcmp(str.offset(l as isize).offset(-(k as isize)), suffix) == 0) as libc::c_int;
+    (strcmp(str.offset(l as isize).offset(-(k as isize)), suffix) == 0) as libc::c_int
 }
 unsafe extern "C" fn ldrcmd(
     mut ldr: *mut LDR,
     mut fmt: *const libc::c_char,
     mut name: *const libc::c_char,
 ) -> *mut FILE {
-    let mut res: *mut FILE = 0 as *mut FILE;
+    let mut res: *mut FILE = std::ptr::null_mut::<FILE>();
     let mut len: libc::c_int = (strlen(fmt))
         .wrapping_add(strlen(name))
         .wrapping_add(1 as libc::c_int as libc::c_ulong)
@@ -386,7 +386,7 @@ unsafe extern "C" fn ldrcmd(
         s as *mut libc::c_void,
         len as size_t,
     );
-    return res;
+    res
 }
 #[no_mangle]
 pub unsafe extern "C" fn ldrsetpath(mut ldr: *mut LDR, mut path: *const libc::c_char) -> i32 {
@@ -419,12 +419,12 @@ pub unsafe extern "C" fn ldrsetpath(mut ldr: *mut LDR, mut path: *const libc::c_
         (*ldr).closefile = 1 as libc::c_int;
     }
     if ((*ldr).file).is_null() {
-        return ldrperr(
+        ldrperr(
             ldr,
             b"can not open file\0" as *const u8 as *const libc::c_char,
-        );
+        )
     } else {
-        return 0;
+        0
     }
 }
 #[no_mangle]
@@ -446,7 +446,7 @@ pub unsafe extern "C" fn ldrsetnamedfile(
 }
 #[no_mangle]
 pub unsafe extern "C" fn ldrerr(mut ldr: *mut LDR) -> *const libc::c_char {
-    return (*ldr).errmsg;
+    (*ldr).errmsg
 }
 unsafe extern "C" fn ldrnext(mut ldr: *mut LDR) -> libc::c_int {
     let mut ch: libc::c_int = 0;
@@ -455,7 +455,7 @@ unsafe extern "C" fn ldrnext(mut ldr: *mut LDR) -> libc::c_int {
         (*ldr).lineno += 1;
         (*ldr).lineno;
     }
-    return ch;
+    ch
 }
 #[no_mangle]
 pub unsafe extern "C" fn ldrparse(mut ldr: *mut LDR) -> libc::c_int {
@@ -477,12 +477,12 @@ pub unsafe extern "C" fn ldrparse(mut ldr: *mut LDR) -> libc::c_int {
     }
     loop {
         ch = ldrnext(ldr);
-        if !(ch == 'c' as i32) {
+        if ch != 'c' as i32 {
             break;
         }
         loop {
             ch = ldrnext(ldr);
-            if !(ch != '\n' as i32) {
+            if ch == '\n' as i32 {
                 break;
             }
             if ch == -(1 as libc::c_int) {
@@ -639,7 +639,7 @@ pub unsafe extern "C" fn ldrparse(mut ldr: *mut LDR) -> libc::c_int {
                         if ch == 'c' as i32 {
                             loop {
                                 ch = ldrnext(ldr);
-                                if !(ch != '\n' as i32) {
+                                if ch == '\n' as i32 {
                                     break;
                                 }
                                 if ch == -(1 as libc::c_int) {
@@ -687,9 +687,8 @@ pub unsafe extern "C" fn ldrparse(mut ldr: *mut LDR) -> libc::c_int {
                             lit = ch - '0' as i32;
                             loop {
                                 ch = ldrnext(ldr);
-                                if !(*(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
-                                    & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int
-                                    != 0)
+                                if *(*__ctype_b_loc()).offset(ch as isize) as libc::c_int
+                                    & _ISdigit as libc::c_int as libc::c_ushort as libc::c_int == 0
                                 {
                                     break;
                                 }
@@ -748,5 +747,5 @@ pub unsafe extern "C" fn ldrparse(mut ldr: *mut LDR) -> libc::c_int {
             b"clauses are missing\0" as *const u8 as *const libc::c_char,
         );
     }
-    return 1 as libc::c_int;
+    1 as libc::c_int
 }
